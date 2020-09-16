@@ -1,0 +1,81 @@
+.boards{
+    position: absolute;
+    margin: 2rem 7rem 2rem 7rem;
+    
+    &-container {
+
+        .personal-boards, .team-boards {
+            margin-bottom: 1rem;
+
+            &-title {
+                margin-bottom: 1rem; 
+
+                p {
+                    color: gray;
+                    font-weight: normal;
+                }
+            }
+
+            &-list, &-create-new-board {
+                display: flex;
+                flex-wrap: wrap;
+                padding: 0;
+                list-style-type: none;
+
+                a:hover {
+                    text-decoration: none;
+                }
+
+                .item {
+                    &-container {
+                        margin: 0 1rem 2rem 0;
+                        width: 12rem;
+                        height: 6rem;
+                        background-color: rgb(238, 155, 87);
+                        border-radius: 5px;
+
+                        &:hover {
+                            //background-color: rgba(243, 142, 59, 1.5);
+                            -webkit-box-shadow: 4px 5px 15px -6px rgba(46,45,46,0.77);
+                            -moz-box-shadow: 4px 5px 15px -6px rgba(46,45,46,0.77);
+                            box-shadow: 4px 5px 15px -6px rgba(46,45,46,0.77);
+                        }
+                    }
+
+                    &-title {
+                        color: white;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        -webkit-box-orient: vertical;
+                        display: -webkit-box;
+                        -webkit-line-clamp: 2;
+
+                            .title-text {
+                                text-align: center;
+                                margin-top: 1rem;
+
+                                a:hover {
+                                    text-decoration: none;
+                                }
+                            }
+                        }
+                }
+
+                .create-board-container, .create-team-board-container {
+                    background-color: rgba(180, 168, 168, 0.7);
+                    vertical-align: middle;
+                    display: table-cell;
+
+                    .title-text {
+                        text-align: center;
+                        margin-top: 1rem;
+                        
+                        a:hover {
+                            text-decoration: none;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

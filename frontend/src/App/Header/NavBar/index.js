@@ -1,66 +1,80 @@
-import React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import {
-    faHome, faTable, faSearch,
-    faPlus, faBell
-} from '@fortawesome/free-solid-svg-icons'
+import React from 'react'
+import { Link } from "react-router-dom";
 import { Image, StyleSheet } from 'react-native'
+import SearchPopup from './SearchPopup'
+import BoardsPopup from './BoardsPopup'
 
 const styles = StyleSheet.create({
-    logo: {
-      width: 30,
-      height: 30,
-      borderRadius: 50
+    userIcon: {
+      width: '1.9rem',
+      height: '1.9rem',
+      borderRadius: '50%'
     },
+    logo: {
+        width: '200px',
+        height: '60px',
+        opacity: '95%'
+      }
   });
- 
 
-class NavBar extends React.Component{
+class NavBar extends React.Component {
     constructor(props){
         super(props);
+
+        this.state = {
+            boardsPopUpEnabled: true
+        }
     }
+
     render(){
         return(
-            <div className="navbar-container py-2">
-                <div className="navbar--left-section">
-                    <button className="tip">
-                        <FontAwesomeIcon icon={ faHome } className="text-light"/>
-                        <span className="left">Home</span>
-                    </button>
-
-                    <button className="tip">
-                        <FontAwesomeIcon icon={ faTable } className="text-light"/>
-                        <span className="left">Boards</span>
-                    </button>
-
-                    <button className="tip">
-                        <FontAwesomeIcon icon={ faSearch } className="text-light"/>
-                        <span className="left">Search</span>
-                    </button>
+            <div className='navbar-container py-2'>
+                <div className='navbar--left-section'>
+                    <Link to='/home'>
+                        <img className='logo' src={require('./logo2.svg').default} alt={"Logo"} />
+                    </Link>
                 </div>
 
-                <div className="navbar--center-section">
-                    <img src=""/>
+                <div className='navbar--center-section'>
+                    <button>
+                        <Link to='/'>
+                            <p className='navbar-titles'>HOME</p>
+                        </Link>
+                    </button>
+
+                    <p className='delimiter'>|</p>
+
+                    <BoardsPopup/>
+
+                    <p className='delimiter'>|</p>
+
+                    <button>
+                        <Link to='/createnewboard' >
+                            <p className='navbar-titles'>CREATE NEW BOARD</p>
+                        </Link>
+                    </button>
+
+                    <p className='delimiter'>|</p>
+
+                    <button>
+                        <p className='navbar-titles'>ABOUT</p>
+                    </button>
+
+
                 </div>
 
-                <div className="navbar--right-section">
-                    <button className="tip">
-                        <FontAwesomeIcon icon={ faPlus } className="text-light"/>
-                        <span className="right">Add new board</span>
-                    </button>
-
-                    <button className="tip">
-                        <FontAwesomeIcon icon={ faBell } className="text-light"/>
-                        <span className="right">Notifications</span>
-                    </button>
-
-                    <button className="user-photo">
+                <div className='navbar--right-section'>
+                    <button className='user-photo'>
+                        {//TODO: change Image to Avatar from material-ui
+                        
                         <Image
-                        source={require('./default-user-icon.png')}
-                        style={styles.logo}
+                        source={require('./default-user-icon.png').default}
+                        style={ styles.userIcon }
                         />
+                        }
                     </button>
 
+                    <SearchPopup />
 
                 </div>
             </div>

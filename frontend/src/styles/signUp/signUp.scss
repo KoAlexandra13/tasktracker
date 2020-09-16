@@ -1,0 +1,136 @@
+.sign-up-page-container{
+    position: absolute;
+    padding:0;
+    margin:0;
+
+    top:0;
+    left:0;
+
+    width: 100%;
+    height: 100%;
+    background: rgb(156,132,210);
+    background: linear-gradient(337deg, rgba(156,132,210,0.9051995798319328) 26%, rgba(103,215,227,0.8519782913165266) 58%, rgba(0,211,255,0.8183648459383753) 93%);
+    
+    .sign-up-form-container{
+        margin-left: auto;
+        margin-right: auto;
+        width: 70%;
+        height: 90%;
+
+        .sign-up-image-container{
+            width: 40%;
+
+            img{
+                width: 100%;
+                height: 80%;
+                margin-top: 2rem;
+            }
+        }
+
+        .sign-up-form{
+            width: 60%;
+            text-align: center;
+
+            .sign-up-title{
+                font-family: "Comic Sans MS", cursive, sans-serif;
+                font-size: x-large;
+                letter-spacing: -0.8px;
+                color: rgba(128, 123, 123, 1);
+                text-transform: none;
+                font-style: normal;
+                text-decoration: none;
+                line-height: 0em;
+                margin-top: 2rem;
+                margin-bottom: 1rem;
+
+            }
+
+            .options-container{
+                display: flex;
+                justify-content: flex-end;
+                margin-top: 0.25rem;
+                margin-right: 18%;
+
+                .forgot-password-link{
+                    font-family: "Comic Sans MS", cursive, sans-serif;
+                    letter-spacing: -0.8px;
+                    font-size: small;
+                    color: rgba(128, 123, 123, 1);
+                    margin-top: 0.75rem;
+                }
+            }
+            
+            .sign-up-btn{
+                width: 65%;
+                margin-top: 1.5rem;
+                border-radius: 50px;
+                background: rgb(70, 150, 255);
+
+                &:hover{
+                    color: white;
+                }
+                
+                p{
+                    margin: 3px;
+                    font-family: "Comic Sans MS", cursive, sans-serif;
+                    font-size: medium;
+                }
+            }
+
+            .login-contianer{
+                p{
+                    font-family: "Comic Sans MS", cursive, sans-serif;
+                    letter-spacing: -0.8px;
+                    font-size: medium;
+                }
+
+                .title {
+                    color: rgba(128, 123, 123, 1);
+                    margin-top: 1rem;
+                    margin-bottom: 0.5rem;
+                }
+            }
+
+            .checkboxes-container{
+                margin-top: 1.5rem;
+                text-align: left;
+                margin-left: 20%;
+
+                .subscribe-chekbox, .terms-and-conditions-checkbox{
+                    display: flex;
+                }
+
+                label{
+                    font-family: "Comic Sans MS", cursive, sans-serif;
+                    letter-spacing: -0.8px;
+                    font-size: small;
+                    color: rgba(128, 123, 123, 1);
+                    margin-bottom: 0;
+                    flex-wrap: wrap;
+                }
+
+            }
+
+            .sign-up-form-error{
+                font-family: "Comic Sans MS", cursive, sans-serif;
+                font-size: small;
+                letter-spacing: -0.8px;
+                font-style: normal;
+                color: indianred;
+                flex-wrap: wrap;
+                margin-top: 0.5rem;
+                margin-left:20%;
+            }
+        }
+    }
+}
+
+@media screen and (max-device-width:800px), screen and (max-width: 800px)  {
+    .sign-up-image-container{
+        display: none;
+    }
+
+    .sign-up-form{
+        width: 100%!important;
+    }
+}

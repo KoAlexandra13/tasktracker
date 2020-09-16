@@ -1,64 +1,15 @@
 .header{
     &-container{
         background-color: #2cc4cb;
-        width: 100%;
+        min-width: 700px;
     }
 
-    button {
-        border-radius: 5px;
-        background-color: Transparent;
-        background-repeat:no-repeat;
-        border: none;
-        cursor:pointer;
-        outline:none;
-        padding:  2px 10px 2px 10px;
-
-        .user-photo{
-            border-radius: 50%;
-        }
-
-        &:hover{
-            background-color: rgba(0,0,0, 0.3);
-        }
+    .user-photo, .logo {
         
-    }
-    
-    .tip {
-        text-decoration: none;
-
         &:hover{
-            position: relative;
-
-            span {
-                font-size: 0.8rem;
-                background-color: rgba(0,0,0, 0.9);
-                border-radius: 5px;
-                color: lightgray;
-                display: block;
-                z-index: 100;
-                padding: 0 5px 0 5px;
-                position: absolute;
-                top: 15px;
-                text-decoration: none
-            }   
-
-            .left{
-                left: 20px;
-                margin: 13px;
-            }
-    
-            .right{
-                right: 20px;
-                margin: 13px;
-            }
-
-        }
-
-        span {
-            display: none;
+            background-color: inherit;
         }
     }
-
 }
 
 @import "navbar/navbar.scss"
