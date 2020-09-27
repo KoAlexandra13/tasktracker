@@ -2,15 +2,21 @@ from rest_framework.views import status, Response
 from rest_framework.viewsets import ModelViewSet
 from rest_framework import decorators
 from rest_framework.permissions import AllowAny
+from rest_framework_simplejwt.views import TokenObtainPairView
 
 from api.models import (
     User, Table
 )
 from api.serializers import (
-    UserDetailSerializer, TableDetailSerializer
+    UserDetailSerializer, TableDetailSerializer,
+    CustomJWTSerializer
 )
 from api.permissions import IsSuperUserOrOwner
 from api.forms import UserCreationForm
+
+
+class CustomTokenObtainPairView(TokenObtainPairView):
+    serializer_class = CustomJWTSerializer
 
 
 class UserViewSet(ModelViewSet):
@@ -26,8 +32,8 @@ class UserViewSet(ModelViewSet):
     def sign_up(self, request, *args, **kwargs):
         form = UserCreationForm(request.POST)
         if form.is_valid():
-            form.save()
-            return Response(status=status.HTTP_201_CREATED)
+            user = form.save()
+            return Response(UserDetailSerializer(user).data, status=status.HTTP_201_CREATED)
         return Response(form.errors, status=status.HTTP_400_BAD_REQUEST)
 
     @decorators.action(detail=False, methods=['get'], url_path='self')

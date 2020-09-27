@@ -2,6 +2,8 @@ import unicodedata
 
 from django import forms
 from django.contrib.auth import password_validation
+from django.core.validators import validate_email
+from django.core.exceptions import ValidationError
 from django.utils.translation import gettext, gettext_lazy as _
 
 from api.models import User
@@ -17,6 +19,15 @@ class UsernameField(forms.CharField):
             'autocapitalize': 'none',
             'autocomplete': 'username',
         }
+
+    def validate(self, value):
+        # Username should not match email pattern
+        try:
+            validate_email(value)
+        except ValidationError:
+            return
+        else:
+            raise ValidationError('Username should not match email pattern')
 
 
 class UserCreationForm(forms.ModelForm):
@@ -41,12 +52,22 @@ class UserCreationForm(forms.ModelForm):
     )
     email = forms.CharField(
         label=_("Email"),
+        strip=True,
+        validators=[validate_email]
+    )
+    fullname = forms.CharField(
+        label=_("Full name"),
         strip=True
+    )
+    organization = forms.CharField(
+        label=_("Organization"),
+        strip=True,
+        required=False
     )
 
     class Meta:
         model = User
-        fields = ("username",)
+        fields = ("username", 'first_name', 'last_name', 'email', 'organization')
         field_classes = {'username': UsernameField}
 
     def __init__(self, *args, **kwargs):
@@ -63,6 +84,15 @@ class UserCreationForm(forms.ModelForm):
                 code='password_mismatch',
             )
         return password2
+
+    def clean(self):
+        data = super().clean()
+        names = data.get('fullname', "").split(' ')
+        data['first_name'] = names[0]
+        data['last_name'] = names[1] if len(names) > 1 else None
+        if 'fullname' in data:
+            del data['fullname']
+        return data
 
     def _post_clean(self):
         super()._post_clean()
