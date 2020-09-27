@@ -30,7 +30,7 @@ class UserViewSet(ModelViewSet):
     @decorators.permission_classes([AllowAny])
     @decorators.action(detail=False, methods=['post'], url_path='sign_up')
     def sign_up(self, request, *args, **kwargs):
-        form = UserCreationForm(request.POST)
+        form = UserCreationForm(request.data)
         if form.is_valid():
             user = form.save()
             return Response(UserDetailSerializer(user).data, status=status.HTTP_201_CREATED)
