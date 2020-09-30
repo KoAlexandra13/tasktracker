@@ -24,7 +24,6 @@ class SignUp extends React.Component {
             showPassword1: false,
             password2: '',
             showPassword2:false,
-            isSignUpBtnDisabled: true,
             checkedTermsAndConditions: false,
             checkedSubscribe: false,
             errors: {}
@@ -42,69 +41,54 @@ class SignUp extends React.Component {
     };
 
     handleCheckTermsAndConditions = () => {
-        this.setState({...this.state, checkedTermsAndConditions: !this.state.checkedTermsAndConditions, 
-            isSignUpBtnDisabled: this.state.checkedTermsAndConditions});
+        this.setState({
+            ...this.state,
+            checkedTermsAndConditions: !this.state.checkedTermsAndConditions, 
+        });
     };
 
     handleCheckSubscribe = () => this.setState({...this.state, checkedSubscribe: !this.state.checkedSubscribe})
 
+    requiredFieldsFilledIn = () => {
+        const requiredFields = ['email', 'username', 'password1', 'password2', 'fullName']
+        return requiredFields.every(field => !_.isEmpty(this.state[field]));
+    }
+
     handleClickSignUp = () => {
-        const requiredFieldsFilledIn = !(_.isEmpty(this.state.email) || _.isEmpty(this.state.username) 
-            || _.isEmpty(this.state.password1) || _.isEmpty(this.state.password2) || _.isEmpty(this.state.fullName));
-
-        if(!requiredFieldsFilledIn){
-            this.setState(prevState => ({
-                errors: {                   
-                    ...prevState.errors,    
-                    requiredFields: ['Fill in all required fields']
+        const requiredFieldsFilledIn = this.requiredFieldsFilledIn();
+        if(requiredFieldsFilledIn){
+            const config = {
+                url: 'http://127.0.0.1:8000/api/users/sign_up/', 
+                method: 'POST',
+                data: {
+                    fullname: this.state.fullName,
+                    email: this.state.email,
+                    username: this.state.username,
+                    password1: this.state.password1,
+                    password2: this.state.password2
                 }
-            }));
-        }else {
-            this.setState(prevState => ({
-                ...prevState,
-                errors: _.omit(this.state.errors, ['requiredFields'])
-
-            }))
-        }     
-
-        const config = {
-            url: 'http://127.0.0.1:8000/api/users/sign_up/', 
-            method: 'POST',
-            data: {
-                fullname: this.state.fullName,
-                email: this.state.email,
-                username: this.state.username,
-                password1: this.state.password1,
-                password2: this.state.password2
             }
-        }
 
-        //const axios = require('axios');
-
-        axios(config)
+            axios(config)
             .then(response => {
                 console.log(response.data);
                 console.log(response.config);
                 console.log(response.request);
-                
+                this.setState({errors: {}});
             })
             .catch(error => {
                 const data = error.response.data;
                 Object.entries(data).map(([key, value]) => {
-                    this.setState(prevState => ({
-                        errors: {                   
-                            ...prevState.errors,    
-                            [key]: value
-                        }
-                    }))
+                    this.setState({errors: {[key]: value}})
                 });
             });
-    
+        } else {
+            this.setState({errors: {requiredFields: ['Fill in all required fields']}});
+        }     
     };
 
 
     render(){
-
         console.log(this.state.errors);
 
         const styles = {
@@ -137,8 +121,11 @@ class SignUp extends React.Component {
 
         const image = require('./images/signup.png').default;
 
-        const {password1, showPassword1, password2, showPassword2,
-        isSignUpBtnDisabled, errors} = this.state;
+        const {
+            password1, showPassword1, 
+            password2, showPassword2,
+            errors, checkedTermsAndConditions
+        } = this.state;
 
         const titleErrorStyle = Object.values(this.state.errors).some((value) => value !== null ) ? {
             display: 'flex'
@@ -298,7 +285,7 @@ class SignUp extends React.Component {
 
                             <button 
                             className='sign-up-btn'
-                            disabled={isSignUpBtnDisabled}
+                            disabled={!checkedTermsAndConditions}
                             onClick={this.handleClickSignUp}
                             >
                                 <p>SIGN UP</p>

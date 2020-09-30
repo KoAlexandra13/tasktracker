@@ -89,7 +89,7 @@ class UserCreationForm(forms.ModelForm):
         data = super().clean()
         names = data.get('fullname', "").split(' ')
         data['first_name'] = names[0]
-        data['last_name'] = names[1] if len(names) > 1 else None
+        data['last_name'] = names[1] if len(names) > 1 else ''
         if 'fullname' in data:
             del data['fullname']
         return data
