@@ -1,21 +1,16 @@
 import React from 'react'
 import { Link } from "react-router-dom";
-import { Image, StyleSheet } from 'react-native'
+import Avatar from '@material-ui/core/Avatar';
 import SearchPopup from './SearchPopup'
 import BoardsPopup from './BoardsPopup'
 
-const styles = StyleSheet.create({
-    userIcon: {
-      width: '1.9rem',
-      height: '1.9rem',
-      borderRadius: '50%'
-    },
+const styles = {
     logo: {
         width: '200px',
         height: '60px',
         opacity: '95%'
       }
-  });
+  };
 
 class NavBar extends React.Component {
     constructor(props){
@@ -31,7 +26,7 @@ class NavBar extends React.Component {
             <div className='navbar-container py-2'>
                 <div className='navbar--left-section'>
                     <Link to='/home'>
-                        <img className='logo' src={require('./logo2.svg').default} alt={"Logo"} />
+                        <img className='logo' src={require('./images/logo2.svg').default} alt={"Logo"} />
                     </Link>
                 </div>
 
@@ -65,13 +60,12 @@ class NavBar extends React.Component {
 
                 <div className='navbar--right-section'>
                     <button className='user-photo'>
-                        {//TODO: change Image to Avatar from material-ui
-                        
-                        <Image
-                        source={require('./default-user-icon.png').default}
-                        style={ styles.userIcon }
-                        />
-                        }
+                        <Avatar 
+                            alt='userIcon' 
+                            src={require('./images/default-user-icon.png').default} 
+                            >
+                                HG
+                            </Avatar>
                     </button>
 
                     <SearchPopup />

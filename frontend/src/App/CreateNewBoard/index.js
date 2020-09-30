@@ -11,7 +11,8 @@ import { connect } from 'react-redux';
 import { createNewBoardTitle, createNewBoardColumn, createNewBoardBackgroundColor,
     createNewBoardBackgroundURL
  } from '../../actions/board'
- import { addPersonalBoard } from '../../actions/boardList'
+ import { addPersonalBoard } from '../../actions/boardList';
+ //import axios from 'axios';
 
 class CreateNewBoard extends React.Component {
     constructor(props){
@@ -85,7 +86,20 @@ class CreateNewBoard extends React.Component {
             window.scrollTo(0, 0);
         }
         else {
-           this.props.addPersonalBoard(this.props.boardTitle)
+
+            /*axios.post('127.0.0.1:8000/api/tables/', {
+                columns: this.props.boardColumns,
+                name: this.props.boardTitle,
+                backgroundImage: this.props.boardBackgroundURL
+              })
+              .then(function (response) {
+                console.log(response);
+              })
+              .catch(function (error) {
+                console.log(error);
+            });*/
+
+           this.props.addPersonalBoard(this.props.boardTitle);
         }
     }
 

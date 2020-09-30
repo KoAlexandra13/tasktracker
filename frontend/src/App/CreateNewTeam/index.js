@@ -12,7 +12,7 @@ import { createNewBoardTitle, createNewBoardColumn, createNewBoardBackgroundColo
     createNewBoardBackgroundURL
  } from '../../actions/board'
 import { addTeamBoard } from '../../actions/boardList';
-import AsyncSelect from 'react-select/lib/Async';
+//import AsyncSelect from 'react-select/lib/Async';
 
 
 class CreateNewTeam extends React.Component {

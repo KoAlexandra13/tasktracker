@@ -18,7 +18,7 @@
 
                 .board-title-required-field{
                     //display: none;
-                    color:red;
+                    color:indianred;
                     font-size: small;
                 }
 
@@ -183,11 +183,12 @@
     .create-new-board {
         &-btn {
             margin-top: 1rem;
-            color: gray;
-            border: lightgray solid 1px;
+            color: whitesmoke;
+            border: none;
             border-radius: 10px;
             font-size: medium;
             display: flex;
+            background: #56c1dc;
         }
 
         &-container {

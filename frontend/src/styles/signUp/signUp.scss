@@ -68,6 +68,12 @@
 
                 &:hover{
                     color: white;
+                    background: rgb(35, 126, 245);
+
+                }
+
+                &:disabled{
+                    background: rgb(145, 184, 235);
                 }
                 
                 p{
@@ -87,7 +93,11 @@
                 .title {
                     color: rgba(128, 123, 123, 1);
                     margin-top: 1rem;
-                    margin-bottom: 0.5rem;
+                    margin-bottom: 0;
+                }
+
+                .login-link{
+                    margin: 0;
                 }
             }
 
@@ -98,6 +108,10 @@
 
                 .subscribe-chekbox, .terms-and-conditions-checkbox{
                     display: flex;
+                }
+
+                .terms-and-conditions-checkbox{
+                    margin-top: -0.5rem;
                 }
 
                 label{
@@ -118,8 +132,8 @@
                 font-style: normal;
                 color: indianred;
                 flex-wrap: wrap;
-                margin-top: 0.5rem;
                 margin-left:20%;
+                margin-top: 0.5rem;
             }
         }
     }

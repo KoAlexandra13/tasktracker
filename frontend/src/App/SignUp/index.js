@@ -9,8 +9,8 @@ import FormControl from '@material-ui/core/FormControl';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import { Link } from "react-router-dom";
-import { _ScrollView } from 'react-native';
 import _ from 'lodash';
+import axios from 'axios'
 
 class SignUp extends React.Component {
     constructor(props){
@@ -20,18 +20,20 @@ class SignUp extends React.Component {
             fullName: '',
             email: '',
             username: '',
-            password: '',
-            showPassword: false,
+            password1: '',
+            showPassword1: false,
             password2: '',
             showPassword2:false,
             isSignUpBtnDisabled: true,
             checkedTermsAndConditions: false,
+            checkedSubscribe: false,
+            errors: {}
         }
     }
 
     handleChange = (prop) => (event) => {this.setState({...this.state, [prop]: event.target.value })};
 
-    handleClickShowPassword = () => this.setState({...this.state, showPassword: !this.state.showPassword});
+    handleClickShowPassword1 = () => this.setState({...this.state, showPassword1: !this.state.showPassword1});
 
     handleClickShowPassword2 = () => this.setState({...this.state, showPassword2: !this.state.showPassword2});
     
@@ -44,22 +46,66 @@ class SignUp extends React.Component {
             isSignUpBtnDisabled: this.state.checkedTermsAndConditions});
     };
 
+    handleCheckSubscribe = () => this.setState({...this.state, checkedSubscribe: !this.state.checkedSubscribe})
+
     handleClickSignUp = () => {
+        const requiredFieldsFilledIn = !(_.isEmpty(this.state.email) || _.isEmpty(this.state.username) 
+            || _.isEmpty(this.state.password1) || _.isEmpty(this.state.password2) || _.isEmpty(this.state.fullName));
 
-        const isAllRequiredFeildFilledIn = !(_.isEmpty(this.state.email) || _.isEmpty(this.state.username) 
-            || _.isEmpty(this.state.password) || _.isEmpty(this.state.password2));
+        if(!requiredFieldsFilledIn){
+            this.setState(prevState => ({
+                errors: {                   
+                    ...prevState.errors,    
+                    requiredFields: ['Fill in all required fields']
+                }
+            }));
+        }else {
+            this.setState(prevState => ({
+                ...prevState,
+                errors: _.omit(this.state.errors, ['requiredFields'])
 
-        if(isAllRequiredFeildFilledIn){
+            }))
+        }     
 
+        const config = {
+            url: 'http://127.0.0.1:8000/api/users/sign_up/', 
+            method: 'POST',
+            data: {
+                fullname: this.state.fullName,
+                email: this.state.email,
+                username: this.state.username,
+                password1: this.state.password1,
+                password2: this.state.password2
+            }
         }
-        else{
 
-        }
+        //const axios = require('axios');
+
+        axios(config)
+            .then(response => {
+                console.log(response.data);
+                console.log(response.config);
+                console.log(response.request);
+                
+            })
+            .catch(error => {
+                const data = error.response.data;
+                Object.entries(data).map(([key, value]) => {
+                    this.setState(prevState => ({
+                        errors: {                   
+                            ...prevState.errors,    
+                            [key]: value
+                        }
+                    }))
+                });
+            });
+    
     };
 
 
-
     render(){
+
+        console.log(this.state.errors);
 
         const styles = {
             paper : {
@@ -83,7 +129,7 @@ class SignUp extends React.Component {
                 marginTop: '1rem'
             },
 
-            feildsFont: {
+            fieldsFont: {
                 fontSize: 'medium', 
                 color:'rgb(43, 40, 40)',
             }
@@ -91,13 +137,13 @@ class SignUp extends React.Component {
 
         const image = require('./images/signup.png').default;
 
-        const {password, showPassword, password2, showPassword2,
-        isSignUpBtnDisabled, isAllRequiredFeildFilledIn } = this.state;
+        const {password1, showPassword1, password2, showPassword2,
+        isSignUpBtnDisabled, errors} = this.state;
 
-        const titleErrorStyle = isAllRequiredFeildFilledIn ? {
-            display: 'none'
-        } : {
+        const titleErrorStyle = Object.values(this.state.errors).some((value) => value !== null ) ? {
             display: 'flex'
+        } : {
+            display: 'none'
         };
 
         return(
@@ -119,7 +165,9 @@ class SignUp extends React.Component {
                                 variant='outlined'
                                 size='small'
                                 style={styles.textField}
-                                inputProps={{style: styles.feildsFont}}
+                                inputProps={{style: styles.fieldsFont}}
+                                onChange={this.handleChange('fullName')}
+                                required={true}
                             />
 
                             <TextField
@@ -127,8 +175,9 @@ class SignUp extends React.Component {
                                 variant='outlined'
                                 size='small'
                                 style={styles.textField}
-                                inputProps={{style: styles.feildsFont}}
-                                required={true} 
+                                inputProps={{style: styles.fieldsFont}}
+                                required={true}
+                                onChange={this.handleChange('username')} 
                             />
 
                             <TextField
@@ -136,8 +185,9 @@ class SignUp extends React.Component {
                                 variant='outlined'
                                 size='small'
                                 style={styles.textField}
-                                inputProps={{style: styles.feildsFont}}
-                                required={true} 
+                                inputProps={{style: styles.fieldsFont}}
+                                required={true}
+                                onChange={this.handleChange('email')} 
                             />
 
                             <TextField
@@ -145,7 +195,8 @@ class SignUp extends React.Component {
                                 variant='outlined'
                                 size='small'
                                 style={styles.textField}
-                                inputProps={{style: styles.feildsFont}}
+                                inputProps={{style: styles.fieldsFont}}
+                                onChange={this.handleChange('organization')}
                             />
                         
                             <FormControl 
@@ -160,19 +211,19 @@ class SignUp extends React.Component {
                                 </InputLabel>
 
                                 <OutlinedInput
-                                        type={showPassword ? 'text' : 'password'}
-                                        value={password}
-                                        onChange={this.handleChange('password')}
+                                        type={showPassword1 ? 'text' : 'password'}
+                                        value={password1}
+                                        onChange={this.handleChange('password1')}
                                         style={{padding : 0}}
-                                        inputProps={{style: styles.feildsFont}} 
+                                        inputProps={{style: styles.fieldsFont}} 
                                         endAdornment={
                                         <InputAdornment position="end">
                                             <IconButton
                                             aria-label="toggle password visibility"
-                                            onClick={this.handleClickShowPassword}
+                                            onClick={this.handleClickShowPassword1}
                                             onMouseDown={this.handleMouseDownPassword}
                                             >
-                                            {showPassword ? <Visibility /> : <VisibilityOff />}
+                                            {showPassword1 ? <Visibility /> : <VisibilityOff />}
                                             </IconButton>
                                         </InputAdornment>
                                         }
@@ -197,7 +248,7 @@ class SignUp extends React.Component {
                                         value={password2}
                                         onChange={this.handleChange('password2')}
                                         style={{padding : 0}}
-                                        inputProps={{style: styles.feildsFont}} 
+                                        inputProps={{style: styles.fieldsFont}} 
                                         endAdornment={
                                         <InputAdornment position="end">
                                             <IconButton
@@ -205,7 +256,7 @@ class SignUp extends React.Component {
                                             onClick={this.handleClickShowPassword2}
                                             onMouseDown={this.handleMouseDownPassword}
                                             >
-                                            {showPassword ? <Visibility /> : <VisibilityOff />}
+                                            {showPassword2 ? <Visibility /> : <VisibilityOff />}
                                             </IconButton>
                                         </InputAdornment>
                                         }
@@ -213,20 +264,22 @@ class SignUp extends React.Component {
                                 />
                             </FormControl>
 
-                            <span 
-                            className='sign-up-form-error'
-                            style={ titleErrorStyle }>
-                                * Wrong email/username or password, try again. 
-                            </span>
+                            {
+                                <span 
+                                    className='sign-up-form-error'
+                                    style={ titleErrorStyle }>
+                                        * {Object.values(errors)[0]} 
+                                </span>
+                                
+                            }
 
                             <div className='checkboxes-container'>
                                 <div className='terms-and-conditions-checkbox'>
                                     <input 
                                         type='checkbox' 
                                         className='terms-and-conditions' 
-                                        id='terms-and-conditions'
                                         onChange={this.handleCheckTermsAndConditions}/>
-                                    <label for='terms-and-conditions'>
+                                    <label>
                                         &nbsp;I Agree to Terms and Conditions.
                                     </label>   
                                 </div> 
@@ -234,9 +287,10 @@ class SignUp extends React.Component {
                                 <div className='subscribe-chekbox'>
                                     <input 
                                         type='checkbox' 
-                                        className='subscribe' 
-                                        id='subscribe'/>
-                                    <label for='subscribe'>
+                                        className='subscribe'
+                                        onChange={this.handleCheckSubscribe} 
+                                    />
+                                    <label>
                                         &nbsp;I Would like to recieve Promotional Offers.
                                     </label> 
                                 </div>
@@ -245,7 +299,8 @@ class SignUp extends React.Component {
                             <button 
                             className='sign-up-btn'
                             disabled={isSignUpBtnDisabled}
-                            onClick={this.handleClickSignUp}>
+                            onClick={this.handleClickSignUp}
+                            >
                                 <p>SIGN UP</p>
                             </button>
 

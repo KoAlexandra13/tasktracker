@@ -25,23 +25,19 @@ const store = createStore(
 );
 
 class App extends React.Component{
-  constructor(props){
-    super(props);
-      this.state = {
-        isUserLogin: false
-      }
-  }
+
     render(){
         return (
           <Provider store={store}>
             <Router>
-                {this.state.isUserLogin && <Header />}
               <div>
                 <Switch>
                   <Route path="/createnewboard">
+                    <Header />
                     <CreateNewBoard />
                   </Route>
                   <Route path="/createnewteam">
+                    <Header />
                     <CreateNewTeam />
                   </Route>
                   <Route path="/login">
@@ -51,6 +47,7 @@ class App extends React.Component{
                     <SignUp />
                   </Route>
                   <Route path="/">
+                    <Header />
                     <Home />
                   </Route>
                 </Switch>
