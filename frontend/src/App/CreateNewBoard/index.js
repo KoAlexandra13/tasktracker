@@ -63,7 +63,10 @@ class CreateNewBoard extends React.Component {
     
     handleColorPickerClose = () => this.setState({ ...this.state, displayColorPicker: false });
 
-    handleUploadImageChange = (uploadedImages) => this.setState({...this.state, images: uploadedImages});
+    handleUploadImageChange = (uploadedImages) => {
+        console.log(uploadedImages)
+        this.setState({...this.state, images: uploadedImages});
+    }
 
     handleSelectOptionsChange = (selectOptions) => this.props.createNewBoardColumn(selectOptions);
 

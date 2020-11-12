@@ -8,9 +8,11 @@ from api.models import (
     User, Table
 )
 from api.serializers import (
-    UserDetailSerializer, TableDetailSerializer,
+    UserDetailSerializer,
+    TableDetailSerializer,
     CustomJWTSerializer
 )
+from api.models import TableColumn
 from api.permissions import IsSuperUserOrOwner
 from api.forms import UserCreationForm
 
@@ -44,3 +46,21 @@ class UserViewSet(ModelViewSet):
 class TableViewSet(ModelViewSet):
     queryset = Table.objects.all()
     serializer_class = TableDetailSerializer
+
+    def create(self, request, *args, **kwargs):
+        users = request.data.pop('users')
+        columns = request.data.pop('columns')
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        table = serializer.save()
+
+        table.users.add(*list(User.objects.filter(pk__in=users)))
+
+        columns = [
+            TableColumn(table=table, **column_data)
+            for column_data in columns
+        ]
+
+        TableColumn.objects.bulk_create(columns)
+
+        return Response(self.get_serializer(table).data, status=status.HTTP_201_CREATED)
