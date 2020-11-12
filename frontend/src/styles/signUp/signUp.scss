@@ -15,7 +15,7 @@
         margin-left: auto;
         margin-right: auto;
         width: 70%;
-        height: 90%;
+        height: 93%;
 
         .sign-up-image-container{
             width: 40%;
@@ -132,8 +132,10 @@
                 font-style: normal;
                 color: indianred;
                 flex-wrap: wrap;
-                margin-left:20%;
-                margin-top: 0.5rem;
+                margin-left: 20%;
+                margin-right: 20%;
+                margin-top: 0;
+                margin-bottom: -1rem;
             }
         }
     }

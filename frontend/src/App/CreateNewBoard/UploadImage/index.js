@@ -4,7 +4,7 @@ class UploadImage extends React.Component {
 
     render(){
 
-        const { imageURL, handleChangeBoardBackground } = this.props;
+        const {imageURL, handleChangeBoardBackground} = this.props;
 
         return (
             <li 
@@ -13,7 +13,7 @@ class UploadImage extends React.Component {
                 className='board-background-color-btn image' 
                 onClick={ () => handleChangeBoardBackground(imageURL) }
                 >
-                    <img className='image' src={ imageURL } alt='Background'/>
+                    <img className='image' src={imageURL} alt='Background'/>
                 </button>
             </li>
         );

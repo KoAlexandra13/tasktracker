@@ -49,19 +49,19 @@ class BoardsPopup extends React.Component {
 
       return(
           <Popup
-          trigger={
-            <button>
-                <p className='navbar-titles'>MY BOARDS</p>
-            </button>}
-          on='focus'
-          open={ isPopUpOpen }
-          onOpen={ this.handlePopUpOpen }
-          closeOnDocumentClick
-          contentStyle = { styles.contentStyle }
-          arrowStyle = { styles.arrowStyle }
+            trigger={
+              <button>
+                  <p className='navbar-titles'>MY BOARDS</p>
+              </button>}
+            on='focus'
+            open={ isPopUpOpen }
+            onOpen={ this.handlePopUpOpen }
+            closeOnDocumentClick
+            contentStyle = { styles.contentStyle }
+            arrowStyle = { styles.arrowStyle }
           >
             <div className='popUp-boards-container'>
-              <div className='search-block'>
+              {/*<div className='search-block'>
                 <input type='text' 
                 className='-search' 
                 placeholder='Search board by name...'/>
@@ -71,7 +71,7 @@ class BoardsPopup extends React.Component {
                 onClick={ this.handlePopUpClose }>
                   &times;
                 </button>
-              </div>
+              </div>*/}
 
               <div className='favourites'>
                 <div className="favourites-header">

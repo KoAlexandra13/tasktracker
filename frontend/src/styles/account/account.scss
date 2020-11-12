@@ -1,0 +1,214 @@
+.account-body-container{
+    margin-bottom: 5rem;
+
+    .user-info-pane-container{
+        background-color: rgb(250, 246, 246);
+        display: flex;
+
+        .user-info-and-links-container{
+            width: 170%;
+            margin-top: 3rem;
+
+        }
+
+        .user-info{
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+
+            .user-fullname-container{
+                margin: 0 0.5rem 0 1rem;
+
+                h3{
+                    font-family: 'system-ui';
+                    color: rgb(71, 71, 71);
+                }
+            }
+
+            .username-container{
+                p{
+                    font-family: 'system-ui';
+                    color: rgb(71, 71, 71);
+                    font-style: italic;
+                    margin-top: 0.45rem;
+                }
+            }
+        }
+
+        .right-img-container{
+            transform: rotate(180deg);
+
+        }
+
+        img{
+            width: 100%;
+        }
+    }
+
+    .account-navigation-pane{
+        justify-content: center;
+        display: flex;
+        margin-top: 1rem;
+
+        .link-container{
+            margin: 0.5rem 1rem 1rem 1rem;
+            justify-content: center;
+        }
+    }
+
+    .personal-data-container, .security-container{
+        margin: 2rem 20% 0 20%;
+
+        .title{
+            text-align: center;
+
+            h2{
+                font-family: 'system-ui';
+                color: rgb(71, 71, 71);
+                margin-top: 0.45rem;
+            }
+        }
+    }
+
+    .personal-data-container{
+
+        .change-personal-data-container{
+            display: flex;
+            justify-content: space-around;
+
+            .text-fields-container{
+                margin-top: 1rem;
+                width: 70%;
+            }
+
+            .avatar-container{
+                display: flex;
+                vertical-align: middle;
+
+                p {
+                    font-family: 'system-ui';
+                    margin-bottom: 0.5rem;
+                    color: rgb(71, 71, 71);
+                }
+
+                .change-avatar-button{
+
+                    .half-round-div{
+                        margin-top: -4rem;
+                        position: relative;
+                        background: rgba($color: #000000, $alpha: 0.4);
+                        height: 4rem;
+                        border-bottom-left-radius: 100px;
+                        border-bottom-right-radius: 100px;
+                        visibility: hidden;
+
+                        p{
+                            color: whitesmoke;
+                            padding-top: 1rem;
+                        }
+
+                    }
+
+                    &:hover{
+                        .half-round-div{
+                            visibility: visible;
+                        }
+                    }
+                }
+            }
+        }
+
+    }
+
+    .save-changes-button-container{
+        margin-top: 2.5rem;        
+
+        button{
+            background-color: rgb(33, 206, 253);
+            width: 17rem;
+            height: 2rem;
+            border-radius: 5px;
+            font-family: 'system-ui';
+        }
+    }
+}
+
+.security-container{
+    margin-top: 1rem;
+
+    .change-password-container{
+
+        p{
+            display: flex;
+            justify-content: left;
+            font-family: 'system-ui';
+            font-weight: bold;
+
+        }
+
+        .change-password-button{
+            width: 40%;
+            justify-content: center;
+            display: flex;
+        }
+    }
+
+    .verify-email-container{
+         
+        p{
+            margin-top: 2rem;
+            margin-bottom: 0;
+            display: flex;
+            justify-content: left;
+            font-family: 'system-ui';
+            font-weight: bold;
+        }
+
+        .verify-button-container{
+            margin-top: 1.25rem;
+            display: flex;
+            margin-left: 1rem;
+
+            .verify-button{
+                background-color: rgb(33, 206, 253);
+                width: 100%;
+                height: 2rem;
+                border-radius: 50px;
+                font-family: 'system-ui'; 
+            }
+        }
+    }
+
+}
+
+.upload-image{
+    padding: 0;
+    background-color: rgb(33, 206, 253);
+    width: 50%;
+    border-radius: 50px;
+    height: 2rem;
+
+    p{
+        margin-top: 0.25rem;
+        color: white;
+    }
+}
+
+@media screen and (max-device-width:895px), screen and (max-width: 895px)  {
+
+    .user-info-and-links-container{
+        margin-top: 1rem!important;
+        width: 230%!important;
+
+
+        .user-fullname-container{
+            margin: 0 0.25rem 0 0.25rem!important;
+        }
+    }
+
+    .personal-data-container, .security-container, .log-out-container{
+        margin: 1rem 2% 0 10%!important;
+    }
+    
+}

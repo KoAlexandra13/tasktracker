@@ -10,7 +10,7 @@ import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import { Link } from 'react-router-dom';
 import _ from 'lodash'
-
+import { userLogIn } from '../../actions/user'
 
 class Login extends React.Component {
     constructor(props){
@@ -20,11 +20,11 @@ class Login extends React.Component {
             password: '',
             showPassword: false,
             emailOrUsername: '',
-            isEnteredDataCorrect: true
+            error: null
         }
     }
 
-    handleChange = (prop) => (event) => {this.setState({...this.state, [prop]: event.target.value })};
+    handleChange = (prop) => (event) => {this.setState({...this.state, [prop]: event.target.value})};
 
     handleClickShowPassword = () => this.setState({...this.state, showPassword: !this.state.showPassword});
     
@@ -32,19 +32,22 @@ class Login extends React.Component {
         event.preventDefault();
     };
 
-    handleClickLoginButton = () => {
-        if( !_.isEmpty(this.state.password) && !_.isEmpty(this.state.emailOrUsername)){
-            this.setState({...this.state, isEnteredDataCorrect: true})
-            //TODO: verify entered email/username and password
+    handleClickLoginButton = async () => {
+        
+        const success = await userLogIn(this.state.emailOrUsername, this.state.password);
+
+        if (success){
+            window.location.href = '/';
         }
-        else{
-            this.setState({...this.state, isEnteredDataCorrect: false})
-        }
+        else {
+            this.setState({error: 'wrong login/email or password. Try again'});  
+        } 
     }
+
     render(){
 
         const styles = {
-                paper : {
+            paper : {
                 width: '100%',
                 height: '100%',
                 marginLeft: 'auto',
@@ -66,16 +69,16 @@ class Login extends React.Component {
             },
 
             feildsFont: {
-                fontSize: 'small', 
+                fontSize: 'medium', 
                 color:'rgb(43, 40, 40)',
             }
         }
 
         const image = require('./images/login2.png').default;
 
-        const { password, showPassword, isEnteredDataCorrect } = this.state;
+        const { password, showPassword, error} = this.state;
 
-        const titleErrorStyle = isEnteredDataCorrect ? {
+        const titleErrorStyle = _.isNull(error) ? {
             display: 'none'
         } : {
             display: 'flex'
@@ -138,7 +141,7 @@ class Login extends React.Component {
                             <span 
                             className='login-form-error'
                             style={ titleErrorStyle }>
-                                * Wrong email/username or password, try again. 
+                                * {error}
                             </span>
                             
                             <div className='options-container'>

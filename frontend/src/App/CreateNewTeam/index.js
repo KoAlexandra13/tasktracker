@@ -12,6 +12,7 @@ import { createNewBoardTitle, createNewBoardColumn, createNewBoardBackgroundColo
     createNewBoardBackgroundURL
  } from '../../actions/board'
 import { addTeamBoard } from '../../actions/boardList';
+import Header from '../Header'
 //import AsyncSelect from 'react-select/lib/Async';
 
 
@@ -119,145 +120,148 @@ class CreateNewTeam extends React.Component {
         }
 
         return(
-            <div className='main-container'>
-                <h3>Create New Team</h3>
+            <div style={{minWidth: '600px', width: '100%'}}>
+                <Header/>
+                <div className='main-container'>
+                    <h3>Create New Team</h3>
 
-                <div className='board-design-container'>
+                    <div className='board-design-container'>
 
-                    <div className='board-title-container'>
+                        <div className='board-title-container'>
 
-                        <div className='group'>      
-                            <input 
-                            type='text' 
-                            value={ this.props.boardTitle} 
-                            onChange={ this.handleTitleChange } 
-                            required
-                            />
-                            <span className='highlight'></span>
-                            <span className='bar'></span>
-                            <label>Name of your team, company or organization</label>
+                            <div className='group'>      
+                                <input 
+                                type='text' 
+                                value={ this.props.boardTitle} 
+                                onChange={ this.handleTitleChange } 
+                                required
+                                />
+                                <span className='highlight'></span>
+                                <span className='bar'></span>
+                                <label>Name of your team, company or organization</label>
+                            </div>
+
+                            <span 
+                            className='board-title-required-field'
+                            style={ titleErrorStyle }>
+                                * Please, fill in this field 
+                            </span>
+
                         </div>
 
-                        <span 
-                        className='board-title-required-field'
-                        style={ titleErrorStyle }>
-                            * Please, fill in this field 
-                        </span>
+                        {/*<div className='team-members'>
+                            <AsyncSelect cacheOptions defaultOptions loadOptions={promiseOptions} />
+                        </div>*/}
+                        
+                        <div className='board-background-container'>
+                            <fieldset>
+                                <legend>Choose board background</legend>
+                                <ul className='choose-baord-background'>
 
-                    </div>
-
-                    {/*<div className='team-members'>
-                        <AsyncSelect cacheOptions defaultOptions loadOptions={promiseOptions} />
-                    </div>*/}
-                    
-                    <div className='board-background-container'>
-                        <fieldset>
-                            <legend>Choose board background</legend>
-                            <ul className='choose-baord-background'>
-
-                                {this.defaultColors.map(
-                                    (color, index) => <BackgroundItem 
-                                        color={color}
-                                        image={null}
-                                        key={`color-${index}`}
-                                        handleChangeBoardBackground={this.handleChangeBoardBackgroundColor}
-                                    />
-                                )}  
-
-                                <li className='item-container'>
-                                    <button
-                                    className='board-background-color-btn choose-btn' 
-                                    onClick={ this.handleColorPickerClick }>
-                                        <p>Custom color</p>
-                                    </button>
-                                    { this.state.displayColorPicker ? 
-                                    <div style={ this.popover }>
-                                        <div style={ this.cover } onClick={ this.handleColorPickerClose }/>
-                                        <SwatchesPicker onChange={ this.handleChooseCustomBackgroundColor}/>
-                                    </div> : null }
-                                </li>
-
-                                {this.defaultImagesURLs.map(
-                                    (image, index) => <BackgroundItem 
-                                        image={image}
-                                        key={`image-${index}`}
-                                        handleChangeBoardBackground={this.handleChangeBoardBackgroundURL}
-                                    /> 
-                                )}
-
-
-                                { !_.isEmpty(images) && images.map(
-                                    (image, index) => <UploadImage 
-                                            imageURL={image.dataURL} 
-                                            key={`user-image-${index}`}
-                                            handleChangeBoardBackground={this.handleChangeBoardBackgroundURL}
+                                    {this.defaultColors.map(
+                                        (color, index) => <BackgroundItem 
+                                            color={color}
+                                            image={null}
+                                            key={`color-${index}`}
+                                            handleChangeBoardBackground={this.handleChangeBoardBackgroundColor}
                                         />
-                                    ) 
+                                    )}  
+
+                                    <li className='item-container'>
+                                        <button
+                                        className='board-background-color-btn choose-btn' 
+                                        onClick={ this.handleColorPickerClick }>
+                                            <p>Custom color</p>
+                                        </button>
+                                        { this.state.displayColorPicker ? 
+                                        <div style={ this.popover }>
+                                            <div style={ this.cover } onClick={ this.handleColorPickerClose }/>
+                                            <SwatchesPicker onChange={ this.handleChooseCustomBackgroundColor}/>
+                                        </div> : null }
+                                    </li>
+
+                                    {this.defaultImagesURLs.map(
+                                        (image, index) => <BackgroundItem 
+                                            image={image}
+                                            key={`image-${index}`}
+                                            handleChangeBoardBackground={this.handleChangeBoardBackgroundURL}
+                                        /> 
+                                    )}
+
+
+                                    { !_.isEmpty(images) && images.map(
+                                        (image, index) => <UploadImage 
+                                                imageURL={image.dataURL} 
+                                                key={`user-image-${index}`}
+                                                handleChangeBoardBackground={this.handleChangeBoardBackgroundURL}
+                                            />
+                                        ) 
+                                    }
+                                        
+                                    <ImageUploading
+                                        multiple
+                                        isClearable
+                                        onChange={ this.handleUploadImageChange }
+                                        acceptType={['jpg', 'gif', 'png']}
+                                        maxFileSize={ 5242880 }
+                                        onError={ this.onError }
+                                        >
+                                        {({ onImageUpload }) => {
+                                            return (
+                                                    <li className='item-container'>
+                                                        <button 
+                                                        onClick={ onImageUpload }
+                                                        className='board-background-color-btn choose-btn' 
+                                                        > 
+                                                            <p>Upload image</p>
+                                                        </button>
+                                                    </li>
+                                            )
+                                        }}
+                                    </ImageUploading>
+                                </ul>
+                            </fieldset>  
+                        </div>
+
+                        <CreatableSelect
+                            isMulti
+                            options={this.options}
+                            placeholder='Select or create columns for your table...'
+                            className='w-100 custom-select-box'   
+                            classNamePrefix='custom-select-box'
+                            closeMenuOnSelect = { false }
+                            onChange={this.handleSelectOptionsChange }
+                        />
+                        
+                    </div>
+
+                    <div className='board-demo-version-container'>
+                        <h3>Board Demo Version</h3>  
+
+                        <div 
+                            className='board-demo-version' 
+                            style={ demoVersionBoardBackgraundStyle }>
+                            <ScrollMenu
+                                data = { !_.isEmpty(boardColumns) && boardColumns.map(
+                                            (column, index) => {
+                                                return (<BoardDemoColumn 
+                                                    columnTitle={ column }
+                                                    boardWidth={ width } 
+                                                    key={ `column-${index}` }
+                                                />);
+                                            })
                                 }
-                                    
-                                <ImageUploading
-                                    multiple
-                                    isClearable
-                                    onChange={ this.handleUploadImageChange }
-                                    acceptType={['jpg', 'gif', 'png']}
-                                    maxFileSize={ 5242880 }
-                                    onError={ this.onError }
-                                    >
-                                    {({ onImageUpload }) => {
-                                        return (
-                                                <li className='item-container'>
-                                                    <button 
-                                                    onClick={ onImageUpload }
-                                                    className='board-background-color-btn choose-btn' 
-                                                    > 
-                                                        <p>Upload image</p>
-                                                    </button>
-                                                </li>
-                                        )
-                                    }}
-                                </ImageUploading>
-                            </ul>
-                        </fieldset>  
+                                />
+                        </div>
                     </div>
 
-                    <CreatableSelect
-                        isMulti
-                        options={this.options}
-                        placeholder='Select or create columns for your table...'
-                        className='w-100 custom-select-box'   
-                        classNamePrefix='custom-select-box'
-                        closeMenuOnSelect = { false }
-                        onChange={this.handleSelectOptionsChange }
-                    />
-                    
-                </div>
 
-                <div className='board-demo-version-container'>
-                    <h3>Board Demo Version</h3>  
-
-                    <div 
-                        className='board-demo-version' 
-                        style={ demoVersionBoardBackgraundStyle }>
-                           <ScrollMenu
-                            data = { !_.isEmpty(boardColumns) && boardColumns.map(
-                                        (column, index) => {
-                                            return (<BoardDemoColumn 
-                                                columnTitle={ column }
-                                                boardWidth={ width } 
-                                                key={ `column-${index}` }
-                                            />);
-                                        })
-                            }
-                            />
+                    <div className='create-new-board-container'> 
+                        <button className='create-new-board-btn'
+                        onClick={this.handleCreateBoard}
+                        >Create team board
+                        </button>
                     </div>
-                </div>
-
-
-                <div className='create-new-board-container'> 
-                    <button className='create-new-board-btn'
-                    onClick={this.handleCreateBoard}
-                    >Create team board
-                    </button>
                 </div>
             </div>
         );

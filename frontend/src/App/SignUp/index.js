@@ -10,7 +10,7 @@ import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import { Link } from "react-router-dom";
 import _ from 'lodash';
-import axios from 'axios'
+import { signUpUser, userLogIn } from '../../actions/user';
 
 class SignUp extends React.Component {
     constructor(props){
@@ -54,34 +54,22 @@ class SignUp extends React.Component {
         return requiredFields.every(field => !_.isEmpty(this.state[field]));
     }
 
-    handleClickSignUp = () => {
+    handleClickSignUp = async () => {
         const requiredFieldsFilledIn = this.requiredFieldsFilledIn();
         if(requiredFieldsFilledIn){
-            const config = {
-                url: 'http://127.0.0.1:8000/api/users/sign_up/', 
-                method: 'POST',
-                data: {
-                    fullname: this.state.fullName,
-                    email: this.state.email,
-                    username: this.state.username,
-                    password1: this.state.password1,
-                    password2: this.state.password2
+            const data = await signUpUser(
+                this.state.fullName, this.state.email, this.state.username,
+                this.state.password1, this.state.password2
+            );
+            if (_.isEmpty(data.errors)){
+
+                const success = await userLogIn(this.state.username, this.state.password1);
+
+                if (success){
+                    window.location.href = '/';
                 }
             }
-
-            axios(config)
-            .then(response => {
-                console.log(response.data);
-                console.log(response.config);
-                console.log(response.request);
-                this.setState({errors: {}});
-            })
-            .catch(error => {
-                const data = error.response.data;
-                Object.entries(data).map(([key, value]) => {
-                    this.setState({errors: {[key]: value}})
-                });
-            });
+            this.setState({errors: data.errors});
         } else {
             this.setState({errors: {requiredFields: ['Fill in all required fields']}});
         }     
@@ -89,8 +77,6 @@ class SignUp extends React.Component {
 
 
     render(){
-        console.log(this.state.errors);
-
         const styles = {
             paper : {
                 width: '100%',
@@ -275,7 +261,7 @@ class SignUp extends React.Component {
                                     <input 
                                         type='checkbox' 
                                         className='subscribe'
-                                        onChange={this.handleCheckSubscribe} 
+                                        onChange={this.handleCheckSubscribe}
                                     />
                                     <label>
                                         &nbsp;I Would like to recieve Promotional Offers.
