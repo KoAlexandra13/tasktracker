@@ -18,7 +18,7 @@
     "@tgrx/getcontrasttext": "^1.0.1",
     "@typescript-eslint/eslint-plugin": "*",
     "@typescript-eslint/parser": "*",
-    "axios": "^0.20.0",
+    "axios": "^0.21.1",
     "babel-eslint": "*",
     "babel-jest": "*",
     "babel-loader": "*",
