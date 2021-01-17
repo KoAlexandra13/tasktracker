@@ -1,0 +1,31 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres
+    environment:
+      - POSTGRES_DB=tasktracker
+      - POSTGRES_USER=tasktracker
+      - POSTGRES_PASSWORD=tasktracker
+    volumes:
+      - ./postgres_data:/var/lib/postgresql
+    ports:
+      - "5432:5432"
+  web:
+    build: backend/
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - './backend:/backend'
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+  frontend:
+    stdin_open: true
+    command: npm start
+    build: frontend/
+    volumes:
+      - './frontend:/frontend'
+      - '/frontend/node_modules'
+    ports:
+      - "3000:3000"
