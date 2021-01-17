@@ -14,6 +14,7 @@ import { createNewBoardTitle, createNewBoardColumn, createNewBoardBackgroundColo
  import { addPersonalBoard } from '../../actions/boardList';
  import Header from '../Header';
  import { boardCreate } from '../../actions/board'
+ import Footer from '../Footer'
 
 class CreateNewBoard extends React.Component {
     constructor(props){
@@ -113,6 +114,18 @@ class CreateNewBoard extends React.Component {
         } : {
             display: 'flex'
         }
+
+        const Arrow = ({ text, className }) => {
+            return (
+              <div
+                className={className}
+              >{text}</div>
+            );
+          };
+           
+           
+        const ArrowLeft = Arrow({ text: '◄', className: 'arrow-prev' });
+        const ArrowRight = Arrow({ text: '►', className: 'arrow-next' });
 
         return(
             <div style={{minWidth: '600px', width: '100%'}}>
@@ -217,15 +230,25 @@ class CreateNewBoard extends React.Component {
                             </fieldset>  
                         </div>
 
-                        <CreatableSelect
-                            isMulti
-                            options={this.options}
-                            placeholder='Select or create columns for your table...'
-                            className='w-100 custom-select-box'   
-                            classNamePrefix='custom-select-box'
-                            closeMenuOnSelect = { false }
-                            onChange={this.handleSelectOptionsChange }
-                        />
+                        <div className='d-flex'>
+                            <CreatableSelect
+                                isMulti
+                                options={this.options}
+                                placeholder='Select or create columns for your table...'
+                                className='w-100 custom-select-box'   
+                                classNamePrefix='custom-select-box'
+                                closeMenuOnSelect = {false}
+                                onChange={this.handleSelectOptionsChange }
+                            />
+
+                            <div className='create-new-board-container'> 
+                                <button className='create-new-board-btn'
+                                onClick={this.handleCreateBoard}
+                                >
+                                    <p>Create board</p>
+                                </button>
+                            </div>
+                        </div>
                         
                     </div>
 
@@ -245,18 +268,16 @@ class CreateNewBoard extends React.Component {
                                                 />);
                                             })
                                 }
-                                />
+                                //dragging={false}
+                                transition={false}
+                                wheel={false}
+                                arrowLeft={ArrowLeft}
+                                arrowRight={ArrowRight}
+                            />
                         </div>
                     </div>
-
-
-                    <div className='create-new-board-container'> 
-                        <button className='create-new-board-btn'
-                        onClick={this.handleCreateBoard}
-                        >Create board
-                        </button>
-                    </div>
                 </div>
+                <Footer/>
             </div>
         );
     }

@@ -5,6 +5,7 @@ import { refreshTokenRequest } from '../api/auth';
 export const FETCH_USER_SUCCESS = 'FETCH_USER_SUCCESS';
 export const FETCH_USER_REQUEST = 'FETCH_USER_REQUEST';
 export const FETCH_USER_ERROR = 'FETCH_USER_ERROR';
+export const UPLOAD_AVATAR_IMAGE = 'UPLOAD_AVATAR_IMAGE';
 
 const fetchUserRequestAction = () => ({
     type: FETCH_USER_REQUEST,
@@ -17,6 +18,17 @@ const fetchUserErrorAction = (message) => ({
     type: FETCH_USER_ERROR,
     message
 });
+
+const uploadAvatarImageAction = (imageURL) => ({
+    type: UPLOAD_AVATAR_IMAGE,
+    imageURL
+})
+
+export function uploadAvatarImage(imageURL){
+    return dispatch => {
+        dispatch(uploadAvatarImageAction(imageURL))
+    }
+}
 
 export function fetchUser(){
     return dispatch => {

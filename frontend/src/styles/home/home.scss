@@ -1,5 +1,4 @@
 .boards{
-    position: absolute;
     margin: 2rem 7rem 2rem 7rem;
     
     &-container {
@@ -35,7 +34,6 @@
                         border-radius: 5px;
 
                         &:hover {
-                            //background-color: rgba(243, 142, 59, 1.5);
                             -webkit-box-shadow: 4px 5px 15px -6px rgba(46,45,46,0.77);
                             -moz-box-shadow: 4px 5px 15px -6px rgba(46,45,46,0.77);
                             box-shadow: 4px 5px 15px -6px rgba(46,45,46,0.77);

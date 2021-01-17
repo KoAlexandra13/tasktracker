@@ -1,0 +1,26 @@
+.footer-container{
+    background-color: #374a56;
+    color: whitesmoke;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0px 0px 3px 0px #595959;
+    //position: absolute;
+    
+    .copyright-text{
+        padding-bottom: 1rem;
+        font-size: small;
+        margin: 0;
+    }
+
+    .navbar-section{
+        display: flex;
+        justify-content: center;
+        padding-top: 1rem;
+
+        .navbar-title{
+            font-size: medium;
+        }
+    }
+
+}

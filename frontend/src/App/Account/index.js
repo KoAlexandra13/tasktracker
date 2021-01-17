@@ -12,6 +12,8 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Button from '@material-ui/core/Button';
 import ImageUploading from 'react-images-uploading';
 import _ from 'lodash';
+import Footer from '../Footer'
+import {uploadUserAvatarRequest} from '../../api/user'
 
 
 class Account extends React.Component{
@@ -35,11 +37,30 @@ class Account extends React.Component{
 
     handleCloseDialogWindow = (prop) => () => {this.setState({...this.state, [prop]: false})}
 
-    handleUploadImageChange = (uploadedImage) => this.setState({...this.state, 
+    handleUploadImage = (uploadedImage) => this.setState({...this.state, 
         avatarImageURL: uploadedImage[0].dataURL, 
         isImageUploaded: true});
 
-    handleSaveChangedAvatar = () => {this.setState({...this.state, openAvatarDialogWindow: false})}
+    handleSaveChangedAvatar = () => {
+        this.setState({...this.state, openAvatarDialogWindow: false})
+
+        const formData = new FormData();
+
+        formData.append("image", this.state.avatarImageURL);
+        formData.append("username", this.props.username);
+
+        uploadUserAvatarRequest(this.props.userId, formData)
+        .then(async response => 
+            {
+                console.log(response.message)
+            }
+        )
+        .catch((error) => 
+            {
+               console.log(error.response)
+            }
+        )
+    };
 
     onError = () => {this.setState({...this.state, isImageUploaded: false})};
 
@@ -68,14 +89,6 @@ class Account extends React.Component{
                 fontSize: 'small',
                 display: 'flex'
             },
-
-            verifyEmailTextField: {
-                width: '70%',
-                marginTop: '1rem',
-                textAligne: 'center',
-                fontSize: 'small',
-                display: 'flex'
-            }
         }
 
         const {isImageUploaded, openLogOutDialogWindow} = this.state;
@@ -97,15 +110,17 @@ class Account extends React.Component{
                         <div className='user-info-and-links-container'>
                             <div className='user-info'>
                                 <Avatar
+                                    src={this.state.avatarImageURL}
                                     alt='userIcon'
                                     style={{
                                         height: '45px',
                                         width: '45px',
                                         backgroundColor: 'rgb(201, 97, 221)',
-                                        marginTop: '-0.2rem'
+                                        marginTop: '-0.2rem',
+                                        fontSize: 'x-large'
                                     }} 
                                     >   
-                                        { this.getUserInitials() }
+                                        {this.getUserInitials()}
                                 </Avatar>
                                 <div className='user-fullname-container'>
                                     <h3>{ this.props.fullname }</h3>
@@ -228,12 +243,13 @@ class Account extends React.Component{
                                     <p>Avatar</p>
 
                                     <Avatar
+                                        src={this.state.avatarImageURL}
                                         alt='userIcon'
                                         style={{
                                             height: '8rem',
                                             width: '8rem',
                                             backgroundColor: 'rgb(201, 97, 221)',
-                                            fontSize: 'xx-large',
+                                            fontSize: 'xxx-large',
                                             marginTop: '0.25rem',
                                         }} 
                                     >   
@@ -256,7 +272,7 @@ class Account extends React.Component{
                                         </DialogContentText>
 
                                         <div className='subscribe-chekbox'>
-                                            <input 
+                                            <input
                                                 type='checkbox' 
                                                 className='subscribe'
                                             />
@@ -267,15 +283,15 @@ class Account extends React.Component{
                                         
                                         <ImageUploading
                                             isClearable
-                                            onChange={this.handleUploadImageChange}
-                                            acceptType={['jpg', 'gif', 'png']}
+                                            onChange={this.handleUploadImage}
+                                            acceptType={['jpg', 'gif', 'png', 'jpeg']}
                                             maxFileSize={5242880}
                                             onError={this.onError}
                                             >
                                             {({onImageUpload}) => {
                                                 return(
                                                         <button 
-                                                        onClick={ onImageUpload }
+                                                        onClick={onImageUpload}
                                                         className='upload-image' 
                                                         > 
                                                             <p>Upload image</p>
@@ -288,18 +304,18 @@ class Account extends React.Component{
                                             <label 
                                                 style={titleErrorStyle}>
                                                 *Problems with uploading the image check that it has 
-                                                the correct resolution '.jpg', '.gif', '.png'
+                                                the correct resolution '.jpg', '.gif', '.png', 'jpeg'
                                             </label>
                                         </DialogContentText>
                                     
                                     </DialogContent>
                                     <DialogActions>
                                         <Button 
-                                            onClick={this.handleCloseDialogWindow('openAvatarDialogWindow')} 
+                                            onClick={this.handleSaveChangedAvatar} 
                                             color='primary'>
                                             Save changes
                                         </Button>
-                                        <Button onClick={this.handleSaveChangedAvatar} color='primary'>
+                                        <Button onClick={this.handleCloseDialogWindow('openAvatarDialogWindow')} color='primary'>
                                             Close
                                         </Button>
                                     </DialogActions>
@@ -350,18 +366,18 @@ class Account extends React.Component{
                            <div className='verify-email-container'>
                                 <p>Verify your email</p>
 
-                                <div style={{display: 'flex'}}>
+                                <div>
                                     <TextField
                                         variant='outlined'
                                         size='small'
                                         label='email'
                                         defaultValue={this.props.email}
-                                        style={styles.verifyEmailTextField}
+                                        style={styles.textField}
                                     />
 
                                     <div className='verify-button-container'>
                                         <button className='verify-button'>
-                                            Verify!
+                                            Verify
                                         </button>
                                     </div>
                                 </div>
@@ -370,6 +386,7 @@ class Account extends React.Component{
                        </div>
                    </div>
                 </div>
+                <Footer/>
             </div>
         );
     }
@@ -381,6 +398,8 @@ function mapStateToProps(state){
        fullname: state.user.fullName,
        email: state.user.email,
        organization: state.user.organization,
+       image: state.user.userIcon,
+       userId: state.user.userId 
     };
 }
 

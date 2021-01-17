@@ -4,6 +4,7 @@ import BoardItem from './BoardItem'
 import { connect } from 'react-redux';
 import { addPersonalBoard, addTeamBoard} from '../../actions/boardList';
 import Header from '../Header';
+import Footer from '../Footer';
 
 
 class Home extends React.Component {
@@ -67,6 +68,7 @@ class Home extends React.Component {
                         </div>
                     </div> 
                 </div>
+                <Footer/>
             </div>
         );
     }

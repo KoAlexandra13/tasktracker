@@ -181,28 +181,66 @@
     }
 
     .create-new-board {
+        
+
         &-btn {
-            margin-top: 1rem;
-            color: whitesmoke;
+            width: 90%;
+            text-align: center;
             border: none;
-            border-radius: 10px;
-            font-size: medium;
+            border-radius: 5px;
             display: flex;
-            background: #56c1dc;
+            height: 2.3rem;
+            background: #5e6d71;
+            padding-top: 7px;
+
+            p{
+                font-size: medium;
+                margin: 0;
+                color: white;
+                display: flex;
+                margin: 0 auto;
+                vertical-align: middle;
+            }
         }
 
         &-container {
-            width: 100%;
+            width: 15%;
             display: flex;
             justify-content: flex-end;
         }
     }
 
     .board-demo-version-column {
-        background-color: white;
-        margin: 0.5rem 0 0.5rem 0.5rem;
+        background-color: #efefef;
+        margin: 0.75rem 0.2rem 0.5rem 0.5rem;
         border-radius: 5px;
         display: inline-flex;
+
+        .column-label{
+            margin: 0.5rem 0.5rem 0.5rem 0.5rem;
+            color: black;
+            font-weight: bold;
+            font-size: medium;
+        }
+        
+    }
+
+}
+
+@media screen and (max-device-width:1070px), screen and (max-width: 1070px)  {
+    .create-new-board-btn {
+        p{
+            visibility: hidden;
+
+            &:before{
+                content: 'Create';
+                visibility: visible;
+            }
+        }
+    }
+
+    .column-label{
+        font-size: small !important;
     }
 }
 

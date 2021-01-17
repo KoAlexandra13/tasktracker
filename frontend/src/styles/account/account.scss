@@ -75,7 +75,7 @@
 
         .change-personal-data-container{
             display: flex;
-            justify-content: space-around;
+            justify-content: space-between;
 
             .text-fields-container{
                 margin-top: 1rem;
@@ -86,7 +86,7 @@
                 display: flex;
                 vertical-align: middle;
 
-                p {
+                p{
                     font-family: 'system-ui';
                     margin-bottom: 0.5rem;
                     color: rgb(71, 71, 71);
@@ -126,8 +126,8 @@
 
         button{
             background-color: rgb(33, 206, 253);
-            width: 17rem;
-            height: 2rem;
+            width: 40%;
+            height: 2.25rem;
             border-radius: 5px;
             font-family: 'system-ui';
         }
@@ -144,10 +144,10 @@
             justify-content: left;
             font-family: 'system-ui';
             font-weight: bold;
-
         }
 
         .change-password-button{
+            padding-top: 5px;
             width: 40%;
             justify-content: center;
             display: flex;
@@ -166,15 +166,14 @@
         }
 
         .verify-button-container{
-            margin-top: 1.25rem;
-            display: flex;
-            margin-left: 1rem;
+            margin-top: 2.5rem;
+            text-align: left;
 
             .verify-button{
                 background-color: rgb(33, 206, 253);
-                width: 100%;
-                height: 2rem;
-                border-radius: 50px;
+                width: 40%;
+                height: 2.25rem;
+                border-radius: 5px;
                 font-family: 'system-ui'; 
             }
         }
@@ -184,9 +183,9 @@
 
 .upload-image{
     padding: 0;
-    background-color: rgb(33, 206, 253);
+    background-color: rgb(55, 69, 73);
     width: 50%;
-    border-radius: 50px;
+    border-radius: 5px;
     height: 2rem;
 
     p{

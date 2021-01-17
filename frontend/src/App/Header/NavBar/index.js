@@ -62,8 +62,8 @@ class NavBar extends React.Component {
                             <Avatar
                                 alt='userIcon'
                                 style={{
-                                    height: '35px',
-                                    width: '35px',
+                                    height: '40px',
+                                    width: '40px',
                                     backgroundColor: 'rgb(201, 97, 221)',
                                 }} 
                                 >   
