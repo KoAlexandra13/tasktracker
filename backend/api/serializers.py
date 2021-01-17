@@ -1,7 +1,7 @@
 from django.db.models import Q
 from django.core.exceptions import ValidationError
 
-from rest_framework.serializers import ModelSerializer, SerializerMethodField
+from rest_framework.serializers import ModelSerializer, SerializerMethodField, JSONField
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 from api.models import User, Table, TableColumn, Task
@@ -73,8 +73,8 @@ class TableColumnDetailSerializer(ModelSerializer):
 
 
 class TableDetailSerializer(ModelSerializer):
-    columns = TableColumnDetailSerializer(many=True)
-    users = UserDetailSerializer(many=True)
+    columns = TableColumnDetailSerializer(many=True, read_only=True)
+    users = UserDetailSerializer(many=True, read_only=True)
 
     class Meta:
         model = Table
