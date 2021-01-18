@@ -13,7 +13,8 @@ import Button from '@material-ui/core/Button';
 import ImageUploading from 'react-images-uploading';
 import _ from 'lodash';
 import Footer from '../Footer'
-import {uploadUserAvatarRequest} from '../../api/user'
+import {uploadUserAvatarRequest, userSelfRequest} from '../../api/user'
+import { uploadAvatarImage } from '../../actions/user';
 
 
 class Account extends React.Component{
@@ -23,8 +24,10 @@ class Account extends React.Component{
         this.state = {
             openAvatarDialogWindow: false,
             isImageUploaded: '',
+            avatarImageFile: null,
             avatarImageURL: null,
-            openLogOutDialogWindow: false
+            openLogOutDialogWindow: false,
+            isCheckedInitialsCheckbox : false
         }
     }
 
@@ -37,29 +40,53 @@ class Account extends React.Component{
 
     handleCloseDialogWindow = (prop) => () => {this.setState({...this.state, [prop]: false})}
 
-    handleUploadImage = (uploadedImage) => this.setState({...this.state, 
-        avatarImageURL: uploadedImage[0].dataURL, 
-        isImageUploaded: true});
+    handleUploadImage = (uploadedImage) => {
+        this.setState(
+            {
+                ...this.state, 
+                avatarImageFile: uploadedImage[0].file,
+                avatarImageURL: uploadedImage[0].dataURL,
+                isImageUploaded: true
+            }
+        );
+    }
 
     handleSaveChangedAvatar = () => {
         this.setState({...this.state, openAvatarDialogWindow: false})
 
-        const formData = new FormData();
+        if(!this.state.isCheckedInitialsCheckbox){
+            const formData = new FormData();
 
-        formData.append("image", this.state.avatarImageURL);
-        formData.append("username", this.props.username);
+            formData.append("image", this.state.avatarImageFile);
 
-        uploadUserAvatarRequest(this.props.userId, formData)
-        .then(async response => 
-            {
-                console.log(response.message)
-            }
-        )
-        .catch((error) => 
-            {
-               console.log(error.response)
-            }
-        )
+            uploadUserAvatarRequest(this.props.userId, formData)
+            .then()
+            .catch((error) => 
+                {
+                console.log(error.response)
+                }
+            )
+
+            userSelfRequest()
+            .then(response => 
+                {
+                    this.props.uploadAvatarImage(response.data.image)
+                }
+            )
+            .catch(error => console.log(error))
+        }
+        else {
+            uploadUserAvatarRequest(this.props.userId, null)
+            .then()
+            .catch((error) => 
+                {
+                console.log(error.response)
+                }
+            )
+
+            this.props.uploadAvatarImage(null)
+            
+        }
     };
 
     onError = () => {this.setState({...this.state, isImageUploaded: false})};
@@ -72,6 +99,23 @@ class Account extends React.Component{
         localStorage.removeItem('accessToken');
         window.location.reload('');
     }
+
+    selectInitials = () => {
+        this.setState(
+            {
+                ...this.state, 
+                isCheckedInitialsCheckbox: !this.state.isCheckedInitialsCheckbox
+            }
+        )
+        if(!this.state.isCheckedInitialsCheckbox){
+            this.setState(
+                {
+                    ...this.state, 
+                    avatarImageURL: null
+                }
+            )
+        }
+    };
 
     render(){
 
@@ -110,7 +154,7 @@ class Account extends React.Component{
                         <div className='user-info-and-links-container'>
                             <div className='user-info'>
                                 <Avatar
-                                    src={this.state.avatarImageURL}
+                                    src={this.props.image}
                                     alt='userIcon'
                                     style={{
                                         height: '45px',
@@ -241,9 +285,8 @@ class Account extends React.Component{
                                     className='change-avatar-button'
                                     onClick={this.openChangeAvatarDialogWindow}>
                                     <p>Avatar</p>
-
                                     <Avatar
-                                        src={this.state.avatarImageURL}
+                                        src={this.props.image}
                                         alt='userIcon'
                                         style={{
                                             height: '8rem',
@@ -265,40 +308,70 @@ class Account extends React.Component{
                                     open={this.state.openAvatarDialogWindow}
                                     onClose={this.handleCloseDialogWindow('openAvatarDialogWindow')} 
                                     aria-labelledby='form-dialog-title'>
-                                    <DialogTitle>Change your avatar</DialogTitle>
+                                    <DialogTitle>
+                                        Change your avatar
+                                        </DialogTitle>
                                     <DialogContent>
                                         <DialogContentText style={{color: 'rgb(71, 71, 71)'}}>
-                                            You can upload your image or select initials(without avatar).
+                                            You can upload your image or select your initials.
                                         </DialogContentText>
 
-                                        <div className='subscribe-chekbox'>
-                                            <input
-                                                type='checkbox' 
-                                                className='subscribe'
-                                            />
-                                            <label style={{color: 'rgb(71, 71, 71)'}}>
-                                                &nbsp;Initials(without avatar)
-                                            </label> 
-                                        </div>
-                                        
-                                        <ImageUploading
-                                            isClearable
-                                            onChange={this.handleUploadImage}
-                                            acceptType={['jpg', 'gif', 'png', 'jpeg']}
-                                            maxFileSize={5242880}
-                                            onError={this.onError}
+                                        <div 
+                                            style={{display : 'flex'}}
+                                        >
+                                            <div className='avatarDemo'>
+                                                <Avatar
+                                                    src={this.state.avatarImageURL || this.props.image }
+                                                    alt='userIcon'
+                                                    style={{
+                                                        height: '8rem',
+                                                        width: '8rem',
+                                                        backgroundColor: 'rgb(201, 97, 221)',
+                                                        fontSize: 'xxx-large',
+                                                        marginTop: '0.25rem',
+                                                    }} 
+                                                >   
+                                                    {this.getUserInitials()}
+                                                </Avatar>
+                                            </div>
+                                            
+                                            <div 
+                                                style={{
+                                                        width : '100%',
+                                                        marginTop: '4rem',
+                                                        marginLeft : '2rem'}}
                                             >
-                                            {({onImageUpload}) => {
-                                                return(
-                                                        <button 
-                                                        onClick={onImageUpload}
-                                                        className='upload-image' 
-                                                        > 
-                                                            <p>Upload image</p>
-                                                        </button>
-                                                )
-                                            }}
-                                        </ImageUploading>
+                                                <div className='subscribe-chekbox'>
+                                                    <input
+                                                        type='checkbox' 
+                                                        className='subscribe'
+                                                        onChange={this.selectInitials}
+                                                    />
+                                                    <label style={{color: 'rgb(71, 71, 71)'}}>
+                                                        &nbsp;Your initials (without avatar)
+                                                    </label> 
+                                                </div>
+                                                
+                                                <ImageUploading
+                                                    isClearable
+                                                    onChange={this.handleUploadImage}
+                                                    acceptType={['jpg', 'gif', 'png', 'jpeg']}
+                                                    maxFileSize={5242880}
+                                                    onError={this.onError}
+                                                    >
+                                                    {({onImageUpload}) => {
+                                                        return(
+                                                                <button 
+                                                                onClick={onImageUpload}
+                                                                className='upload-image' 
+                                                                > 
+                                                                    <p>Upload image</p>
+                                                                </button>
+                                                        )
+                                                    }}
+                                                </ImageUploading>
+                                            </div>
+                                        </div>
 
                                         <DialogContentText style={{color: 'indianred'}}>
                                             <label 
@@ -312,10 +385,12 @@ class Account extends React.Component{
                                     <DialogActions>
                                         <Button 
                                             onClick={this.handleSaveChangedAvatar} 
-                                            color='primary'>
+                                            color='#374549'>
                                             Save changes
                                         </Button>
-                                        <Button onClick={this.handleCloseDialogWindow('openAvatarDialogWindow')} color='primary'>
+                                        <Button 
+                                            onClick={this.handleCloseDialogWindow('openAvatarDialogWindow')} 
+                                            color='#374549'>
                                             Close
                                         </Button>
                                     </DialogActions>
@@ -403,4 +478,6 @@ function mapStateToProps(state){
     };
 }
 
-export default connect(mapStateToProps,{})(Account);
+export default connect(mapStateToProps,{
+    uploadAvatarImage,
+})(Account);

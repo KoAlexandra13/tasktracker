@@ -1,7 +1,8 @@
 import {
     FETCH_USER_REQUEST,
     FETCH_USER_SUCCESS,
-    FETCH_USER_ERROR
+    FETCH_USER_ERROR,
+    UPLOAD_AVATAR_IMAGE
 } from '../actions/user';
 
 const initialState = {
@@ -29,7 +30,7 @@ const userReducer = (state = initialState, action) => {
                 username: action.data.username,
                 email: action.data.email,
                 organization: action.data.organization,
-                userIcon: action.data.image,
+                userIcon: 'http://localhost:8000' + action.data.image,
                 userId: action.data.id,
                 isFetching: false
             }
@@ -38,6 +39,11 @@ const userReducer = (state = initialState, action) => {
                 ...state,
                 isFetching: false,
                 error: action.message
+            }
+        case UPLOAD_AVATAR_IMAGE:
+            return {
+                ...state,
+                userIcon: 'http://localhost:8000' + action.imageURL,
             }
         default:
             return state;

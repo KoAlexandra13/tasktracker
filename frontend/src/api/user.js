@@ -38,10 +38,14 @@ export function userSelfRequest(){
 export function uploadUserAvatarRequest(userId, data){
     const config = {
         url: `http://127.0.0.1:8000/api/users/${userId}/`, 
-        method: 'PUT',
-        data
+        method: 'PATCH',
+        data,
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        }
     }
     return axios(config)
 }
+
 
 

@@ -60,6 +60,7 @@ class NavBar extends React.Component {
                     <button className='user-photo'>
                         <Link to='/account'>
                             <Avatar
+                                src={this.props.image} 
                                 alt='userIcon'
                                 style={{
                                     height: '40px',
@@ -83,7 +84,7 @@ class NavBar extends React.Component {
 function mapStateToProps(state){
     return {
         fullName: state.user.fullName,
-        userIcon: state.user.userIcon
+        image: state.user.userIcon,
     };
 }
 
