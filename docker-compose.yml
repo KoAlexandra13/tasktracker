@@ -11,9 +11,13 @@ services:
       - ./postgres_data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
-  web:
+  backend:
     build: backend/
-    command: python manage.py runserver 0.0.0.0:8000
+    entrypoint: ./backend-entrypoint.sh
+    environment:
+      - POSTGRES_DB=tasktracker
+      - POSTGRES_USER=tasktracker
+      - POSTGRES_PASSWORD=tasktracker
     volumes:
       - './backend:/backend'
     ports:
