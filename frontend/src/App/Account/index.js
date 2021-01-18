@@ -13,8 +13,8 @@ import Button from '@material-ui/core/Button';
 import ImageUploading from 'react-images-uploading';
 import _ from 'lodash';
 import Footer from '../Footer'
-import {uploadUserAvatarRequest, userSelfRequest} from '../../api/user'
-import { uploadAvatarImage } from '../../actions/user';
+import { uploadUserAvatarRequest, changeUserInfoRequest } from '../../api/user'
+import { uploadAvatarImage, changeUserInfo } from '../../actions/user';
 
 
 class Account extends React.Component{
@@ -27,7 +27,14 @@ class Account extends React.Component{
             avatarImageFile: null,
             avatarImageURL: null,
             openLogOutDialogWindow: false,
-            isCheckedInitialsCheckbox : false
+            isCheckedInitialsCheckbox : false,
+            newFullname: this.props.fullname,
+            newUsername: this.props.username, 
+            newOrganization: this.props.organization,
+            newEmail: this.props.email,
+            //newUserInfoAboutYourself: this.props.userInfoAboutYourself,
+            personalDataErrors: {},
+            changePasswordErrors: {},
         }
     }
 
@@ -78,6 +85,41 @@ class Account extends React.Component{
         )
     };
 
+    handleSaveChangedUserInfo = () => {
+        let data = new FormData();
+
+        if(this.state.newFullname !== this.props.fullname){
+            data.append("fullname", this.state.newFullname)
+        }
+
+        if(this.state.newUsername !== this.props.username){ 
+            data.append("username", this.state.newUsername)
+        }
+
+        if(this.state.newEmail !== this.props.email){ 
+            data.append("email", this.state.newEmail)
+        }
+
+        if(this.state.newOrganization !== this.props.organization){ 
+            data.append("organization", this.state.newOrganization)
+        }
+
+        //TODO: add if(){} for newUserInfoAboutYourself
+
+        changeUserInfoRequest(this.props.userId, data)
+        .then(response => 
+            {
+                this.props.changeUserInfo(response.data)
+                this.setState({personalDataErrors: {}});
+            }
+        )
+        .catch((error) => 
+            {
+                this.setState({personalDataErrors: error.response.data});
+            }
+        )
+    }
+
     onError = () => {this.setState({...this.state, isImageUploaded: false})};
 
     handleLogOutButton = () => {this.setState({...this.state, openLogOutDialogWindow: true})};
@@ -98,6 +140,10 @@ class Account extends React.Component{
         )
     };
 
+    handleChangeTextField = (prop, value) => {
+        this.setState({...this.state, [prop]: value})
+    }
+
     render(){
 
         const styles = {
@@ -116,13 +162,17 @@ class Account extends React.Component{
             },
         }
 
-        const {isImageUploaded, openLogOutDialogWindow} = this.state;
+        const {openLogOutDialogWindow, personalDataErrors} = this.state;
 
-        const titleErrorStyle = (isImageUploaded || _.isEmpty(isImageUploaded)) ? {
-            display: 'none'
+        const titlePersonalDataErrorsStyle = Object.values(personalDataErrors).some((value) => value !== null ) ? {
+            display: 'flex',
+            color: 'indianred',
+            fontSize: 'small',
+            marginBottom: '-1.5rem',
+            marginTop: '0.25rem'
         } : {
-            display: 'flex'
-        }
+            display: 'none'
+        };
 
         return( 
             <div style={{minWidth: '600px', width: '100%'}}>
@@ -130,7 +180,9 @@ class Account extends React.Component{
                 <div className='account-body-container'>
                     <div className='user-info-pane-container'>
                         <div className='right-img-container'>
-                            <img src={require('./images/bg.svg').default} alt={'background'}/>
+                            <img 
+                                className='d-none'
+                                src={require('./images/bg.svg').default} alt={'background'}/>
                         </div>
                         <div className='user-info-and-links-container'>
                             <div className='user-info'>
@@ -175,6 +227,7 @@ class Account extends React.Component{
                                 </div>
                                 <div className='link-container'>
                                     <button 
+                                        className='p-0 hover-underline'
                                         to='/account#log-out'
                                         style={styles.linkStyle}
                                         onClick={this.handleLogOutButton}
@@ -211,7 +264,9 @@ class Account extends React.Component{
                             </div>
                         </div>
                         <div className='left-img-container'>
-                            <img src={require('./images/bg.svg').default} alt={'background'}/>
+                            <img
+                                className='d-none' 
+                                src={require('./images/bg.svg').default} alt={'background'}/>
                         </div>
                     </div>
                     <div className='personal-data-container' id='personal-data'>
@@ -226,6 +281,7 @@ class Account extends React.Component{
                                         label='Full name'
                                         defaultValue={this.props.fullname}
                                         style={styles.textField}
+                                        onChange={(e) => this.handleChangeTextField('newFullname', e.target.value)}
                                     />
 
                                     <TextField
@@ -234,14 +290,16 @@ class Account extends React.Component{
                                         label='Username'
                                         defaultValue={this.props.username}
                                         style={styles.textField}
+                                        onChange={(e) => this.handleChangeTextField('newUsername', e.target.value)}
                                     />
 
                                     <TextField
                                         variant='outlined'
                                         size='small'
-                                        label='email'
+                                        label='Email'
                                         defaultValue={this.props.email}
                                         style={styles.textField}
+                                        onChange={(e) => this.handleChangeTextField('newEmail',e.target.value)}
                                     />
 
                                     <TextField
@@ -250,6 +308,7 @@ class Account extends React.Component{
                                         label='Organization'
                                         defaultValue={this.props.organization}
                                         style={styles.textField}
+                                        onChange={(e) => this.handleChangeTextField('newOrganization',e.target.value)}
                                     />
 
                                     <TextField
@@ -258,6 +317,8 @@ class Account extends React.Component{
                                         multiline
                                         label='About yourself'
                                         style={styles.textField}
+                                        //onChange={(e) => this.handleChangeTextField('newUserInfoAboutYourself',e.target.value)}
+
                                     />
                             </div>
 
@@ -354,15 +415,6 @@ class Account extends React.Component{
                                                 </ImageUploading>
                                             </div>
                                         </div>
-
-                                        <DialogContentText style={{color: 'indianred'}}>
-                                            <label 
-                                                style={titleErrorStyle}>
-                                                *Problems with uploading the image check that it has 
-                                                the correct resolution '.jpg', '.gif', '.png', 'jpeg'
-                                            </label>
-                                        </DialogContentText>
-                                    
                                     </DialogContent>
                                     <DialogActions>
                                         <Button 
@@ -379,9 +431,18 @@ class Account extends React.Component{
                                 </Dialog>
                             </div>
                         </div>
+
+                        {
+                            <span 
+                                className='sign-up-form-error'
+                                style={ titlePersonalDataErrorsStyle }>
+                                    * {Object.values(personalDataErrors)[0]} 
+                            </span>
+                        }
                        
                         <div className='save-changes-button-container'>
-                           <button>
+                           <button
+                                onClick={this.handleSaveChangedUserInfo}>
                                Save changes
                            </button>
                         </div>
@@ -456,10 +517,12 @@ function mapStateToProps(state){
        email: state.user.email,
        organization: state.user.organization,
        image: state.user.userIcon,
-       userId: state.user.userId 
+       userId: state.user.userId, 
+       //userInfoAboutYourself: state.user.userInfoAboutYourself
     };
 }
 
 export default connect(mapStateToProps,{
     uploadAvatarImage,
+    changeUserInfo,
 })(Account);

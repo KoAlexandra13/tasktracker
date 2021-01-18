@@ -6,6 +6,7 @@ export const FETCH_USER_SUCCESS = 'FETCH_USER_SUCCESS';
 export const FETCH_USER_REQUEST = 'FETCH_USER_REQUEST';
 export const FETCH_USER_ERROR = 'FETCH_USER_ERROR';
 export const UPLOAD_AVATAR_IMAGE = 'UPLOAD_AVATAR_IMAGE';
+export const CHANGE_USER_INFO = 'CHANGE_USER_INFO';
 
 const fetchUserRequestAction = () => ({
     type: FETCH_USER_REQUEST,
@@ -24,9 +25,20 @@ const uploadAvatarImageAction = (imageURL) => ({
     imageURL
 })
 
+const changeUserInfoAction = (data) => ({
+    type: CHANGE_USER_INFO,
+    data
+})
+
 export function uploadAvatarImage(imageURL){
     return dispatch => {
         dispatch(uploadAvatarImageAction(imageURL))
+    }
+}
+
+export function changeUserInfo(data){
+    return dispatch => {
+        dispatch(changeUserInfoAction(data))
     }
 }
 

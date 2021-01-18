@@ -41,9 +41,15 @@ export function uploadUserAvatarRequest(userId, data){
         url: `http://127.0.0.1:8000/api/users/${userId}/`, 
         method: 'PATCH',
         data,
-        //headers: {
-         //   'Content-Type': 'multipart/form-data'
-        //}
+    }
+    return axios(config)
+}
+
+export function changeUserInfoRequest(userId, data){
+    const config = {
+        url: `http://127.0.0.1:8000/api/users/${userId}/`, 
+        method: 'PATCH',
+        data,
     }
     return axios(config)
 }
