@@ -30,7 +30,7 @@ const userReducer = (state = initialState, action) => {
                 username: action.data.username,
                 email: action.data.email,
                 organization: action.data.organization,
-                userIcon: 'http://localhost:8000' + action.data.image,
+                userIcon: action.data.image,
                 userId: action.data.id,
                 isFetching: false
             }
@@ -43,7 +43,7 @@ const userReducer = (state = initialState, action) => {
         case UPLOAD_AVATAR_IMAGE:
             return {
                 ...state,
-                userIcon: 'http://localhost:8000' + action.imageURL,
+                userIcon: action.imageURL,
             }
         default:
             return state;

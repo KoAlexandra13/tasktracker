@@ -5,7 +5,7 @@ import ImageUploading from 'react-images-uploading';
 import UploadImage from './UploadImage';
 import BackgroundItem from './BackgroundItem'
 import BoardDemoColumn from './BoardDemoColumn'
-import CreatableSelect from 'react-select/lib/Creatable';
+import Creatable from 'react-select/creatable';
 import ScrollMenu from 'react-horizontal-scrolling-menu';
 import { connect } from 'react-redux';
 import { createNewBoardTitle, createNewBoardColumn, createNewBoardBackgroundColor,
@@ -234,7 +234,7 @@ class CreateNewBoard extends React.Component {
                         </div>
 
                         <div className='d-flex'>
-                            <CreatableSelect
+                            <Creatable
                                 isMulti
                                 options={this.options}
                                 placeholder='Select or create columns for your table...'

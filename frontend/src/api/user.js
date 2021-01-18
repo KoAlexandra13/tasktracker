@@ -29,7 +29,8 @@ export function userLoginRequest(usernameOrEmail, password){
 
 export function userSelfRequest(){
     const config = {
-        url: 'http://127.0.0.1:8000/api/users/self', 
+        url: 'http://127.0.0.1:8000/api/users/self/', 
+        crossDomain: true,
         method: 'GET',
     };
     return axios(config);
@@ -40,9 +41,9 @@ export function uploadUserAvatarRequest(userId, data){
         url: `http://127.0.0.1:8000/api/users/${userId}/`, 
         method: 'PATCH',
         data,
-        headers: {
-            'Content-Type': 'multipart/form-data'
-        }
+        //headers: {
+         //   'Content-Type': 'multipart/form-data'
+        //}
     }
     return axios(config)
 }

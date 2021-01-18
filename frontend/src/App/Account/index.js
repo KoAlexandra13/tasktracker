@@ -46,47 +46,36 @@ class Account extends React.Component{
                 ...this.state, 
                 avatarImageFile: uploadedImage[0].file,
                 avatarImageURL: uploadedImage[0].dataURL,
-                isImageUploaded: true
+                isImageUploaded: true,
+                isCheckedInitialsCheckbox : false
             }
         );
     }
 
     handleSaveChangedAvatar = () => {
         this.setState({...this.state, openAvatarDialogWindow: false})
+        const image = !this.state.isCheckedInitialsCheckbox ? this.state.avatarImageFile : null;
 
-        if(!this.state.isCheckedInitialsCheckbox){
-            const formData = new FormData();
-
-            formData.append("image", this.state.avatarImageFile);
-
-            uploadUserAvatarRequest(this.props.userId, formData)
-            .then()
-            .catch((error) => 
-                {
-                console.log(error.response)
-                }
-            )
-
-            userSelfRequest()
-            .then(response => 
-                {
-                    this.props.uploadAvatarImage(response.data.image)
-                }
-            )
-            .catch(error => console.log(error))
+        let data = null;
+        if (image){
+            data = new FormData();
+            data.append("image", image);
+        } else {
+            data = {};
+            data['image'] = image;
         }
-        else {
-            uploadUserAvatarRequest(this.props.userId, null)
-            .then()
-            .catch((error) => 
-                {
-                console.log(error.response)
-                }
-            )
 
-            this.props.uploadAvatarImage(null)
-            
-        }
+        uploadUserAvatarRequest(this.props.userId, data)
+        .then(response => 
+            {
+                this.props.uploadAvatarImage(response.data.image)
+            }
+        )
+        .catch((error) => 
+            {
+                console.log(error.response)
+            }
+        )
     };
 
     onError = () => {this.setState({...this.state, isImageUploaded: false})};
@@ -107,14 +96,6 @@ class Account extends React.Component{
                 isCheckedInitialsCheckbox: !this.state.isCheckedInitialsCheckbox
             }
         )
-        if(!this.state.isCheckedInitialsCheckbox){
-            this.setState(
-                {
-                    ...this.state, 
-                    avatarImageURL: null
-                }
-            )
-        }
     };
 
     render(){
@@ -216,12 +197,12 @@ class Account extends React.Component{
                                     <DialogActions>
                                         <Button 
                                             onClick={this.logOut} 
-                                            color='primary'>
+                                            color='#374549'>
                                             Yes
                                         </Button>
                                         <Button 
                                             onClick={this.handleCloseDialogWindow('openLogOutDialogWindow')} 
-                                            color='primary'>
+                                            color='#374549'>
                                             No
                                         </Button>
                                     </DialogActions>
@@ -284,7 +265,7 @@ class Account extends React.Component{
                                 <button 
                                     className='change-avatar-button'
                                     onClick={this.openChangeAvatarDialogWindow}>
-                                    <p>Avatar</p>
+                                    <p className='h4'>Avatar</p>
                                     <Avatar
                                         src={this.props.image}
                                         alt='userIcon'
@@ -345,7 +326,8 @@ class Account extends React.Component{
                                                     <input
                                                         type='checkbox' 
                                                         className='subscribe'
-                                                        onChange={this.selectInitials}
+                                                        onClick={this.selectInitials}
+                                                        checked={this.state.isCheckedInitialsCheckbox}
                                                     />
                                                     <label style={{color: 'rgb(71, 71, 71)'}}>
                                                         &nbsp;Your initials (without avatar)

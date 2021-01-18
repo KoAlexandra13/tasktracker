@@ -5,7 +5,7 @@ import ImageUploading from 'react-images-uploading';
 import UploadImage from '../CreateNewBoard/UploadImage';
 import BackgroundItem from '../CreateNewBoard/BackgroundItem'
 import BoardDemoColumn from '../CreateNewBoard/BoardDemoColumn'
-import CreatableSelect from 'react-select/lib/Creatable';
+import Creatable from 'react-select/creatable';
 import ScrollMenu from 'react-horizontal-scrolling-menu';
 import { connect } from 'react-redux';
 import { createNewBoardTitle, createNewBoardColumn, createNewBoardBackgroundColor,
@@ -223,7 +223,7 @@ class CreateNewTeam extends React.Component {
                             </fieldset>  
                         </div>
 
-                        <CreatableSelect
+                        <Creatable
                             isMulti
                             options={this.options}
                             placeholder='Select or create columns for your table...'

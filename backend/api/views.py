@@ -35,12 +35,12 @@ class UserViewSet(ModelViewSet):
         form = UserCreationForm(request.data)
         if form.is_valid():
             user = form.save()
-            return Response(UserDetailSerializer(user).data, status=status.HTTP_201_CREATED)
+            return Response(UserDetailSerializer(user, context={"request": request}).data, status=status.HTTP_201_CREATED)
         return Response(form.errors, status=status.HTTP_400_BAD_REQUEST)
 
     @decorators.action(detail=False, methods=['get'], url_path='self')
     def get_self(self, request, *args, **kwargs):
-        return Response(UserDetailSerializer(request.user).data, status=status.HTTP_200_OK)
+        return Response(UserDetailSerializer(request.user, context={"request": request}).data, status=status.HTTP_200_OK)
 
 
 class TableViewSet(ModelViewSet):

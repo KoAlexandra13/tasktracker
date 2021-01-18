@@ -129,11 +129,15 @@
         margin-top: 2.5rem;        
 
         button{
-            background-color: rgb(33, 206, 253);
+            background-color: #374a56;
             width: 40%;
             height: 2.25rem;
             border-radius: 5px;
-            font-family: 'system-ui';
+            font-family: 'system-ui'; 
+
+            &:hover{
+                color:rgba($color: #e9dada, $alpha: 0.6);
+            }
         }
     }
 }
@@ -174,11 +178,15 @@
             text-align: left;
 
             .verify-button{
-                background-color: rgb(33, 206, 253);
+                background-color: #374a56;
                 width: 40%;
                 height: 2.25rem;
                 border-radius: 5px;
-                font-family: 'system-ui'; 
+                font-family: 'system-ui';
+                
+                &:hover{
+                    color:rgba($color: #e9dada, $alpha: 0.6)
+                }
             }
         }
     }
@@ -191,6 +199,7 @@
     width: 50%;
     border-radius: 5px;
     height: 2rem;
+    width: 100%;
 
     p{
         margin-top: 0.25rem;

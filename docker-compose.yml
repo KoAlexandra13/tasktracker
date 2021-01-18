@@ -22,7 +22,7 @@ services:
       - db
   frontend:
     stdin_open: true
-    command: npm start
+    command: npm run build && serve -s build
     build: frontend/
     volumes:
       - './frontend:/frontend'
