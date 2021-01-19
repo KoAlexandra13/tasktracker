@@ -14,6 +14,7 @@ class User(AbstractUser):
 class Table(models.Model):
     name = models.CharField(max_length=255)
     users = models.ManyToManyField('User', related_name='tables', null=True, blank=True)
+    background_color = models.CharField(max_length=10, null=True, blank=True)
     background_image = models.ImageField(upload_to='table/bg/', null=True, blank=True)
 
     def __str__(self):
