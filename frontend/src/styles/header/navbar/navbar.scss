@@ -24,10 +24,37 @@
         font-family: 'system-ui';
         font-weight: 400;
     }
+
     &--center-section {
         text-align: center;
 
+        button {
+        
+            &:hover{
+                color:rgba($color: #eeeeee, $alpha: 0.6)
+            }
+        
+            a {
+                color: inherit;
+        
+                &:hover {
+                    text-decoration: none;
+                    color: inherit
+                }
+             }
+        }
+        
     }
+}
+
+button {
+    background-color: Transparent;
+    background-repeat: no-repeat;
+    border: none;
+    cursor: pointer;
+    outline: none!important;
+    padding:  1px 10px 1px 10px;
+    color: white;
 }
 
 .delimiter {
@@ -39,28 +66,6 @@
     height: 40px;
 }
 
-button {
-    background-color: Transparent;
-    background-repeat: no-repeat;
-    border: none;
-    cursor: pointer;
-    outline: none!important;
-    padding:  1px 10px 1px 10px;
-    color: white;
-
-    &:hover{
-        color:rgba($color: #0f0f0f, $alpha: 0.6)
-    }
-
-    a {
-        color: inherit;
-
-        &:hover {
-            text-decoration: none;
-            color: inherit
-        }
-     }
-}
 
 @import "popups/search.scss";
 @import 'popups/boards.scss'

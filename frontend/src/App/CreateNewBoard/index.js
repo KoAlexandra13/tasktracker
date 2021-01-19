@@ -48,11 +48,13 @@ class CreateNewBoard extends React.Component {
         this.defaultImagesURLs = [
             require('./images/view_1.jpg').default,
             require('./images/view_2.jpg').default, 
-            require('./images/view_3.jpg').default
+            require('./images/view_3.jpg').default,
+            require('./images/view_4.jpg').default,
+            require('./images/view_5.jpg').default,
         ];
 
         this.defaultColors = [
-            '#fdfbda', '#ffc0d0', '#cb9bba', '#0fc9e7', '#a7cf5d', '#ea9085', '#ffde7d'
+            '#af704b5e', '#f3dce1', '#d6b6cb', '#8eeaf9', '#d7f3a5d1', '#e619005e', '#007bff5e'
         ];
     }
 
@@ -246,7 +248,7 @@ class CreateNewBoard extends React.Component {
 
                             <div className='create-new-board-container'> 
                                 <button className='create-new-board-btn'
-                                onClick={this.handleCreateBoard}
+                                onClick={ this.handleCreateBoard }
                                 >
                                     <p>Create board</p>
                                 </button>

@@ -40,7 +40,8 @@ class BoardsPopup extends React.Component {
           marginTop: '0.5rem',
           marginLeft: '3.1em',
           borderColor: 'lightgray',
-          borderRadius: '0.3rem'
+          borderRadius: '0.3rem',
+          backgroundColor: 'white'
         },
         arrowStyle : {
           marginLeft: '-5.5rem'
@@ -53,7 +54,7 @@ class BoardsPopup extends React.Component {
               <button>
                   <p className='navbar-titles'>MY BOARDS</p>
               </button>}
-            on='focus'
+            //on='focus'
             open={ isPopUpOpen }
             onOpen={ this.handlePopUpOpen }
             closeOnDocumentClick
@@ -61,17 +62,6 @@ class BoardsPopup extends React.Component {
             arrowStyle = { styles.arrowStyle }
           >
             <div className='popUp-boards-container'>
-              {/*<div className='search-block'>
-                <input type='text' 
-                className='-search' 
-                placeholder='Search board by name...'/>
-
-                <button 
-                className='close-boards-popUp-button' 
-                onClick={ this.handlePopUpClose }>
-                  &times;
-                </button>
-              </div>*/}
 
               <div className='favourites'>
                 <div className="favourites-header">

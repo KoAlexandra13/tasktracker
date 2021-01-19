@@ -13,13 +13,7 @@ class SearchPopup extends React.Component {
 
     handlePopUpOpen = () => this.setState({ ...this.state, isPopUpOpen: true });
 
-    handlePopUpClose = () => this.setState({...this.state, 
-      isPopUpOpen: !this.state.isPopUpOpen,
-      isFavouritesOpen: false,
-      isFreqVisitedOpen: false,
-      isPersonalOpen: false,
-    });
-
+    handlePopUpClose = () => this.setState({...this.state, isPopUpOpen: false});
 
     render(){
 
@@ -29,10 +23,12 @@ class SearchPopup extends React.Component {
       const styles = {
         contentStyle: {
           width: '12em',
+          height: '2rem',
           marginTop: '0.1em',
           marginLeft: '-7rem',
           borderColor: 'lightgray',
-          borderRadius: '0.3rem'
+          borderRadius: '0.3rem',
+          backgroundColor: 'white'
         },
         arrowStyle: {
           marginLeft: '7rem'
@@ -44,9 +40,9 @@ class SearchPopup extends React.Component {
               <button>
                   <FontAwesomeIcon icon={ faSearch } className='text-light'/>
               </button>}
-            on='focus'
+            //on='focus'
             open={ isPopUpOpen }
-            onOpen={ this.handlePopUpOpen }
+            onClick={ this.handlePopUpOpen }
             closeOnDocumentClick
             contentStyle = { styles.contentStyle }
             arrowStyle = { styles.arrowStyle }
@@ -59,14 +55,6 @@ class SearchPopup extends React.Component {
                 className='close-boards-popUp-button' onClick={ this.handlePopUpClose }>
                   &times;
                 </button>
-
-                {/* <div className='text'>
-                  <p> SEARCH RESULTS</p> 
-                </div>
-
-                <div className='search-results'>
-                  <br/>
-                </div> */}
               </div>
           </Popup>
         );

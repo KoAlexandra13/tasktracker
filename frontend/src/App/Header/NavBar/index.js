@@ -1,16 +1,20 @@
 import React from 'react'
 import { Link } from "react-router-dom";
 import Avatar from '@material-ui/core/Avatar';
-import SearchPopup from './SearchPopup';
 import BoardsPopup from './BoardsPopup';
 import { connect } from 'react-redux';
+import { faSearch } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 
 class NavBar extends React.Component {
     constructor(props){
-        super(props);
+        super(props)
 
         this.state = {
-            boardsPopUpEnabled: true
+            boardsPopUpEnabled: true,
+            clickOnSearchButton: false,
+            openSearchTextField: false
         }
     }
 
@@ -18,6 +22,18 @@ class NavBar extends React.Component {
         const firstAndSecondNames = this.props.fullName ? this.props.fullName.split(' ') : [];
         return (firstAndSecondNames && firstAndSecondNames.length) ? firstAndSecondNames[0].charAt(0) + firstAndSecondNames[1].charAt(0) : null;
     }
+
+    handleSearchButton = () => {
+        this.setState(
+            {
+                ...this.state, 
+                clickOnSearchButton: !this.state.clickOnSearchButton,
+                openSearchTextField: !this.state.openSearchTextField,
+            }
+        )
+
+    }
+
 
     render(){
         return(
@@ -35,9 +51,9 @@ class NavBar extends React.Component {
                         </Link>
                     </button>
 
-                    <p className='delimiter'>|</p>
+                    {/*<p className='delimiter'>|</p>
 
-                    <BoardsPopup/>
+                    <BoardsPopup/>*/}
 
                     <p className='delimiter'>|</p>
 
@@ -73,7 +89,18 @@ class NavBar extends React.Component {
                         </Link>
                     </button>
 
-                    <SearchPopup />
+                    <div
+                        style={{    
+                            marginTop: '0.25rem',
+                            marginLeft: '0.5rem',
+                        }}
+                    >
+                        <FontAwesomeIcon 
+                            icon={ faSearch } 
+                            className='text-light'
+                            onClick={ this.handleSearchButton }
+                            />
+                    </div>
 
                 </div>
             </div>
