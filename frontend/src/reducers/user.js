@@ -13,7 +13,7 @@ const initialState = {
     organization: '',
     userIcon: '',
     userId: '',
-    //userInfoAboutYourself: '',
+    userInfoAboutYourself: '',
     isFetching: true,
     error: null
 }
@@ -34,7 +34,7 @@ const userReducer = (state = initialState, action) => {
                 organization: action.data.organization,
                 userIcon: action.data.image,
                 userId: action.data.id,
-                //userInfoAboutYourself: action.data.
+                userInfoAboutYourself: action.data.about,
                 isFetching: false
             }
         case FETCH_USER_ERROR:
@@ -55,7 +55,7 @@ const userReducer = (state = initialState, action) => {
                 username: action.data.username,
                 email: action.data.email,
                 organization: action.data.organization,
-                //userInfoAboutYourself: action.data.
+                userInfoAboutYourself: action.data.about
             }
         default:
             return state;

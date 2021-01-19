@@ -9,6 +9,11 @@ class User(AbstractUser):
     image = models.ImageField(upload_to='profile/logo/', null=True, blank=True)
     organization = models.CharField(max_length=100, null=True, blank=True)
     email = models.EmailField(_('email address'), blank=True, unique=True)
+    about = models.TextField(null=True, blank=True)
+
+    @property
+    def fullname(self):
+        return f"{self.first_name}{' %s' % self.last_name if self.last_name else ''}"
 
 
 class Table(models.Model):

@@ -32,7 +32,7 @@ class Account extends React.Component{
             newUsername: this.props.username, 
             newOrganization: this.props.organization,
             newEmail: this.props.email,
-            //newUserInfoAboutYourself: this.props.userInfoAboutYourself,
+            newUserInfoAboutYourself: this.props.userInfoAboutYourself,
             personalDataErrors: {},
             changePasswordErrors: {},
         }
@@ -104,7 +104,9 @@ class Account extends React.Component{
             data.append("organization", this.state.newOrganization)
         }
 
-        //TODO: add if(){} for newUserInfoAboutYourself
+        if(this.state.newUserInfoAboutYourself !== this.props.userInfoAboutYourself){
+            data.append("about", this.state.newUserInfoAboutYourself);
+        }
 
         changeUserInfoRequest(this.props.userId, data)
         .then(response => 
@@ -316,8 +318,9 @@ class Account extends React.Component{
                                         size='small'
                                         multiline
                                         label='About yourself'
+                                        defaultValue={this.props.userInfoAboutYourself}
                                         style={styles.textField}
-                                        //onChange={(e) => this.handleChangeTextField('newUserInfoAboutYourself',e.target.value)}
+                                        onChange={(e) => this.handleChangeTextField('newUserInfoAboutYourself',e.target.value)}
 
                                     />
                             </div>
@@ -518,7 +521,7 @@ function mapStateToProps(state){
        organization: state.user.organization,
        image: state.user.userIcon,
        userId: state.user.userId, 
-       //userInfoAboutYourself: state.user.userInfoAboutYourself
+       userInfoAboutYourself: state.user.userInfoAboutYourself
     };
 }
 

@@ -30,17 +30,20 @@ class CustomJWTSerializer(TokenObtainPairSerializer):
 
 
 class UserDetailSerializer(ModelSerializer):
-    fullname = SerializerMethodField()
+    fullname = serializers.CharField(max_length=180, allow_blank=True)
 
     class Meta:
         model = User
         fields = (
             'fullname', 'username', 'id',
-            'email', 'organization', 'image'
+            'email', 'organization', 'image', 'about'
         )
 
-    def get_fullname(self, user):
-        return f"{user.first_name}{' %s' % user.last_name if user.last_name else ''}"
+    def update(self, instance, validated_data):
+        fullname = validated_data.pop('fullname', None)
+        if fullname is not None:
+            instance.first_name, instance.last_name = fullname.split(" ", 1)
+        return super().update(instance, validated_data)
 
 
 class UserMiniSerializer(ModelSerializer):
