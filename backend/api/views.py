@@ -48,9 +48,10 @@ class TableViewSet(ModelViewSet):
     serializer_class = TableDetailSerializer
 
     def create(self, request, *args, **kwargs):
-        users = request.data.pop('users')
-        columns = request.data.pop('columns')
-        serializer = self.get_serializer(data=request.data)
+        data = request.data.copy()
+        users = data.pop('users')
+        columns = data.pop('columns')
+        serializer = self.get_serializer(data=data)
         serializer.is_valid(raise_exception=True)
         table = serializer.save()
 
