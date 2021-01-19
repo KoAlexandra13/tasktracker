@@ -10,6 +10,7 @@ class User(AbstractUser):
     organization = models.CharField(max_length=100, null=True, blank=True)
     email = models.EmailField(_('email address'), blank=True, unique=True)
     about = models.TextField(null=True, blank=True)
+    email_verified = models.BooleanField(default=False)
 
     @property
     def fullname(self):

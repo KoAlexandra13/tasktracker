@@ -1,0 +1,5 @@
+Hi, {{username}}.
+Welcome to the Treckero community!
+To approve your email click the link below.
+{{ link }}
+If you have not registered on the Treckero simply ignore this message.

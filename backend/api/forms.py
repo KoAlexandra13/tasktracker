@@ -7,6 +7,7 @@ from django.core.exceptions import ValidationError
 from django.utils.translation import gettext, gettext_lazy as _
 
 from api.models import User
+from api.tasks import send_mail_verification_email_task
 
 
 class UsernameField(forms.CharField):
@@ -87,7 +88,7 @@ class UserCreationForm(forms.ModelForm):
 
     def clean(self):
         data = super().clean()
-        names = data.get('fullname', "").split(' ')
+        names = data.get('fullname', "").split(' ', 1)
         data['first_name'] = names[0]
         data['last_name'] = names[1] if len(names) > 1 else ''
         if 'fullname' in data:
@@ -110,4 +111,5 @@ class UserCreationForm(forms.ModelForm):
         user.set_password(self.cleaned_data["password1"])
         if commit:
             user.save()
+        send_mail_verification_email_task.delay(user)
         return user

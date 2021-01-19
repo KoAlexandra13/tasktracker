@@ -31,3 +31,18 @@ services:
       - './frontend:/frontend'
     ports:
       - "3000:3000"
+  celery:
+    build: backend/
+    entrypoint: ./celery-entrypoint.sh
+    environment:
+      - POSTGRES_DB=tasktracker
+      - POSTGRES_USER=tasktracker
+      - POSTGRES_PASSWORD=tasktracker
+    volumes:
+      - './backend:/backend'
+    depends_on:
+      - db
+      - redis
+  redis:
+    image: redis:alpine
+
