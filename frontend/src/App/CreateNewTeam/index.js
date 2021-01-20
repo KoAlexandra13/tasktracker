@@ -8,8 +8,8 @@ import BoardDemoColumn from '../CreateNewBoard/BoardDemoColumn'
 import Creatable from 'react-select/creatable';
 import ScrollMenu from 'react-horizontal-scrolling-menu';
 import { connect } from 'react-redux';
-import { createNewBoardTitle, createNewBoardColumn, createNewBoardBackgroundColor,
-    createNewBoardBackgroundURL
+import { addBoardTitle, addBoardColumn, addBoardBackgroundColor,
+    addBoardBackgroundURL
  } from '../../actions/board'
 import { addTeamBoard } from '../../actions/boardList';
 import Header from '../Header'
@@ -280,9 +280,8 @@ function mapStateToProps(state){
 }
 
 export default connect(mapStateToProps, {
-    createNewBoardTitle,
-    createNewBoardColumn,
-    createNewBoardBackgroundColor,
-    createNewBoardBackgroundURL,
-    addTeamBoard
+    addBoardTitle,
+    addBoardColumn,
+    addBoardBackgroundColor,
+    addBoardBackgroundURL,
 })(CreateNewTeam);

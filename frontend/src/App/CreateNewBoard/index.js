@@ -8,12 +8,8 @@ import BoardDemoColumn from './BoardDemoColumn'
 import Creatable from 'react-select/creatable';
 import ScrollMenu from 'react-horizontal-scrolling-menu';
 import { connect } from 'react-redux';
-import { createNewBoardTitle, createNewBoardColumn, createNewBoardBackgroundColor,
-    createNewBoardBackgroundURL
- } from '../../actions/board'
- import { addPersonalBoard } from '../../actions/boardList';
+import { createBoard } from '../../actions/board'
  import Header from '../Header';
- import { boardCreate } from '../../actions/board'
  import Footer from '../Footer'
 
 class CreateNewBoard extends React.Component {
@@ -24,6 +20,11 @@ class CreateNewBoard extends React.Component {
             images: [],
             width: window.innerWidth,
             isBoardTitleEntered: true,
+            backgroundImageAsFile: null,
+            boardTitle: '',
+            boardColumns: [],
+            boardBackgroundColor: 'transparent',
+            boardBackgroundURL: null,            
         }
 
         this.popover = {
@@ -58,28 +59,44 @@ class CreateNewBoard extends React.Component {
         ];
     }
 
-    handleTitleChange = (event) => this.props.createNewBoardTitle(event.target.value);
+    handleTitleChange = (event) => this.setState({...this.state, boardTitle: event.target.value})
 
-    handleChooseCustomBackgroundColor = (color) => this.props.createNewBoardBackgroundColor(color.hex);
+    handleChooseCustomBackgroundColor = (color) => this.setState({...this.state, boardBackgroundColor: color.hex})
 
     handleColorPickerClick = () => this.setState({ ...this.state, displayColorPicker: !this.state.displayColorPicker });
     
     handleColorPickerClose = () => this.setState({ ...this.state, displayColorPicker: false });
 
-    handleUploadImageChange = (uploadedImages) => {
-        console.log(uploadedImages)
-        this.setState({...this.state, images: uploadedImages});
+    handleUploadImageChange = (uploadedImages) => this.setState({...this.state, images: uploadedImages});
+
+    handleSelectOptionsChange = (selectOptions) => this.setState({...this.state, boardColumns: selectOptions})
+
+    handleChangeBoardBackgroundColor = (value) => {
+        this.setState({
+            ...this.state, 
+            boardBackgroundColor: value, 
+            boardBackgroundURL: null
+        })
     }
 
-    handleSelectOptionsChange = (selectOptions) => this.props.createNewBoardColumn(selectOptions);
+    handleChangeBoardBackgroundURL = (value) => {
+        this.setState({
+            ...this.state, 
+            boardBackgroundURL: value, 
+            boardBackgroundColor: null
+        })
+    }
 
-    handleChangeBoardBackgroundColor = (value) => this.props.createNewBoardBackgroundColor(value);
+    handleChangeBoardBackgroundUploadImage = (value) => {
+        this.setState({
+            ...this.state, 
+            backgroundImageAsFile: value.file,
+            boardBackgroundURL: value.dataURL,
+            boardBackgroundColor: null
+        })
+    }
 
-    handleChangeBoardBackgroundURL = (value) => this.props.createNewBoardBackgroundURL(value)
-
-    onError = (errors, files) => {
-        alert(errors, files);
-    };
+    onError = (errors, files) => alert(errors, files);
 
     updateDimensions = () => this.setState({ ...this.state, width: window.innerWidth});
 
@@ -93,18 +110,49 @@ class CreateNewBoard extends React.Component {
             window.scrollTo(0, 0);
         }
         else {
-            const success = await boardCreate(this.props.boardColumns,this.props.boardTitle, this.props.boardBackgroundURL);
-            if(success){
-                this.props.addPersonalBoard(this.props.boardTitle);
+            let columns = this.state.boardColumns.map((el, index) => {
+                let column = Object.create({})
+                column.name = el.label
+                column.index = index
+                return column
+            })
+
+            /*let data = new FormData();
+
+            data.append('name', this.state.boardTitle);
+            data.append('users', JSON.stringify([this.props.userId]));
+            data.append('columns', JSON.stringify(columns));
+
+            if(this.props.boardBackgroundURL){
+                data.append('background_image', this.state.backgroundImageAsFile)
             }
+            else {
+                data.append('background_color', this.state.boardBackgroundColor)
+            }*/
+
+
+            let data = Object.create({});
+
+            data.name = this.state.boardTitle;
+            data.users= [this.props.userId];
+            data.columns = columns;
+
+            if(this.state.boardBackgroundURL){
+                data.background_image = this.state.backgroundImageAsFile
+            }
+            else {
+                data.background_color = this.state.boardBackgroundColor
+            }
+
+           const success = createBoard(data);
+            
         }
     }
 
     render(){
 
-        const { images, width, isBoardTitleEntered } = this.state;
-
-        const {boardColumns, boardBackgroundColor, boardBackgroundURL} = this.props;    
+        const { images, width, isBoardTitleEntered, 
+            boardColumns, boardBackgroundColor, boardBackgroundURL } = this.state;
 
         const demoVersionBoardBackgraundStyle = boardBackgroundColor === null ? {
             background: 'url(' + boardBackgroundURL + ') no-repeat transparent center',
@@ -145,7 +193,7 @@ class CreateNewBoard extends React.Component {
                             <div className='group'>      
                                 <input 
                                 type='text' 
-                                value={ this.props.boardTitle} 
+                                value={ this.state.boardTitle} 
                                 onChange={ this.handleTitleChange } 
                                 required
                                 />
@@ -200,23 +248,21 @@ class CreateNewBoard extends React.Component {
                                         /> 
                                     )}
 
-
                                     { !_.isEmpty(images) && images.map(
                                         (image, index) => <UploadImage 
-                                                imageURL={image.dataURL} 
-                                                key={`user-image-${index}`}
-                                                handleChangeBoardBackground={this.handleChangeBoardBackgroundURL}
-                                            />
-                                        ) 
+                                            image={image} 
+                                            key={`user-image-${index}`}
+                                            handleChangeBoardBackground={this.handleChangeBoardBackgroundUploadImage}
+                                            />)
                                     }
-                                        
+
                                     <ImageUploading
-                                        multiple
+                                        //multiple
                                         isClearable
                                         onChange={this.handleUploadImageChange}
                                         acceptType={['jpg', 'gif', 'png']}
                                         maxFileSize={ 5242880 }
-                                        onError={ this.onError }
+                                        onError={this.onError}
                                         >
                                         {({onImageUpload}) => {
                                             return (
@@ -273,7 +319,6 @@ class CreateNewBoard extends React.Component {
                                                 />);
                                             })
                                 }
-                                //dragging={false}
                                 transition={false}
                                 wheel={false}
                                 arrowLeft={ArrowLeft}
@@ -291,18 +336,8 @@ class CreateNewBoard extends React.Component {
 
 function mapStateToProps(state){
     return {
-        boardTitle: state.newBoardCreator.boardTitle,
-        boardColumns: state.newBoardCreator.boardColumns,
-        boardBackgroundColor: state.newBoardCreator.boardBackgroundColor,
-        boardBackgroundURL: state.newBoardCreator.boardBackgroundURL,
-        personalBoardList: state.addBoard.personalBoardList
+        userId: state.user.userId, 
     };
 }
 
-export default connect(mapStateToProps, {
-    createNewBoardTitle,
-    createNewBoardColumn,
-    createNewBoardBackgroundColor,
-    createNewBoardBackgroundURL,
-    addPersonalBoard
-})(CreateNewBoard);
+export default connect(mapStateToProps, {})(CreateNewBoard);

@@ -68,7 +68,7 @@ class Home extends React.Component {
                         </div>
                     </div> 
                 </div>
-                <Footer/>
+                <Footer style={{position: 'fixed'}}/>
             </div>
         );
     }
