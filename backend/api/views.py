@@ -1,7 +1,7 @@
-from rest_framework.views import status, Response
+from rest_framework.views import status, Response, APIView
 from rest_framework.viewsets import ModelViewSet
 from rest_framework import decorators
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.views import TokenObtainPairView
 
 from api.models import (
@@ -41,6 +41,21 @@ class UserViewSet(ModelViewSet):
     @decorators.action(detail=False, methods=['get'], url_path='self')
     def get_self(self, request, *args, **kwargs):
         return Response(UserDetailSerializer(request.user, context={"request": request}).data, status=status.HTTP_200_OK)
+
+    @decorators.permission_classes([AllowAny])
+    @decorators.action(detail=False, methods=['post'], url_path='email-activate')
+    def activate_email(self, request, *args, **kwargs):
+        email = request.POST.get('email', None)
+        if email is None:
+            return Response("Email to activate is not specified", status=status.HTTP_400_BAD_REQUEST)
+
+        user = User.objects.filter(email=email).first()
+        if user is None:
+            return Response("User with such email not found", status=status.HTTP_404_NOT_FOUND)
+
+        user.is_email_verified = True
+        user.save()
+        return Response(UserDetailSerializer(user).data, status=status.HTTP_200_OK)
 
 
 class TableViewSet(ModelViewSet):
