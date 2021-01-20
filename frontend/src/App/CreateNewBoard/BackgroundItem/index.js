@@ -21,7 +21,6 @@ class BackgroundItem extends React.Component {
                 onClick={ () => handleChangeBoardBackground(value)}
                 >
                     {image && <img className='image' src={image} alt='Background'/>}
-                    
                 </button>
             </li>
         );

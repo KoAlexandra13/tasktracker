@@ -24,33 +24,32 @@ const addBoardBackgroundURLAction = (url) => ({
     url
 })
 
-export function createNewBoardTitle(title){
+export function addBoardTitle(title){
     return dispatch => {
         dispatch(addBoardTitleAction(title))
     }
 }
 
-export function createNewBoardColumn(columnName){
+export function addBoardColumn(columnName){
     return dispatch => {
         dispatch(addColumnNameAction(columnName))
     }
 }
 
-export function createNewBoardBackgroundColor(color){
+export function addBoardBackgroundColor(color){
     return dispatch => {
         dispatch(addBoardBackgroundColorAction(color))
     }
 }
 
-export function createNewBoardBackgroundURL(url){
+export function addBoardBackgroundURL(url){
     return dispatch => {
         dispatch(addBoardBackgroundURLAction(url))
     }
 }
 
-export function boardCreate(boardColumns, boardTitle, boardBackgroundURL){
-    
-    return createNewBoardRequest(boardColumns, boardTitle, boardBackgroundURL)
+export function createBoard(data){
+    return createNewBoardRequest(data)
     .then(response => {
         console.log(response.data);
         return true;

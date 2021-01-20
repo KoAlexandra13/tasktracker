@@ -62,7 +62,7 @@ class Account extends React.Component{
     handleSaveChangedAvatar = () => {
         this.setState({...this.state, openAvatarDialogWindow: false})
         const image = !this.state.isCheckedInitialsCheckbox ? this.state.avatarImageFile : null;
-
+        
         let data = null;
         if (image){
             data = new FormData();

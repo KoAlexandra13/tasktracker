@@ -4,6 +4,7 @@
         justify-content: space-between;
         align-items: center;
     }
+
     &--left-section, &--right-section {
         font-size: 1.5rem;
         display: flex;
@@ -15,6 +16,35 @@
 
     &--right-section {
         margin-right: 1rem;
+
+        .close-search{
+            margin-top: 0.25rem;
+            margin-left: 0.5rem;
+        }
+
+        .open-search{
+            display: inline;
+            background-color: white;
+            border-radius: 5px;
+            height: 2rem;
+            vertical-align: text-top;
+            margin-top: 0.25rem;
+
+            input{
+                width: 10rem;
+                height: 1.5rem;
+                outline: none;
+                border: none;
+                border-radius: 5px;
+                font-size: medium;
+                margin-top: 0.25rem;
+            }
+
+            .close-search-btn{
+                color: black;
+                margin-top: -0.25rem;
+            }
+        }
     }
 
     &-titles {

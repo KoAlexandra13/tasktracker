@@ -23,7 +23,7 @@ class NavBar extends React.Component {
         return (firstAndSecondNames && firstAndSecondNames.length) ? firstAndSecondNames[0].charAt(0) + firstAndSecondNames[1].charAt(0) : null;
     }
 
-    handleSearchButton = () => {
+    handleOpenSearchInput = () => {
         this.setState(
             {
                 ...this.state, 
@@ -31,11 +31,31 @@ class NavBar extends React.Component {
                 openSearchTextField: !this.state.openSearchTextField,
             }
         )
-
     }
 
+    handleCloseSearchInput = () => {
+        this.setState(
+            {
+                ...this.state, 
+                clickOnSearchButton: !this.state.clickOnSearchButton,
+                openSearchTextField: !this.state.openSearchTextField,
+            }
+        )
+    }
 
     render(){
+        const closeSearchStyle = this.state.openSearchTextField ? {
+            display: 'none',
+        } : {
+            display: 'block',
+        };
+
+        const openSearchStyle = !this.state.openSearchTextField ? {
+            display: 'none',
+        } : {
+            display: 'flex',
+        };
+
         return(
             <div className='navbar-container py-2'>
                 <div className='navbar--left-section'>
@@ -89,16 +109,20 @@ class NavBar extends React.Component {
                         </Link>
                     </button>
 
-                    <div
-                        style={{    
-                            marginTop: '0.25rem',
-                            marginLeft: '0.5rem',
-                        }}
-                    >
+                    <div className='open-search' style = {openSearchStyle}>
+                        <input 
+                            type='search'
+                            placeholder='Search...'/>
+                        <button 
+                            className='close-search-btn'
+                            onClick={this.handleCloseSearchInput}>x</button>
+                    </div>
+
+                    <div className='close-search' style = {closeSearchStyle}>
                         <FontAwesomeIcon 
                             icon={ faSearch } 
                             className='text-light'
-                            onClick={ this.handleSearchButton }
+                            onClick={this.handleOpenSearchInput}
                             />
                     </div>
 

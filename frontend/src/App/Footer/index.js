@@ -4,12 +4,13 @@ import { Link } from "react-router-dom";
 class Footer extends React.Component{
 
     render(){
+        const {style} = this.props;
         const linkStyle = {
             marginRight: '1.5rem',
             color: 'white',
         }
         return (
-            <div className='footer-container'>
+            <div className='footer-container' style={style}>
                 <div className='navbar-section'>
                     
                     <Link 
