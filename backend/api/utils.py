@@ -5,7 +5,7 @@ from django.template.loader import get_template
 
 def send_email_activation_mail(user):
     mail_from = settings.DEFAULT_FROM_EMAIL
-    frontend_url = settings.FRONTEND_URL
+    frontend_url = settings.FRONTEND_EXTERNAL_URL
 
     plaintext = get_template('email/email_verification.txt')
     html_template = get_template('email/email_verification.html')
