@@ -1,4 +1,9 @@
+import requests
+from django.core import files
+from io import BytesIO
+
 from django.db.models import Q
+from django.conf import settings
 from django.core.exceptions import ValidationError
 
 from rest_framework import serializers
@@ -79,7 +84,33 @@ class TableColumnDetailSerializer(ModelSerializer):
 class TableDetailSerializer(ModelSerializer):
     columns = TableColumnDetailSerializer(many=True, read_only=True)
     users = UserDetailSerializer(many=True, read_only=True)
+    image_from_url = serializers.URLField(allow_null=True, allow_blank=True, write_only=True)
 
     class Meta:
         model = Table
         fields = '__all__'
+
+    @staticmethod
+    def _download_image_from_url_and_save_to_table(instance, url):
+        url = url.replace(settings.FRONTEND_EXTERNAL_URL, settings.FRONTEND_INTERNAL_URL)
+
+        fp = BytesIO()
+        fp.write(
+            requests.get(url).content
+        )
+        file_name = url.split("/")[-1]
+        instance.background_image.save(file_name, files.File(fp))
+
+    def create(self, validated_data):
+        image_from_url = validated_data.pop('image_from_url', None)
+        instance = super().create(validated_data)
+        if image_from_url:
+            self._download_image_from_url_and_save_to_table(instance, image_from_url)
+        return instance
+
+    def update(self, instance, validated_data):
+        image_from_url = validated_data.pop('image_from_url', None)
+        instance = super().update(instance, validated_data)
+        if image_from_url:
+            self._download_image_from_url_and_save_to_table(instance, image_from_url)
+        return instance

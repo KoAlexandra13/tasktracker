@@ -177,4 +177,5 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = 'dimoniss00@gmail.com'
 
-FRONTEND_URL = 'http://localhost:3000'
+FRONTEND_EXTERNAL_URL = 'http://localhost:3000'
+FRONTEND_INTERNAL_URL = 'http://frontend:3000'
