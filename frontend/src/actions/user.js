@@ -84,17 +84,17 @@ export function signUpUser(fullname, email, username, password1, password2){
 }
 
 export function userLogIn(usernameOrEmail, password){
-    
     return userLoginRequest(usernameOrEmail, password)
-    .then(async response => 
+    .then(
+        async response => 
         {
             localStorage.setItem('accessToken', response.data.access);
             localStorage.setItem('refreshToken', response.data.refresh);
             return true;
         }
     )
-    .catch(() => 
-        {
+    .catch(
+        () => {
             return false;
         }
     )
@@ -102,14 +102,18 @@ export function userLogIn(usernameOrEmail, password){
 
 export function refreshAuthorizationToken(refreshToken){
     return refreshTokenRequest(refreshToken)
-        .then(async response => {
-            localStorage.setItem('accessToken', response.data.access);
-            localStorage.setItem('refreshToken', response.data.refresh);
+        .then(
+            async response => {
+                localStorage.setItem('accessToken', response.data.access);
+                localStorage.setItem('refreshToken', response.data.refresh);
 
-            setAutorizationToken(localStorage.getItem('accessToken'));
-        })
-        .catch(() => {
-            localStorage.removeItem('accessToken');
-            localStorage.removeItem('refreshToken');
-        })
+                setAutorizationToken(localStorage.getItem('accessToken'));
+            }
+        )
+        .catch(
+            () => {
+                localStorage.removeItem('accessToken');
+                localStorage.removeItem('refreshToken');
+            }
+        )
 }

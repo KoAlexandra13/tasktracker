@@ -6,7 +6,6 @@ import {
 } from "react-router-dom";
 import Home from './Home';
 import CreateNewBoard from './CreateNewBoard';
-import CreateNewTeam from './CreateNewTeam';
 import SignUp from './SignUp'
 import Auth from '../components/Auth/index'
 import { createStore, applyMiddleware, compose } from "redux";
@@ -34,7 +33,7 @@ class App extends React.Component{
                     <Switch>
                       <Route exact path='/' component={Home}/>
                       <Route path='/createnewboard' component={CreateNewBoard}/>
-                      <Route path='/createnewteam' component={CreateNewTeam}/>
+                      {/*<Route path='/createnewteam' component={CreateNewTeam}/>*/}
                       <Route path='/account' component={Account}/>
                     </Switch>
                   </Auth>

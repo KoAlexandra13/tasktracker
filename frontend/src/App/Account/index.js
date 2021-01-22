@@ -11,7 +11,6 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Button from '@material-ui/core/Button';
 import ImageUploading from 'react-images-uploading';
-import _ from 'lodash';
 import Footer from '../Footer'
 import { uploadUserAvatarRequest, changeUserInfoRequest } from '../../api/user'
 import { uploadAvatarImage, changeUserInfo } from '../../actions/user';

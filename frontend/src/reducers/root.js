@@ -5,7 +5,7 @@ import userReducer from './user'
 
 // Root Reducers
 export const rootReducer = combineReducers({
-    newBoardCreator: createNewBoardReducer,
+    board: createNewBoardReducer,
     addBoard: addBoardReducer,
     user: userReducer,
  });

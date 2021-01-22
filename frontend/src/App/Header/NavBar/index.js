@@ -1,7 +1,6 @@
 import React from 'react'
 import { Link } from "react-router-dom";
 import Avatar from '@material-ui/core/Avatar';
-import BoardsPopup from './BoardsPopup';
 import { connect } from 'react-redux';
 import { faSearch } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';

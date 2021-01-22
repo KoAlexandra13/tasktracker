@@ -15,7 +15,7 @@ const initialState = {
     userId: '',
     userInfoAboutYourself: '',
     isFetching: true,
-    error: null
+    error: null,
 }
 
 const userReducer = (state = initialState, action) => {

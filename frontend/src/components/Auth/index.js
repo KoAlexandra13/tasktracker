@@ -18,7 +18,7 @@ class Auth extends React.Component{
     
 
     render(){
-        const { isFetching } = this.props;
+        const {isFetching} = this.props;
         if (isFetching){
             return ( 
                 <div style={{
@@ -26,9 +26,9 @@ class Auth extends React.Component{
                    marginTop: '20rem'
                 }}>
                     <ClassicSpinner
-                    size={ 30 }
+                    size={30}
                     color='#2292ee'
-                    loading={ isFetching }
+                    loading={isFetching}
                     />
                 </div>
             );

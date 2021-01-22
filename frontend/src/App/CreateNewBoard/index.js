@@ -8,9 +8,11 @@ import BoardDemoColumn from './BoardDemoColumn'
 import Creatable from 'react-select/creatable';
 import ScrollMenu from 'react-horizontal-scrolling-menu';
 import { connect } from 'react-redux';
-import { createBoard } from '../../actions/board'
- import Header from '../Header';
- import Footer from '../Footer'
+import { fetchBoard, setLoader, uploadImage } from '../../actions/board'
+import Header from '../Header';
+import Footer from '../Footer'
+import {ClassicSpinner} from 'react-spinners-kit';
+
 
 class CreateNewBoard extends React.Component {
     constructor(props){
@@ -20,7 +22,6 @@ class CreateNewBoard extends React.Component {
             images: [],
             width: window.innerWidth,
             isBoardTitleEntered: true,
-            backgroundImageAsFile: null,
             boardTitle: '',
             boardColumns: [],
             boardBackgroundColor: 'transparent',
@@ -90,7 +91,6 @@ class CreateNewBoard extends React.Component {
     handleChangeBoardBackgroundUploadImage = (value) => {
         this.setState({
             ...this.state, 
-            backgroundImageAsFile: value.file,
             boardBackgroundURL: value.dataURL,
             boardBackgroundColor: null
         })
@@ -117,35 +117,29 @@ class CreateNewBoard extends React.Component {
                 return column
             })
 
-            /*let data = new FormData();
-
-            data.append('name', this.state.boardTitle);
-            data.append('users', JSON.stringify([this.props.userId]));
-            data.append('columns', JSON.stringify(columns));
-
-            if(this.props.boardBackgroundURL){
-                data.append('background_image', this.state.backgroundImageAsFile)
-            }
-            else {
-                data.append('background_color', this.state.boardBackgroundColor)
-            }*/
-
-
             let data = Object.create({});
 
             data.name = this.state.boardTitle;
             data.users= [this.props.userId];
             data.columns = columns;
 
-            if(this.state.boardBackgroundURL){
-                data.background_image = this.state.backgroundImageAsFile
-            }
-            else {
+            if(this.state.boardBackgroundColor){
                 data.background_color = this.state.boardBackgroundColor
             }
 
-           const success = createBoard(data);
-            
+            this.props.setLoader(true); 
+
+            const id = await this.props.fetchBoard(data);
+
+            if(!_.isNull(this.state.boardBackgroundURL)){
+                const imageURL = {
+                    image_from_url: `${window.location.origin}${this.state.boardBackgroundURL}` 
+                }
+                console.log(this.state.boardBackgroundURL)
+                await this.props.uploadImage(id, imageURL);
+            }
+
+            this.props.setLoader(false);
         }
     }
 
@@ -180,164 +174,188 @@ class CreateNewBoard extends React.Component {
         const ArrowLeft = Arrow({ text: '◄', className: 'arrow-prev' });
         const ArrowRight = Arrow({ text: '►', className: 'arrow-next' });
 
-        return(
-            <div style={{minWidth: '600px', width: '100%'}}>
-                <Header/>
-                <div className='main-container'>
-                    <h3>Create New Board</h3>
-
-                    <div className='board-design-container'>
-
-                        <div className='board-title-container'>
-
-                            <div className='group'>      
-                                <input 
-                                type='text' 
-                                value={ this.state.boardTitle} 
-                                onChange={ this.handleTitleChange } 
-                                required
-                                />
-                                <span className='highlight'></span>
-                                <span className='bar'></span>
-                                <label>Board title</label>
-                            </div>
-
-                            <span 
-                            className='board-title-required-field'
-                            style={ titleErrorStyle }>
-                                * Please, fill in the board title 
-                            </span>
-
-                        </div>
-                        
-                        <div className='board-background-container'>
-                            <fieldset>
-                                <legend>Choose board background</legend>
-                                <ul className='choose-baord-background'>
-
-                                    {this.defaultColors.map(
-                                        (color, index) => <BackgroundItem 
-                                            color={color}
-                                            image={null}
-                                            key={`color-${index}`}
-                                            handleChangeBoardBackground={this.handleChangeBoardBackgroundColor}
-                                        />
-                                    )}  
-
-                                    <li className='item-container'>
-                                        <button
-                                        className='board-background-color-btn choose-btn' 
-                                        onClick={ this.handleColorPickerClick }>
-                                            <p>Custom color</p>
-                                        </button>
-                                        { this.state.displayColorPicker ? 
-                                        <div style={ this.popover }>
-                                            <div 
-                                            style={ this.cover } 
-                                            onClick={ this.handleColorPickerClose }/>
-                                            <SwatchesPicker 
-                                            onChange={ this.handleChooseCustomBackgroundColor}/>
-                                        </div> : null }
-                                    </li>
-
-                                    {this.defaultImagesURLs.map(
-                                        (image, index) => <BackgroundItem 
-                                            image={image}
-                                            key={`image-${index}`}
-                                            handleChangeBoardBackground={this.handleChangeBoardBackgroundURL}
-                                        /> 
-                                    )}
-
-                                    { !_.isEmpty(images) && images.map(
-                                        (image, index) => <UploadImage 
-                                            image={image} 
-                                            key={`user-image-${index}`}
-                                            handleChangeBoardBackground={this.handleChangeBoardBackgroundUploadImage}
-                                            />)
-                                    }
-
-                                    <ImageUploading
-                                        //multiple
-                                        isClearable
-                                        onChange={this.handleUploadImageChange}
-                                        acceptType={['jpg', 'gif', 'png']}
-                                        maxFileSize={ 5242880 }
-                                        onError={this.onError}
-                                        >
-                                        {({onImageUpload}) => {
-                                            return (
-                                                    <li className='item-container'>
-                                                        <button 
-                                                        onClick={onImageUpload}
-                                                        className='board-background-color-btn choose-btn' 
-                                                        > 
-                                                            <p>Upload image</p>
-                                                        </button>
-                                                    </li>
-                                            )
-                                        }}
-                                    </ImageUploading>
-                                </ul>
-                            </fieldset>  
-                        </div>
-
-                        <div className='d-flex'>
-                            <Creatable
-                                isMulti
-                                options={this.options}
-                                placeholder='Select or create columns for your table...'
-                                className='w-100 custom-select-box'   
-                                classNamePrefix='custom-select-box'
-                                closeMenuOnSelect = {false}
-                                onChange={this.handleSelectOptionsChange }
-                            />
-
-                            <div className='create-new-board-container'> 
-                                <button className='create-new-board-btn'
-                                onClick={ this.handleCreateBoard }
-                                >
-                                    <p>Create board</p>
-                                </button>
-                            </div>
-                        </div>
-                        
-                    </div>
-
-                    <div className='board-demo-version-container'>
-                        <h3>Board Demo Version</h3>  
-
-                        <div 
-                            className='board-demo-version' 
-                            style={ demoVersionBoardBackgraundStyle }>
-                            <ScrollMenu
-                                data = { !_.isEmpty(boardColumns) && boardColumns.map(
-                                            (column, index) => {
-                                                return (<BoardDemoColumn 
-                                                    columnTitle={ column }
-                                                    boardWidth={ width } 
-                                                    key={ `column-${index}` }
-                                                />);
-                                            })
-                                }
-                                transition={false}
-                                wheel={false}
-                                arrowLeft={ArrowLeft}
-                                arrowRight={ArrowRight}
-                            />
-                        </div>
-                    </div>
+        if (this.props.isLoading){
+            return ( 
+                <div style={{
+                   marginLeft: '50%',
+                   marginTop: '20rem'
+                }}>
+                    <ClassicSpinner
+                    size={30}
+                    color='#2292ee'
+                    loading={this.props.isLoading}
+                    />
                 </div>
-                <Footer/>
-            </div>
-        );
+            );
+        }
+        else {
+            return(
+                <div style={{minWidth: '600px', width: '100%'}}>
+                    <Header/>
+                    <div className='main-container'>
+                        <h3>Create New Board</h3>
+    
+                        <div className='board-design-container'>
+    
+                            <div className='board-title-container'>
+    
+                                <div className='group'>      
+                                    <input 
+                                    type='text' 
+                                    value={ this.state.boardTitle} 
+                                    onChange={ this.handleTitleChange } 
+                                    required
+                                    />
+                                    <span className='highlight'></span>
+                                    <span className='bar'></span>
+                                    <label>Board title</label>
+                                </div>
+    
+                                <span 
+                                className='board-title-required-field'
+                                style={ titleErrorStyle }>
+                                    * Please, fill in the board title 
+                                </span>
+    
+                            </div>
+                            
+                            <div className='board-background-container'>
+                                <fieldset>
+                                    <legend>Choose board background</legend>
+                                    <ul className='choose-baord-background'>
+    
+                                        {this.defaultColors.map(
+                                            (color, index) => <BackgroundItem 
+                                                color={color}
+                                                image={null}
+                                                key={`color-${index}`}
+                                                handleChangeBoardBackground={this.handleChangeBoardBackgroundColor}
+                                            />
+                                        )}  
+    
+                                        <li className='item-container'>
+                                            <button
+                                            className='board-background-color-btn choose-btn' 
+                                            onClick={ this.handleColorPickerClick }>
+                                                <p>Custom color</p>
+                                            </button>
+                                            { this.state.displayColorPicker ? 
+                                            <div style={ this.popover }>
+                                                <div 
+                                                style={ this.cover } 
+                                                onClick={ this.handleColorPickerClose }/>
+                                                <SwatchesPicker 
+                                                onChange={ this.handleChooseCustomBackgroundColor}/>
+                                            </div> : null }
+                                        </li>
+    
+                                        {this.defaultImagesURLs.map(
+                                            (image, index) => <BackgroundItem 
+                                                image={image}
+                                                key={`image-${index}`}
+                                                handleChangeBoardBackground={this.handleChangeBoardBackgroundURL}
+                                            /> 
+                                        )}
+    
+                                        { !_.isEmpty(images) && images.map(
+                                            (image, index) => <UploadImage 
+                                                image={image} 
+                                                key={`user-image-${index}`}
+                                                handleChangeBoardBackground={this.handleChangeBoardBackgroundUploadImage}
+                                                />)
+                                        }
+    
+                                        <ImageUploading
+                                            //multiple
+                                            isClearable
+                                            onChange={this.handleUploadImageChange}
+                                            acceptType={['jpg', 'gif', 'png']}
+                                            maxFileSize={ 5242880 }
+                                            onError={this.onError}
+                                            >
+                                            {({onImageUpload}) => {
+                                                return (
+                                                        <li className='item-container'>
+                                                            <button 
+                                                            onClick={onImageUpload}
+                                                            className='board-background-color-btn choose-btn' 
+                                                            > 
+                                                                <p>Upload image</p>
+                                                            </button>
+                                                        </li>
+                                                )
+                                            }}
+                                        </ImageUploading>
+                                    </ul>
+                                </fieldset>  
+                            </div>
+    
+                            <div className='d-flex'>
+                                <Creatable
+                                    isMulti
+                                    options={this.options}
+                                    placeholder='Select or create columns for your table...'
+                                    className='w-100 custom-select-box'   
+                                    classNamePrefix='custom-select-box'
+                                    closeMenuOnSelect = {false}
+                                    onChange={this.handleSelectOptionsChange }
+                                />
+    
+                                <div className='create-new-board-container'> 
+                                    <button className='create-new-board-btn'
+                                    onClick={ this.handleCreateBoard }
+                                    >
+                                        <p>Create board</p>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                        </div>
+    
+                        <div className='board-demo-version-container'>
+                            <h3>Board Demo Version</h3>  
+    
+                            <div 
+                                className='board-demo-version' 
+                                style={ demoVersionBoardBackgraundStyle }>
+                                <ScrollMenu
+                                    data = { !_.isEmpty(boardColumns) && boardColumns.map(
+                                                (column, index) => {
+                                                    return (<BoardDemoColumn 
+                                                        columnTitle={ column }
+                                                        boardWidth={ width } 
+                                                        key={ `column-${index}` }
+                                                    />);
+                                                })
+                                    }
+                                    transition={false}
+                                    wheel={false}
+                                    arrowLeft={ArrowLeft}
+                                    arrowRight={ArrowRight}
+                                />
+                            </div>
+                        </div>
+                    </div>
+                    <Footer/>
+                </div>
+            );
+        }
     }
 }
 
 
 function mapStateToProps(state){
     return {
-        userId: state.user.userId, 
+        userId: state.user.userId,
+        isLoading: state.board.isLoading,
+        boardId: state.board.boardId 
     };
 }
 
-export default connect(mapStateToProps, {})(CreateNewBoard);
+export default connect(mapStateToProps, 
+    {
+        fetchBoard, 
+        setLoader,
+        uploadImage,
+    }
+    )(CreateNewBoard);
