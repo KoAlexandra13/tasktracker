@@ -93,7 +93,11 @@ class NavBar extends React.Component {
 
                 <div className='navbar--right-section'>
                     <button className='user-photo'>
-                        <Link to='/account'>
+                        <Link 
+                            style={{
+                                textDecoration: 'none'
+                            }}
+                            to='/account'>
                             <Avatar
                                 src={this.props.image} 
                                 alt='userIcon'

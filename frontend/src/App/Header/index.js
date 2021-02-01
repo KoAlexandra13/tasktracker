@@ -1,5 +1,7 @@
 import React from 'react';
 import NavBar from './NavBar'
+import VerifyEmailError from './VerifyEmailError';
+import { connect } from 'react-redux'
 
 class Header extends React.Component{
 
@@ -11,10 +13,18 @@ class Header extends React.Component{
                         <NavBar/>
                     </nav>
                 </div>
-               
+                <div className='header-verify-email-error'>
+                    {!this.props.verifyEmail && <VerifyEmailError/>}
+                </div>
             </div>
         );
     };
 }
 
-export default Header;
+function mapStateToProps(state){
+    return {
+        verifyEmail: state.user.verifyEmail,
+    };
+}
+
+export default connect(mapStateToProps, {})(Header);

@@ -1,5 +1,5 @@
 import React from 'react'
-import {  Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import BoardItem from './BoardItem'
 import { connect } from 'react-redux';
 import { addPersonalBoard, addTeamBoard} from '../../actions/boardList';

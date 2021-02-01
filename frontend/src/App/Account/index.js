@@ -229,7 +229,6 @@ class Account extends React.Component{
                                 <div className='link-container'>
                                     <button 
                                         className='p-0 hover-underline'
-                                        to='/account#log-out'
                                         style={styles.linkStyle}
                                         onClick={this.handleLogOutButton}
                                         >
@@ -481,27 +480,6 @@ class Account extends React.Component{
                                         Change password
                                     </button>
                                 </div>
-                           </div>
-
-                           <div className='verify-email-container'>
-                                <p>Verify your email</p>
-
-                                <div>
-                                    <TextField
-                                        variant='outlined'
-                                        size='small'
-                                        label='email'
-                                        defaultValue={this.props.email}
-                                        style={styles.textField}
-                                    />
-
-                                    <div className='verify-button-container'>
-                                        <button className='verify-button'>
-                                            Verify
-                                        </button>
-                                    </div>
-                                </div>
-                                 
                            </div>
                        </div>
                    </div>

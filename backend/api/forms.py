@@ -7,7 +7,6 @@ from django.core.exceptions import ValidationError
 from django.utils.translation import gettext, gettext_lazy as _
 
 from api.models import User
-from api.tasks import send_mail_verification_email_task
 
 
 class UsernameField(forms.CharField):
@@ -111,5 +110,5 @@ class UserCreationForm(forms.ModelForm):
         user.set_password(self.cleaned_data["password1"])
         if commit:
             user.save()
-        send_mail_verification_email_task.delay(user)
+        user.send_email_activation_message()
         return user

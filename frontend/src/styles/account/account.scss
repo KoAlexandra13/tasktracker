@@ -161,36 +161,6 @@
             display: flex;
         }
     }
-
-    .verify-email-container{
-         
-        p{
-            margin-top: 2rem;
-            margin-bottom: 0;
-            display: flex;
-            justify-content: left;
-            font-family: 'system-ui';
-            font-weight: bold;
-        }
-
-        .verify-button-container{
-            margin-top: 2.5rem;
-            text-align: left;
-
-            .verify-button{
-                background-color: #374a56;
-                width: 40%;
-                height: 2.25rem;
-                border-radius: 5px;
-                font-family: 'system-ui';
-                
-                &:hover{
-                    color:rgba($color: #e9dada, $alpha: 0.6)
-                }
-            }
-        }
-    }
-
 }
 
 .upload-image{

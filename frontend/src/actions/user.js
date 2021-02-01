@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { userSignUpRequest, userLoginRequest, userSelfRequest } from '../api/user';
+import { userSignUpRequest, userLoginRequest, userSelfRequest, verifyEmailRequest, resendVerifyEmailRequest } from '../api/user';
 import { refreshTokenRequest } from '../api/auth';
 
 export const FETCH_USER_SUCCESS = 'FETCH_USER_SUCCESS';
@@ -64,9 +64,9 @@ export function setAutorizationToken(token){
     }
 }
 
-export function signUpUser(fullname, email, username, password1, password2){
+export function signUpUser(fullname, email, username, password1, password2, organization){
 
-    return userSignUpRequest(fullname, email, username, password1, password2)
+    return userSignUpRequest(fullname, email, username, password1, password2, organization)
     .then(() => 
         {
             return {errors: {}};
@@ -116,4 +116,18 @@ export function refreshAuthorizationToken(refreshToken){
                 localStorage.removeItem('refreshToken');
             }
         )
+}
+
+export function verifyEmail(email){
+    return verifyEmailRequest(email)
+    .then(
+        () => {
+            return true;
+        }
+    )
+    .catch(
+        () => {
+            return false;
+        }
+    )
 }

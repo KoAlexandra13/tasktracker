@@ -1,0 +1,25 @@
+.verify-error-container {
+    width: 100%;
+    background-color: #ffd642db;
+    height: 2.25rem;
+
+    .text-container{
+        display: flex;
+        margin-left: 40%;
+
+        p, button{
+            color: #474747d6;
+            margin: 0;
+            font-family: 'system-ui';
+            margin-top: 0.5rem;
+        }
+
+        button{
+            margin-top: 0.45rem !important;
+
+            &:hover{
+                text-decoration: underline;
+            }
+        }
+    }
+}

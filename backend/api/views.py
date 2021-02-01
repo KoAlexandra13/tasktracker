@@ -38,6 +38,11 @@ class UserViewSet(ModelViewSet):
             return Response(UserDetailSerializer(user, context={"request": request}).data, status=status.HTTP_201_CREATED)
         return Response(form.errors, status=status.HTTP_400_BAD_REQUEST)
 
+    @decorators.action(detail=False, methods=['post'], url_path='resend-activation-mail')
+    def resend_activation_mail(self, request, *args, **kwargs):
+        request.user.send_email_activation_message()
+        return Response("OK", status=status.HTTP_200_OK)
+
     @decorators.action(detail=False, methods=['get'], url_path='self')
     def get_self(self, request, *args, **kwargs):
         return Response(UserDetailSerializer(request.user, context={"request": request}).data, status=status.HTTP_200_OK)
@@ -45,16 +50,15 @@ class UserViewSet(ModelViewSet):
     @decorators.permission_classes([AllowAny])
     @decorators.action(detail=False, methods=['post'], url_path='email-activate')
     def activate_email(self, request, *args, **kwargs):
-        email = request.POST.get('email', None)
-        if email is None:
-            return Response("Email to activate is not specified", status=status.HTTP_400_BAD_REQUEST)
+        token = request.data.get('token', None)
+        if token is None:
+            return Response("Token is not specified", status=status.HTTP_400_BAD_REQUEST)
 
-        user = User.objects.filter(email=email).first()
+        user = User.activate_email(token)
+
         if user is None:
-            return Response("User with such email not found", status=status.HTTP_404_NOT_FOUND)
+            return Response("Token is not valid", status=status.HTTP_400_BAD_REQUEST)
 
-        user.is_email_verified = True
-        user.save()
         return Response(UserDetailSerializer(user).data, status=status.HTTP_200_OK)
 
 

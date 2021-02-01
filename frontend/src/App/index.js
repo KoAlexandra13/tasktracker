@@ -12,7 +12,8 @@ import { createStore, applyMiddleware, compose } from "redux";
 import { rootReducer } from '../reducers/root';
 import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
-import Account from './Account'
+import Account from './Account';
+import VerifyEmail from './VerifyEmail'
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
@@ -28,6 +29,7 @@ class App extends React.Component{
             <Router>
               <Switch>
                 <Route path='/signup' component={SignUp}/>
+                <Route path='/email-activate' component={VerifyEmail}/>
                 <Route path='/'>
                   <Auth>
                     <Switch>

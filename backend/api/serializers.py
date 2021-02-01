@@ -41,7 +41,7 @@ class UserDetailSerializer(ModelSerializer):
         model = User
         fields = (
             'fullname', 'username', 'id',
-            'email', 'organization', 'image', 'about'
+            'email', 'organization', 'image', 'about', 'is_email_verified'
         )
 
     def update(self, instance, validated_data):
@@ -84,7 +84,7 @@ class TableColumnDetailSerializer(ModelSerializer):
 class TableDetailSerializer(ModelSerializer):
     columns = TableColumnDetailSerializer(many=True, read_only=True)
     users = UserDetailSerializer(many=True, read_only=True)
-    image_from_url = serializers.URLField(allow_null=True, allow_blank=True, write_only=True)
+    image_from_url = serializers.URLField(required=False, write_only=True)
 
     class Meta:
         model = Table

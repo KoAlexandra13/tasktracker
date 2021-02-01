@@ -4,6 +4,9 @@ from django.utils.translation import gettext_lazy as _
 
 from djchoices import DjangoChoices, ChoiceItem
 
+from api.tasks import send_mail_verification_email_task
+from api.utils import account_activation_token
+
 
 class User(AbstractUser):
     image = models.ImageField(upload_to='profile/logo/', null=True, blank=True)
@@ -16,6 +19,48 @@ class User(AbstractUser):
     @property
     def fullname(self):
         return f"{self.first_name}{' %s' % self.last_name if self.last_name else ''}"
+
+    def send_email_activation_message(self):
+        EmailActivationRequest.objects.filter(
+            user=self
+        ).delete()
+
+        token = account_activation_token.make_token(self)
+        EmailActivationRequest.objects.create(
+            token=token,
+            user=self
+        )
+
+        send_mail_verification_email_task.delay(
+            self.fullname,
+            self.email,
+            token
+        )
+
+    @classmethod
+    def activate_email(cls, token):
+        email_activation_request = EmailActivationRequest.objects.filter(token=token).first()
+        if email_activation_request is None:
+            return None
+
+        if not account_activation_token.check_token(
+            email_activation_request.user, token
+        ):
+            return None
+
+        user = email_activation_request.user
+        user.is_email_verified = True
+        user.save()
+
+        email_activation_request.delete()
+
+        return user
+
+    def save(self, *args, **kwargs):
+        old_obj = self.__class__.objects.get(pk=self.pk) if self.pk else None
+        if old_obj and old_obj.email != self.email:
+            self.is_email_verified = False
+        return super().save(*args, **kwargs)
 
 
 class Table(models.Model):
@@ -64,3 +109,9 @@ class Task(models.Model):
 class TaskImage(models.Model):
     task = models.ForeignKey('Task', on_delete=models.CASCADE, related_name='images')
     image = models.ImageField(upload_to='table/task/images/')
+
+
+class EmailActivationRequest(models.Model):
+    token = models.CharField(max_length=30)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)

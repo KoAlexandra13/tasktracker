@@ -11,7 +11,7 @@ import { connect } from 'react-redux';
 import { fetchBoard, setLoader, uploadImage } from '../../actions/board'
 import Header from '../Header';
 import Footer from '../Footer'
-import {ClassicSpinner} from 'react-spinners-kit';
+import { ClassicSpinner } from 'react-spinners-kit';
 
 
 class CreateNewBoard extends React.Component {
@@ -105,7 +105,7 @@ class CreateNewBoard extends React.Component {
     componentWillUnmount = () => window.removeEventListener('resize', this.updateDimensions);
 
     handleCreateBoard = async () => {
-        if(this.props.boardTitle === ''){
+        if(this.state.boardTitle === ''){
             this.setState({...this.state, isBoardTitleEntered : false});
             window.scrollTo(0, 0);
         }
@@ -358,4 +358,4 @@ export default connect(mapStateToProps,
         setLoader,
         uploadImage,
     }
-    )(CreateNewBoard);
+)(CreateNewBoard);

@@ -3,7 +3,7 @@ import {
     FETCH_USER_SUCCESS,
     FETCH_USER_ERROR,
     UPLOAD_AVATAR_IMAGE,
-    CHANGE_USER_INFO
+    CHANGE_USER_INFO, 
 } from '../actions/user';
 
 const initialState = {
@@ -16,6 +16,7 @@ const initialState = {
     userInfoAboutYourself: '',
     isFetching: true,
     error: null,
+    verifyEmail: false
 }
 
 const userReducer = (state = initialState, action) => {
@@ -35,7 +36,8 @@ const userReducer = (state = initialState, action) => {
                 userIcon: action.data.image,
                 userId: action.data.id,
                 userInfoAboutYourself: action.data.about,
-                isFetching: false
+                isFetching: false,
+                verifyEmail: action.data.is_email_verified
             }
         case FETCH_USER_ERROR:
             return {

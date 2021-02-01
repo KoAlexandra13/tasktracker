@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-export function userSignUpRequest(fullName, email, username, password1, password2){
+export function userSignUpRequest(fullName, email, username, password1, password2, organization){
     const config = {
         url: 'http://127.0.0.1:8000/api/users/sign_up/', 
         method: 'POST',
@@ -9,7 +9,8 @@ export function userSignUpRequest(fullName, email, username, password1, password
                 email: email,
                 username: username,
                 password1: password1,
-                password2: password2
+                password2: password2,
+                organization: organization
             }
     };
     return axios(config);
@@ -52,6 +53,23 @@ export function changeUserInfoRequest(userId, data){
         data,
     }
     return axios(config)
+}
+
+export function verifyEmailRequest(data){
+    const config = {
+        url: 'http://127.0.0.1:8000/api/users/email-activate/', 
+        method: 'POST',
+        data
+    };
+    return axios(config);
+}
+
+export function resendVerifyEmailRequest(){
+    const config = {
+        url: 'http://127.0.0.1:8000/api/users/resend-activation-mail/', 
+        method: 'POST'
+    };
+    return axios(config);
 }
 
 

@@ -23,6 +23,7 @@ class SignUp extends React.Component {
             password1: '',
             showPassword1: false,
             password2: '',
+            organization: '',
             showPassword2:false,
             checkedTermsAndConditions: false,
             checkedSubscribe: false,
@@ -59,7 +60,7 @@ class SignUp extends React.Component {
         if(requiredFieldsFilledIn){
             const data = await signUpUser(
                 this.state.fullName, this.state.email, this.state.username,
-                this.state.password1, this.state.password2
+                this.state.password1, this.state.password2, this.state.organization 
             );
             if (_.isEmpty(data.errors)){
 
