@@ -17,3 +17,19 @@ export function uploadBoardImageRequest(tableId, imageURL){
     };
     return axios(config);
 }
+
+export function getBoardListRequest(){
+    const config = {
+        url: 'http://127.0.0.1:8000/api/tables/',
+        method: 'GET'
+    };
+    return axios(config);
+}
+
+export function getBoardRequest(id){
+    const config = {
+        url: `http://127.0.0.1:8000/api/tables/${id}/`,
+        method: 'GET'
+    };
+    return axios(config);
+}

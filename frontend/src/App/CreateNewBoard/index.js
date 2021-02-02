@@ -135,7 +135,6 @@ class CreateNewBoard extends React.Component {
                 const imageURL = {
                     image_from_url: `${window.location.origin}${this.state.boardBackgroundURL}` 
                 }
-                console.log(this.state.boardBackgroundURL)
                 await this.props.uploadImage(id, imageURL);
             }
 
@@ -202,7 +201,7 @@ class CreateNewBoard extends React.Component {
                                 <div className='group'>      
                                     <input 
                                     type='text' 
-                                    value={ this.state.boardTitle} 
+                                    value={this.state.boardTitle} 
                                     onChange={ this.handleTitleChange } 
                                     required
                                     />

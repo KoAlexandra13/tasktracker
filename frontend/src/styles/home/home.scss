@@ -31,7 +31,7 @@
                         width: 12rem;
                         height: 6rem;
                         background-color: rgb(238, 155, 87);
-                        border-radius: 5px;
+                        border-radius: 3px;
 
                         &:hover {
                             -webkit-box-shadow: 4px 5px 15px -6px rgba(46,45,46,0.77);
@@ -40,7 +40,7 @@
                         }
                     }
 
-                    &-title {
+                    &-board-title {
                         color: white;
                         overflow: hidden;
                         text-overflow: ellipsis;
@@ -48,25 +48,28 @@
                         display: -webkit-box;
                         -webkit-line-clamp: 2;
 
-                            .title-text {
-                                text-align: center;
-                                margin-top: 1rem;
+                        .title-text {
+                            margin-top: 0.25rem;
+                            margin-left: 0.25rem;
+                            font-weight: bold;
 
-                                a:hover {
-                                    text-decoration: none;
-                                }
+                            a:hover {
+                                text-decoration: none;
                             }
                         }
+                    }
                 }
 
                 .create-board-container, .create-team-board-container {
                     background-color: rgba(180, 168, 168, 0.7);
                     vertical-align: middle;
                     display: table-cell;
+                    color: white;
 
                     .title-text {
                         text-align: center;
                         margin-top: 1rem;
+                        font-weight: bold;
                         
                         a:hover {
                             text-decoration: none;

@@ -1,0 +1,51 @@
+.board-container{
+    width: 100%;
+    padding-top: 0.5rem;
+
+    .board-header{
+        margin: 0 0.25rem 0 0.25rem;
+        text-align: center;
+
+        .board-title-container{
+            border-radius: 5px;
+            //background-color: #63675d4f;
+            height: 2.5rem;
+            display: inline-block;
+            margin-bottom: 0.25rem;
+
+            h3{
+                color: white;
+                font-family: 'system-ui';
+                margin: 0;
+                display: flex;
+                align-content: center;
+                margin: 0 0.3rem 0.1rem 0.3rem;
+                font-weight: bold;
+                font-size: xx-large;
+            }
+
+            input{
+                font-size: xx-large;
+                font-weight: bold;
+                border-radius: 5px;
+                border: solid 2px#3f85b4;
+                outline: none;
+                height: 100%;
+                font-family: 'system-ui';
+            }
+        }
+
+        .menu{
+            display: inline-flex;
+            //background-color: #63675d4f;
+            border-radius: 5px;
+            vertical-align: text-bottom;
+
+            button{
+                font-size: large;
+                font-family: 'system-ui';
+            }
+        }
+    }
+
+}

@@ -14,6 +14,7 @@ import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
 import Account from './Account';
 import VerifyEmail from './VerifyEmail'
+import Board from './Board'
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
@@ -35,8 +36,8 @@ class App extends React.Component{
                     <Switch>
                       <Route exact path='/' component={Home}/>
                       <Route path='/createnewboard' component={CreateNewBoard}/>
-                      {/*<Route path='/createnewteam' component={CreateNewTeam}/>*/}
                       <Route path='/account' component={Account}/>
+                      <Route path='/board' component={Board}/>
                     </Switch>
                   </Auth>
                 </Route>

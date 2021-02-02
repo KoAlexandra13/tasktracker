@@ -4,7 +4,7 @@ export const UPLOAD_BOARD_BACKGROUND_IMAGE = 'UPLOAD_BOARD_BACKGROUND_IMAGE';
 export const FETCH_BOARD_SUCCESS = 'FETCH_BOARD_SUCCESS';
 export const FETCH_BOARD_REQUEST = 'FETCH_BOARD_REQUEST';
 export const FETCH_BOARD_ERROR = 'FETCH_BOARD_ERROR';
-export const CREATE_BOARD_SET_LOADER = 'SET_LOADER'
+export const CREATE_BOARD_SET_LOADER = 'SET_LOADER';
 
 const addBoardBackgroundImageAction = (image) => ({
     type: UPLOAD_BOARD_BACKGROUND_IMAGE,
@@ -50,10 +50,8 @@ export function setLoader(data){
 
 export function uploadImage(boardId, data){
     return dispatch => {
-        console.log(boardId, data)
         uploadBoardImageRequest(boardId, data)
         .then(response => {
-            console.log(response.data)
             dispatch(addBoardBackgroundImageAction(response.data));
         })
         .catch(()=> {
@@ -62,14 +60,3 @@ export function uploadImage(boardId, data){
         })
     }
 }
-
-/*export function createBoard(data){
-    return createNewBoardRequest(data)
-    .then(response => {
-        addBoard(response.data);
-        return true;
-    })
-    .catch(() => {
-        return false;
-    })
-}*/

@@ -2,16 +2,20 @@ import React from 'react'
 import { Link } from "react-router-dom";
 import BoardItem from './BoardItem'
 import { connect } from 'react-redux';
-import { addPersonalBoard, addTeamBoard} from '../../actions/boardList';
+import { getBoardTitlesList } from '../../actions/boardList';
 import Header from '../Header';
 import Footer from '../Footer';
 
 
 class Home extends React.Component {
 
+    componentDidMount(){
+        this.props.getBoardTitlesList();
+    }
+
     render(){
 
-        const { personalBoardList, teamBoardList} = this.props;
+        const { personalBoardList } = this.props;
 
         return(
             <div>
@@ -24,10 +28,10 @@ class Home extends React.Component {
                                 <p>PERSONAL BOARDS: </p>
                             </div>
 
-                            <ul className='personal-boards-list'>  
-                                { personalBoardList.map((boardName, index) => <BoardItem 
-                                    boardName={ boardName }
-                                    key={boardName + index}
+                            <ul className='personal-boards-list'>
+                                { personalBoardList && personalBoardList.map((board, index) => <BoardItem 
+                                    board={board}
+                                    key={board.name + index}
                                     />)
                                 }
                                 <li className='personal-boards-create-new-board-item'> 
@@ -49,10 +53,10 @@ class Home extends React.Component {
                             </div>
 
                             <ul className='team-boards-list'>  
-                                { teamBoardList.map((boardName, index) => <BoardItem 
+                                { /*teamBoardList.map((boardName, index) => <BoardItem 
                                     boardName={ boardName }
                                     key={boardName + index}
-                                    />)
+                                    />)*/
                                 } 
                                 <li className='team-boards-create-new-board-item'> 
                                     <Link to='/createnewteam'>
@@ -76,12 +80,8 @@ class Home extends React.Component {
 
 function mapStateToProps(state){
     return {
-        personalBoardList: state.addBoard.personalBoardList,
-        teamBoardList: state.addBoard.teamBoardList
+        personalBoardList: state.addBoard.personalBoardList
     };
 }
 
-export default connect(mapStateToProps, {
-    addPersonalBoard,
-    addTeamBoard
-})(Home);
+export default connect(mapStateToProps, { getBoardTitlesList })(Home);

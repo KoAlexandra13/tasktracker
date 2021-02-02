@@ -1,25 +1,24 @@
+import { getBoardListRequest } from '../api/board'
+
 export const ADD_PERSONAL_BOARD = 'ADD_PERSONAL_BOARD';
-export const ADD_TEAM_BOARD = 'ADD_TEAM_BOARD';
 
-const addPersonalBoardAction = (personalBoardName) => ({
+const addPersonalBoardAction = (data) => ({
     type: ADD_PERSONAL_BOARD,
-    personalBoardName
+    data
 });
 
-
-const addTeamBoardAction = (teamBoardName) => ({
-    type: ADD_TEAM_BOARD,
-    teamBoardName
-});
-
-export function addPersonalBoard(personalBoardName){
+export function getBoardTitlesList(){
     return dispatch => {
-        dispatch(addPersonalBoardAction(personalBoardName))
+        getBoardListRequest()
+        .then(response => {
+            const boards = response.data.map(element => {
+                return element;
+            });
+            dispatch(addPersonalBoardAction(boards))
+        })
+        .catch(error => {
+            console.log(error)
+        });
     }
-};
-
-export function addTeamBoard(teamBoardName){
-    return dispatch => {
-        dispatch(addTeamBoardAction(teamBoardName))
-    }
-};
+   
+}

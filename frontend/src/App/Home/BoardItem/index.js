@@ -1,19 +1,29 @@
 import React from 'react'
+//import _ from 'lodash'
+import { Link } from "react-router-dom";
 
 class BoardItem extends React.Component {
     render(){
 
-        const { boardName } = this.props;
+        const { board } = this.props;
+
+        /*const style = _.isNull(color) ? {
+            backgroundColor: board.background_color
+        } : {
+            background: 'url(' + board.background_image + ') no-repeat transparent center'
+        }*/
 
         return(
             <li className='boards-list-item'>
-                <a href='/'>
-                    <div className='item-container'>
-                        <div className='item-title'> 
-                            { boardName }
+                <Link to={`/board/${board.id}/`}>
+                    <div 
+                        className='item-container'
+                        style={{backgroundColor: board.background_color}}>
+                        <div className='item-board-title'> 
+                            <p className='title-text'>{ board.name }</p> 
                         </div>
                     </div>
-                </a>
+                </Link>
             </li>
         )
     }

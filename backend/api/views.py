@@ -84,3 +84,9 @@ class TableViewSet(ModelViewSet):
         TableColumn.objects.bulk_create(columns)
 
         return Response(self.get_serializer(table).data, status=status.HTTP_201_CREATED)
+
+    def get_queryset(self):
+        if self.request and self.request.method == 'GET':
+            return self.request.user.tables.all()
+        return super().get_queryset()
+

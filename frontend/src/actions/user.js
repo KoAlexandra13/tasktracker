@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { userSignUpRequest, userLoginRequest, userSelfRequest, verifyEmailRequest, resendVerifyEmailRequest } from '../api/user';
+import { userSignUpRequest, userLoginRequest, userSelfRequest, verifyEmailRequest } from '../api/user';
 import { refreshTokenRequest } from '../api/auth';
 
 export const FETCH_USER_SUCCESS = 'FETCH_USER_SUCCESS';
@@ -75,7 +75,7 @@ export function signUpUser(fullname, email, username, password1, password2, orga
     .catch(error => {
         const data = error.response.data;
         const errors = {};
-        Object.entries(data).map(([key, value]) => {
+        Object.entries(data).forEach(([key, value]) => {
             Object.assign(errors, {[key]: value})
         });
         return {errors: errors};
