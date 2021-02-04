@@ -1,0 +1,48 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres
+    env_file:
+      - db.env
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+  backend:
+    build: backend/
+    entrypoint: ./backend-entrypoint.prod.sh
+    env_file:
+      - db.env
+    volumes:
+      - './backend:/backend'
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+  frontend:
+    command: npm start
+    build: frontend/
+    volumes:
+      - './frontend:/frontend'
+    ports:
+      - "3000:3000"
+  celery:
+    build: backend/
+    entrypoint: ./celery-entrypoint.sh
+    env_file:
+      - db.env
+    volumes:
+      - './backend:/backend'
+    depends_on:
+      - db
+      - redis
+  redis:
+    image: redis:alpine
+  nginx:
+    build: ./nginx
+    ports:
+      - 1337:80
+    depends_on:
+      - backend
+
