@@ -33,3 +33,14 @@ export function getBoardRequest(id){
     };
     return axios(config);
 }
+
+export function editBoardNameRequest(name, id){
+    const config = {
+        url: `http://127.0.0.1:8000/api/tables/${id}/`,
+        method: 'PATCH',
+        data : {
+            name: name 
+        }
+    }
+    return axios(config);
+}

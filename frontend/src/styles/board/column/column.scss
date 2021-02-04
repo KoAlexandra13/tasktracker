@@ -1,0 +1,19 @@
+.column-container{
+    margin: 8px;
+    border: 1px solid #ebecf0;
+    border-radius: 3px;
+    background-color: #ebecf0;
+
+    .column-title{
+        padding: 8px;
+        font-weight: bold;
+        font-family: 'system-ui';
+
+        .tasks-container{
+            padding: 8px;
+        }
+    }
+
+}
+
+@import 'task/task.scss';

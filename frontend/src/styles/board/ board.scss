@@ -3,14 +3,16 @@
     padding-top: 0.5rem;
 
     .board-header{
-        margin: 0 0.25rem 0 0.25rem;
+        margin: 0 1.5rem 0 1.5rem;
         text-align: center;
+        justify-content: space-between;
+        display:flex;
 
         .board-title-container{
             border-radius: 5px;
             //background-color: #63675d4f;
             height: 2.5rem;
-            display: inline-block;
+            display: flex;
             margin-bottom: 0.25rem;
 
             h3{
@@ -35,6 +37,11 @@
             }
         }
 
+        .favourite-board-button-container{
+            display: inline-flex;
+            vertical-align: text-bottom;
+        }
+
         .menu{
             display: inline-flex;
             //background-color: #63675d4f;
@@ -49,3 +56,5 @@
     }
 
 }
+
+@import 'column/column.scss';

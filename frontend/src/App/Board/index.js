@@ -1,10 +1,12 @@
 import React from 'react'
 import { setLoader } from '../../actions/board';
-import { getBoardRequest } from '../../api/board';
+import { editBoardNameRequest, getBoardRequest } from '../../api/board';
 import Header from '../Header'
 import { connect } from 'react-redux'
 import { ClassicSpinner } from 'react-spinners-kit';
-
+import StarBorderOutlinedIcon from '@material-ui/icons/StarBorderOutlined';
+import { DragDropContext } from 'react-beautiful-dnd';
+import Column from './Column'
 
 class Board extends React.Component{
     constructor(props){
@@ -19,6 +21,7 @@ class Board extends React.Component{
             boardBackgroundColor: null,
             boardId: '',
             openEditTitlePane: false,
+            favouriteBoard: false,
         }
     }
 
@@ -31,10 +34,22 @@ class Board extends React.Component{
     }
     
     handleClickOutside = (event) => {
-        if (this.wrapperRef && !this.wrapperRef.current.contains(event.target)) {
+        if (this.wrapperRef && !this.wrapperRef.current.contains(event.target) && this.state.openEditTitlePane) {
            this.setState({...this.state, openEditTitlePane: false})
+           editBoardNameRequest(this.state.boardTitle, this.state.boardId)
+           .catch(error => console.log(error)) 
         }
     };
+
+    handleChangeFavouriteIcon = () => {
+        this.setState({...this.state, favouriteBoard: !this.state.favouriteBoard})
+        //send put/patch request(change favourite board) 
+
+    }
+
+    onDragEnd = result => {
+
+    }
 
     async componentDidMount(){
         const id = window.location.pathname.slice(-2, -1);
@@ -49,7 +64,8 @@ class Board extends React.Component{
                 boardId: response.data.id,
                 boardBackgroundColor: response.data.background_color,
                 boardBackgroundImage: response.data.background_image,
-                boardColumns: response.data.columns
+                boardColumns: response.data.columns,
+                //favouriteBoard: response.data.favourite
             })
         })
         .catch(error => console.log(error))
@@ -67,7 +83,7 @@ class Board extends React.Component{
     render(){
         
         const { boardBackgroundColor, boardBackgroundImage, boardTitle, 
-            openEditTitlePane } = this.state;
+            openEditTitlePane, favouriteBoard, boardColumns } = this.state;
 
         const styles = {
             boardBackgraundStyle : boardBackgroundColor === null ? {
@@ -79,6 +95,11 @@ class Board extends React.Component{
                 display: 'none'
             } : {
                 display: 'flex'
+            },
+            favouriteIcon: favouriteBoard ? {
+                color: 'yellow'
+            } : {
+                color: 'white'
             }
         }
         
@@ -104,6 +125,14 @@ class Board extends React.Component{
                         className='board-container'
                         style={styles.boardBackgraundStyle}>
                             <div className='board-header'>
+                                <div className='favourite-board-button-container'>
+                                    <button
+                                        onClick={this.handleChangeFavouriteIcon}>
+                                        <StarBorderOutlinedIcon
+                                            style={styles.favouriteIcon}/>
+                                    </button>
+                                </div>
+
                                 <div 
                                     className='board-title-container'>
                                     <h3 
@@ -124,13 +153,22 @@ class Board extends React.Component{
                                         }
                                         />
                                 </div>
-
                                 <div className='menu'>
                                     <button>
                                         Menu
                                     </button>
                                 </div>
                             </div>
+                            <DragDropContext
+                                onDragEnd={this.onDragEnd}>
+
+                                { boardColumns && boardColumns.map(column => 
+                                <Column 
+                                    key={column.id} 
+                                    column={column} 
+                                    tasks={column.tasks}/>
+                                )}
+                            </DragDropContext>
                     </div>
                 </div>
             )
