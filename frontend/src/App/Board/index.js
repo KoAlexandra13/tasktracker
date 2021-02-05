@@ -1,12 +1,15 @@
 import React from 'react'
 import { setLoader } from '../../actions/board';
-import { editBoardNameRequest, getBoardRequest } from '../../api/board';
+import { editBoardNameRequest, getBoardRequest, editBoardColumnsRequest } from '../../api/board';
 import Header from '../Header'
 import { connect } from 'react-redux'
 import { ClassicSpinner } from 'react-spinners-kit';
 import StarBorderOutlinedIcon from '@material-ui/icons/StarBorderOutlined';
-import { DragDropContext } from 'react-beautiful-dnd';
-import Column from './Column'
+import { DragDropContext, Droppable } from 'react-beautiful-dnd';
+import Column from './Column';
+import _ from 'lodash'
+import AddNewColumn from './AddNewColumn';
+import MenuIcon from '@material-ui/icons/Menu';
 
 class Board extends React.Component{
     constructor(props){
@@ -47,8 +50,116 @@ class Board extends React.Component{
 
     }
 
-    onDragEnd = result => {
+    handleKeyDown = (event) => {
+        if (event.key === 'Enter') {
+            this.setState({...this.state, openEditTitlePane: false})
+            editBoardNameRequest(this.state.boardTitle, this.state.boardId)
+            .catch(error => console.log(error)) 
+        }
+      }
 
+    onDragEnd = (result) => {
+        const {destination, source, draggableId, type} = result;
+
+        if(!destination || _.isUndefined(destination)){
+            return;
+        }
+
+        if (
+            destination.droppableId === source.droppableId &&
+            destination.index === source.index
+        ){
+            return;
+        }
+
+        if(type === 'column'){
+            const newColumnOrder = Array.from(this.state.boardColumns);
+            const draggedColumn = newColumnOrder.find(column => column.id.toString() === draggableId);
+
+            newColumnOrder.splice(source.index, 1);
+            newColumnOrder.splice(destination.index, 0, draggedColumn);
+
+            newColumnOrder.forEach((column, index) => {
+                column['index'] = index;
+            })
+
+            const newState = {
+                ...this.state,
+                boardColumns: newColumnOrder,
+            };
+
+            /*editBoardColumnsRequest(newState.boardColumns, this.state.boardId, this.state.boardTitle)
+            .then(() => this.setState(newState))
+            .catch(error => console.log(error))*/
+            
+            this.setState(newState);
+            return;
+        }
+
+        const startColumn = this.state.boardColumns.find(column => column.id.toString() === source.droppableId);
+        const finishColumn = this.state.boardColumns.find(column => column.id.toString() === destination.droppableId);
+
+        if (startColumn.id === finishColumn.id){
+
+            const newTasks = Array.from(startColumn.tasks);
+            const draggedTask = startColumn.tasks.find(task => task.id.toString() === draggableId);
+
+            newTasks.splice(source.index, 1);
+            newTasks.splice(destination.index, 0, draggedTask);
+
+            const newColumn = {
+                ...startColumn,
+                tasks: newTasks
+            }
+
+            this.state.boardColumns.splice(newColumn.index, 1, newColumn)
+
+            const newState = {
+                ...this.state,
+                boardColumns: [
+                    ...this.state.boardColumns
+                ]
+            };
+
+            /*editBoardColumnsRequest(newState.boardColumns, this.state.boardId, this.state.boardTitle)
+            .then(() => this.setState(newState))
+            .catch(error => console.log(error))*/
+
+            this.setState(newState);
+            return;
+        }
+
+        const startTasks = Array.from(startColumn.tasks);
+        const draggedTask = startTasks.splice(source.index, 1)[0];
+        const newStartColumn = {
+            ...startColumn,
+            tasks: startTasks,
+        }
+
+        const finishTasks = Array.from(finishColumn.tasks);
+        draggedTask.column = finishColumn.id;
+        finishTasks.splice(destination.index, 0, draggedTask);
+        const newFinishColumn = {
+            ...finishColumn,
+            tasks: finishTasks,
+        }
+
+        this.state.boardColumns.splice(newStartColumn.index, 1, newStartColumn);
+        this.state.boardColumns.splice(newFinishColumn.index, 1, newFinishColumn);
+
+
+        const newState = {
+            ...this.state,
+            boardColumns: [
+                ...this.state.boardColumns
+            ]
+        };
+
+        /*editBoardColumnsRequest(newState.boardColumns, this.state.boardId, this.state.boardTitle)
+        .then(() => this.setState(newState))
+        .catch(error => console.log(error))*/
+
+        this.setState(newState);
     }
 
     async componentDidMount(){
@@ -82,8 +193,8 @@ class Board extends React.Component{
 
     render(){
         
-        const { boardBackgroundColor, boardBackgroundImage, boardTitle, 
-            openEditTitlePane, favouriteBoard, boardColumns } = this.state;
+        const { boardBackgroundColor, boardTitle, openEditTitlePane, 
+            favouriteBoard, boardColumns } = this.state;
 
         const styles = {
             boardBackgraundStyle : boardBackgroundColor === null ? {
@@ -122,7 +233,7 @@ class Board extends React.Component{
                 <div>
                     <Header/>
                     <div 
-                        className='board-container'
+                        className='board-main-container'
                         style={styles.boardBackgraundStyle}>
                             <div className='board-header'>
                                 <div className='favourite-board-button-container'>
@@ -151,25 +262,47 @@ class Board extends React.Component{
                                                 display: openEditTitlePane ? 'inline' : 'none'
                                             }
                                         }
+                                        onKeyDown={this.handleKeyDown}
                                         />
                                 </div>
                                 <div className='menu'>
                                     <button>
-                                        Menu
+                                        <MenuIcon 
+                                            style={{marginBottom: '2px', fontSize: 'large'}}/>
+                                        &nbsp;Menu
                                     </button>
                                 </div>
                             </div>
-                            <DragDropContext
-                                onDragEnd={this.onDragEnd}>
+                            <div className='board-container'>
+                                        <DragDropContext
+                                            onDragEnd={this.onDragEnd}>
+                                                <Droppable 
+                                                    droppableId='all-columns' 
+                                                    direction='horizontal' 
+                                                    type='column'
+                                                    >
+                                                    {(provided) => (
+                                                        <div   
+                                                            className='columns-container'
+                                                            {...provided.droppableProps}
+                                                            ref={provided.innerRef}
+                                                            >
 
-                                { boardColumns && boardColumns.map(column => 
-                                <Column 
-                                    key={column.id} 
-                                    column={column} 
-                                    tasks={column.tasks}/>
-                                )}
-                            </DragDropContext>
-                    </div>
+                                                            { boardColumns && boardColumns.map((column, index) => 
+                                                            <Column 
+                                                                key={column.id} 
+                                                                column={column} 
+                                                                index={index}
+                                                                tasks={column.tasks}/>
+                                                            )}
+                                                            {provided.placeholder}
+                                                        </div>
+                                                    )}
+                                                </Droppable>
+                                        </DragDropContext>
+                                <AddNewColumn/>
+                            </div>
+                        </div>
                 </div>
             )
         }

@@ -3,6 +3,10 @@
     border: 1px solid #ebecf0;
     border-radius: 3px;
     background-color: #ebecf0;
+    width: 272px;
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 8px;
 
     .column-title{
         padding: 8px;
@@ -11,9 +15,78 @@
 
         .tasks-container{
             padding: 8px;
+            flex-grow: 1;
+            min-height: 100px;
         }
     }
 
+}
+
+.add-new-column-container{
+    margin: 8px;
+    background-color: transparent;
+    width: 270px;
+    display: flex;
+    flex-direction: column;
+
+    .add-new-column-button{
+        background-color: #5e5e5e67;
+        border-radius: 3px;
+        min-height: 35px;
+
+        &:hover{
+            background-color: #928f8f78;
+        }
+    
+        button{
+            margin-top: 4px;
+            display: flex;
+            color: whitesmoke;
+            font-family: 'system-ui';
+            width: 100%;
+        }
+
+    }
+
+    .add-new-column-name{
+        background-color: #928f8f78;
+        border-radius: 3px;
+
+        .input-container{
+            width: 100%;
+            display: inline;
+            
+            input{
+                margin: 8px;
+                border-radius: 3px;
+                font-family: 'system-ui';
+                width: 255px; 
+                border: solid 1px #6cc5ff;
+                height: 35px;   
+                outline: none;
+            }
+
+        }
+
+        .options-button{
+            margin-left: 8px;
+            display: flex;
+            justify-content: space-between;
+
+            .add-button{
+                background-color: #6cc5ff;
+                color: whitesmoke;
+                font-family: 'system-ui';
+                margin-bottom: 8px;
+                border-radius: 3px;
+                height: 32px;
+            }
+
+            .close-button{
+                margin-bottom: 8px;
+            }
+        }
+    }
 }
 
 @import 'task/task.scss';

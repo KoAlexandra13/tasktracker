@@ -38,8 +38,20 @@ export function editBoardNameRequest(name, id){
     const config = {
         url: `http://127.0.0.1:8000/api/tables/${id}/`,
         method: 'PATCH',
-        data : {
+        data: {
             name: name 
+        }
+    }
+    return axios(config);
+}
+
+export function editBoardColumnsRequest(data, id, name){
+    const config = {
+        url: `http://127.0.0.1:8000/api/tables/${id}/`,
+        method: 'PUT',
+        data: {
+            columns: data,
+            name: name
         }
     }
     return axios(config);

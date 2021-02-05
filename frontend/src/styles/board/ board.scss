@@ -1,6 +1,8 @@
-.board-container{
+.board-main-container{
     width: 100%;
     padding-top: 0.5rem;
+    height: 100vh;
+    min-width: 1000px;
 
     .board-header{
         margin: 0 1.5rem 0 1.5rem;
@@ -52,6 +54,14 @@
                 font-size: large;
                 font-family: 'system-ui';
             }
+        }
+    }
+
+    .board-container{
+        display: flex;
+
+        .columns-container{
+            display: flex;
         }
     }
 
