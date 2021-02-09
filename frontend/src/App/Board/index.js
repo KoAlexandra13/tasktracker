@@ -11,6 +11,7 @@ import _ from 'lodash'
 import AddNewColumn from './AddNewColumn';
 import MenuIcon from '@material-ui/icons/Menu';
 import { getBoard, changeBoardTitle, changeBoardColumns } from '../../actions/board';
+import Menu from './Menu'
 
 class Board extends React.Component{
     constructor(props){
@@ -21,6 +22,7 @@ class Board extends React.Component{
         this.state = {
             openEditTitlePane: false,
             favouriteBoard: false,
+            openMenuPane: false,
         }
     }
 
@@ -52,7 +54,11 @@ class Board extends React.Component{
             editBoardNameRequest(this.props.boardTitle, this.props.boardId)
             .catch(error => console.log(error)) 
         }
-      }
+    }
+
+    handleOpenMenu = () => {
+        this.setState({...this.state, openMenuPane: !this.state.openMenuPane})
+    }
 
     onDragEnd = (result) => {
         const {destination, source, draggableId, type} = result;
@@ -176,7 +182,7 @@ class Board extends React.Component{
         
         const { boardBackgroundColor, boardTitle, boardColumns } = this.props;
 
-        const { openEditTitlePane, favouriteBoard } = this.state;
+        const { openEditTitlePane, favouriteBoard, openMenuPane } = this.state;
 
         const styles = {
             boardBackgraundStyle : boardBackgroundColor === null ? {
@@ -248,7 +254,8 @@ class Board extends React.Component{
                                         />
                                 </div>
                                 <div className='menu'>
-                                    <button>
+                                    <button
+                                    onClick={this.handleOpenMenu}>
                                         <MenuIcon 
                                             style={{marginBottom: '2px', fontSize: 'large'}}/>
                                         &nbsp;Menu
@@ -284,7 +291,8 @@ class Board extends React.Component{
                                         </DragDropContext>
                                 <AddNewColumn/>
                             </div>
-                        </div>
+                    </div>
+                    {openMenuPane && <Menu closeMenu={this.handleOpenMenu}/>}
                 </div>
             )
         }
