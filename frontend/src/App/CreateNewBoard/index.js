@@ -139,6 +139,8 @@ class CreateNewBoard extends React.Component {
             }
 
             this.props.setLoader(false);
+
+            window.location.href = `/board/${id}/`;
         }
     }
 
@@ -265,7 +267,6 @@ class CreateNewBoard extends React.Component {
                                         }
     
                                         <ImageUploading
-                                            //multiple
                                             isClearable
                                             onChange={this.handleUploadImageChange}
                                             acceptType={['jpg', 'gif', 'png']}

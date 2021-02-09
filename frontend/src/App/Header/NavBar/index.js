@@ -114,7 +114,7 @@ class NavBar extends React.Component {
 
                     <div className='open-search' style = {openSearchStyle}>
                         <input 
-                            type='search'
+                            type='text'
                             placeholder='Search...'/>
                         <button 
                             className='close-search-btn'

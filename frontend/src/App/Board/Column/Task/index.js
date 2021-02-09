@@ -7,7 +7,11 @@ class Task extends React.Component{
         const {task, index} = this.props;
 
         return (
-            <Draggable draggableId={task.id.toString()} index={index}>
+            <Draggable 
+                key={task.id} 
+                draggableId={`task-${task.id.toString()}`} 
+                index={index}
+            >
                 {(provided)=> (
                     <div className='task-contianer'
                         {...provided.draggableProps}

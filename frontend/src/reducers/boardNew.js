@@ -1,6 +1,7 @@
 import {
     FETCH_BOARD_REQUEST, FETCH_BOARD_SUCCESS, UPLOAD_BOARD_BACKGROUND_IMAGE, 
-    FETCH_BOARD_ERROR, CREATE_BOARD_SET_LOADER
+    FETCH_BOARD_ERROR, CREATE_BOARD_SET_LOADER, CHANGE_BOARD_TITLE,
+    CHANGE_BOARD_COLUMNS
 } from '../actions/board';
 
 
@@ -8,7 +9,7 @@ const initialState = {
     boardTitle: '',
     boardColumns: [],
     boardBackgroundColor: null,
-    addBoardBackgroundImage: null,
+    boardBackgroundImage: null,
     boardId: null,
     users: [],
     isFetching: true,
@@ -25,14 +26,13 @@ const createNewBoardReducer = (state = initialState, action) => {
             }
         case FETCH_BOARD_SUCCESS:
             return {
-                ...state, 
                 boardTitle: action.data.name,
                 boardColumns: action.data.columns,
                 boardBackgroundColor: action.data.background_color,
-                addBoardBackgroundImage: action.data.background_image,
+                boardBackgroundImage: action.data.background_image,
                 boardId: action.data.id,
                 users: action.data.users,
-                isFetching: false
+                isFetching: false,
             }
         case FETCH_BOARD_ERROR:
             return {
@@ -43,13 +43,23 @@ const createNewBoardReducer = (state = initialState, action) => {
         case UPLOAD_BOARD_BACKGROUND_IMAGE:
             return {
                 ...state,
-                boardBackgroundURL: action.image,
+                boardBackgroundImage: action.image,
                 boardBackgroundColor: null
             }
         case CREATE_BOARD_SET_LOADER:
             return {
                 ...state,
-                isLoading: action.data.image_from_url
+                isLoading: action.data
+            }
+        case CHANGE_BOARD_TITLE: 
+            return {
+                ...state,
+                boardTitle: action.data
+            }
+        case CHANGE_BOARD_COLUMNS: 
+            return {
+                ...state, 
+                boardColumns: action.data
             }
         default:
             return state;

@@ -1,38 +1,45 @@
 .column-container{
     margin: 8px;
-    border: 1px solid #ebecf0;
     border-radius: 3px;
-    background-color: #ebecf0;
     width: 272px;
     display: flex;
     flex-direction: column;
     padding-bottom: 8px;
 
-    .column-title{
-        padding: 8px;
-        font-weight: bold;
-        font-family: 'system-ui';
-
-        .tasks-container{
-            padding: 8px;
-            flex-grow: 1;
-            min-height: 100px;
+    .title-container-general{
+        background-color: #ebecf0;
+        
+        .title-container{
+            display: flex;
+            justify-content: space-between;
+    
+            .title{
+                padding: 8px;
+                font-weight: bold;
+                font-family: 'system-ui';
+            } 
+        }
+    
+        .edit-title{
+            margin-top: -8px;
+            cursor: pointer;            
         }
     }
-
 }
 
 .add-new-column-container{
     margin: 8px;
     background-color: transparent;
-    width: 270px;
+    min-width: 270px;
+    width: 272px;
+    padding-right: 8px;
     display: flex;
     flex-direction: column;
 
     .add-new-column-button{
         background-color: #5e5e5e67;
         border-radius: 3px;
-        min-height: 35px;
+        max-height: 35px;
 
         &:hover{
             background-color: #928f8f78;
@@ -55,6 +62,7 @@
         .input-container{
             width: 100%;
             display: inline;
+            margin-right: 8px;
             
             input{
                 margin: 8px;
@@ -64,6 +72,7 @@
                 border: solid 1px #6cc5ff;
                 height: 35px;   
                 outline: none;
+                width: 94%;
             }
 
         }
@@ -86,6 +95,20 @@
                 margin-bottom: 8px;
             }
         }
+    }
+}
+
+.add-new-task{
+    background-color: #b3b3b378;
+    border-radius: 3px;
+    margin: 0 8px;
+    padding-top: 5px;
+    display: flex;
+
+    button{
+        width: 100%;
+        color: black;
+        font-family: 'system-ui';
     }
 }
 

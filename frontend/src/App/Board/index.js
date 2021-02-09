@@ -4,12 +4,13 @@ import { editBoardNameRequest, getBoardRequest, editBoardColumnsRequest } from '
 import Header from '../Header'
 import { connect } from 'react-redux'
 import { ClassicSpinner } from 'react-spinners-kit';
-import StarBorderOutlinedIcon from '@material-ui/icons/StarBorderOutlined';
+import StarBorderRoundedIcon from '@material-ui/icons/StarBorderRounded';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import Column from './Column';
 import _ from 'lodash'
 import AddNewColumn from './AddNewColumn';
 import MenuIcon from '@material-ui/icons/Menu';
+import { getBoard, changeBoardTitle, changeBoardColumns } from '../../actions/board';
 
 class Board extends React.Component{
     constructor(props){
@@ -18,18 +19,13 @@ class Board extends React.Component{
         this.wrapperRef = React.createRef();
 
         this.state = {
-            boardTitle: '',
-            boardColumns: [],
-            boardBackgroundImage: null,
-            boardBackgroundColor: null,
-            boardId: '',
             openEditTitlePane: false,
             favouriteBoard: false,
         }
     }
 
     handleChangeBoardTitle = (event) => {
-        this.setState({...this.state, boardTitle: event.target.value})
+        this.props.changeBoardTitle(event.target.value)
     }
 
     openEditTitlePane = () => {
@@ -38,9 +34,9 @@ class Board extends React.Component{
     
     handleClickOutside = (event) => {
         if (this.wrapperRef && !this.wrapperRef.current.contains(event.target) && this.state.openEditTitlePane) {
-           this.setState({...this.state, openEditTitlePane: false})
-           editBoardNameRequest(this.state.boardTitle, this.state.boardId)
-           .catch(error => console.log(error)) 
+            this.setState({...this.state, openEditTitlePane: false})
+            editBoardNameRequest(this.props.boardTitle, this.props.boardId)
+            .catch(error => console.log(error)) 
         }
     };
 
@@ -53,7 +49,7 @@ class Board extends React.Component{
     handleKeyDown = (event) => {
         if (event.key === 'Enter') {
             this.setState({...this.state, openEditTitlePane: false})
-            editBoardNameRequest(this.state.boardTitle, this.state.boardId)
+            editBoardNameRequest(this.props.boardTitle, this.props.boardId)
             .catch(error => console.log(error)) 
         }
       }
@@ -73,7 +69,7 @@ class Board extends React.Component{
         }
 
         if(type === 'column'){
-            const newColumnOrder = Array.from(this.state.boardColumns);
+            const newColumnOrder = Array.from(this.props.boardColumns);
             const draggedColumn = newColumnOrder.find(column => column.id.toString() === draggableId);
 
             newColumnOrder.splice(source.index, 1);
@@ -81,28 +77,24 @@ class Board extends React.Component{
 
             newColumnOrder.forEach((column, index) => {
                 column['index'] = index;
-            })
-
-            const newState = {
-                ...this.state,
-                boardColumns: newColumnOrder,
-            };
+            })            
 
             /*editBoardColumnsRequest(newState.boardColumns, this.state.boardId, this.state.boardTitle)
             .then(() => this.setState(newState))
             .catch(error => console.log(error))*/
             
-            this.setState(newState);
+            this.props.changeBoardColumns(newColumnOrder);
             return;
         }
 
-        const startColumn = this.state.boardColumns.find(column => column.id.toString() === source.droppableId);
-        const finishColumn = this.state.boardColumns.find(column => column.id.toString() === destination.droppableId);
+
+        const startColumn = this.props.boardColumns.find(column => column.id.toString() === source.droppableId);
+        const finishColumn = this.props.boardColumns.find(column => column.id.toString() === destination.droppableId);
 
         if (startColumn.id === finishColumn.id){
 
             const newTasks = Array.from(startColumn.tasks);
-            const draggedTask = startColumn.tasks.find(task => task.id.toString() === draggableId);
+            const draggedTask = startColumn.tasks.find(task => `task-${task.id.toString()}` === draggableId);
 
             newTasks.splice(source.index, 1);
             newTasks.splice(destination.index, 0, draggedTask);
@@ -112,25 +104,26 @@ class Board extends React.Component{
                 tasks: newTasks
             }
 
-            this.state.boardColumns.splice(newColumn.index, 1, newColumn)
+            this.props.boardColumns.splice(newColumn.index, 1, newColumn);
 
-            const newState = {
-                ...this.state,
+            const newProps = {
+                ...this.props,
                 boardColumns: [
-                    ...this.state.boardColumns
+                    ...this.props.boardColumns
                 ]
             };
 
-            /*editBoardColumnsRequest(newState.boardColumns, this.state.boardId, this.state.boardTitle)
+            /*editBoardColumnsRequest(newState.boardColumns, this.props.boardId, this.props.boardTitle)
             .then(() => this.setState(newState))
             .catch(error => console.log(error))*/
 
-            this.setState(newState);
+            this.props.changeBoardColumns(newProps.boardColumns);
             return;
         }
 
         const startTasks = Array.from(startColumn.tasks);
         const draggedTask = startTasks.splice(source.index, 1)[0];
+
         const newStartColumn = {
             ...startColumn,
             tasks: startTasks,
@@ -139,47 +132,35 @@ class Board extends React.Component{
         const finishTasks = Array.from(finishColumn.tasks);
         draggedTask.column = finishColumn.id;
         finishTasks.splice(destination.index, 0, draggedTask);
+
         const newFinishColumn = {
             ...finishColumn,
             tasks: finishTasks,
         }
 
-        this.state.boardColumns.splice(newStartColumn.index, 1, newStartColumn);
-        this.state.boardColumns.splice(newFinishColumn.index, 1, newFinishColumn);
+        this.props.boardColumns.splice(newStartColumn.index, 1, newStartColumn);
+        this.props.boardColumns.splice(newFinishColumn.index, 1, newFinishColumn);
 
-
-        const newState = {
-            ...this.state,
+        const newProps = {
+            ...this.props,
             boardColumns: [
-                ...this.state.boardColumns
+                ...this.props.boardColumns
             ]
         };
 
-        /*editBoardColumnsRequest(newState.boardColumns, this.state.boardId, this.state.boardTitle)
+        /*editBoardColumnsRequest(newState.boardColumns, this.props.boardId, this.props.boardTitle)
         .then(() => this.setState(newState))
         .catch(error => console.log(error))*/
 
-        this.setState(newState);
+        this.props.changeBoardColumns(newProps.boardColumns);
     }
 
     async componentDidMount(){
-        const id = window.location.pathname.slice(-2, -1);
+        const id = window.location.pathname.split('/')[2];
 
         this.props.setLoader(true); 
 
-        await getBoardRequest(id)
-        .then(response => {
-            this.setState({
-                ...this.state,
-                boardTitle: response.data.name,
-                boardId: response.data.id,
-                boardBackgroundColor: response.data.background_color,
-                boardBackgroundImage: response.data.background_image,
-                boardColumns: response.data.columns,
-                //favouriteBoard: response.data.favourite
-            })
-        })
-        .catch(error => console.log(error))
+        await this.props.getBoard(id);
 
         this.props.setLoader(false);
 
@@ -193,8 +174,9 @@ class Board extends React.Component{
 
     render(){
         
-        const { boardBackgroundColor, boardTitle, openEditTitlePane, 
-            favouriteBoard, boardColumns } = this.state;
+        const { boardBackgroundColor, boardTitle, boardColumns } = this.props;
+
+        const { openEditTitlePane, favouriteBoard } = this.state;
 
         const styles = {
             boardBackgraundStyle : boardBackgroundColor === null ? {
@@ -239,7 +221,7 @@ class Board extends React.Component{
                                 <div className='favourite-board-button-container'>
                                     <button
                                         onClick={this.handleChangeFavouriteIcon}>
-                                        <StarBorderOutlinedIcon
+                                        <StarBorderRoundedIcon
                                             style={styles.favouriteIcon}/>
                                     </button>
                                 </div>
@@ -289,7 +271,7 @@ class Board extends React.Component{
                                                             >
 
                                                             { boardColumns && boardColumns.map((column, index) => 
-                                                            <Column 
+                                                            <Column
                                                                 key={column.id} 
                                                                 column={column} 
                                                                 index={index}
@@ -312,11 +294,18 @@ class Board extends React.Component{
 function mapStateToProps(state){
     return {
         isLoading: state.board.isLoading,
+        boardTitle: state.board.boardTitle,
+        boardColumns: state.board.boardColumns,
+        boardBackgroundImage: state.board.boardBackgroundImage,
+        boardBackgroundColor: state.board.boardBackgroundColor,
+        boardId: state.board.boardId
     };
 }
 
-export default connect(mapStateToProps, 
-    {
+export default connect(mapStateToProps, {
         setLoader,
+        getBoard,
+        changeBoardTitle,
+        changeBoardColumns
     }
 )(Board);
