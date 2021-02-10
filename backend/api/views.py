@@ -1,20 +1,23 @@
-from rest_framework.views import status, Response, APIView
-from rest_framework.viewsets import ModelViewSet
 from rest_framework import decorators
-from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.permissions import AllowAny
+from rest_framework.views import status, Response
+from rest_framework.viewsets import ModelViewSet
+
 from rest_framework_simplejwt.views import TokenObtainPairView
 
+from api.forms import UserCreationForm
 from api.models import (
-    User, Table
+    User, Table, TableColumn, Task
 )
 from api.serializers import (
     UserDetailSerializer,
     TableDetailSerializer,
-    CustomJWTSerializer
+    CustomJWTSerializer,
+    TableColumnDetailSerializer,
+    TableColumnUpdateSerializer,
+    TaskUpdateSerializer, TaskDetailSerializer
 )
-from api.models import TableColumn
 from api.permissions import IsSuperUserOrOwner
-from api.forms import UserCreationForm
 
 
 class CustomTokenObtainPairView(TokenObtainPairView):
@@ -90,3 +93,22 @@ class TableViewSet(ModelViewSet):
             return self.request.user.tables.all()
         return super().get_queryset()
 
+
+class TableColumnViewSet(ModelViewSet):
+    queryset = TableColumn.objects.all()
+
+    def get_serializer_class(self):
+        if self.request.method in ['GET', 'DELETE']:
+            return TableColumnDetailSerializer
+        else:
+            return TableColumnUpdateSerializer
+
+
+class TaskViewSet(ModelViewSet):
+    queryset = Task.objects.all()
+
+    def get_serializer_class(self):
+        if self.request.method in ['GET', 'DELETE']:
+            return TaskDetailSerializer
+        else:
+            return TaskUpdateSerializer

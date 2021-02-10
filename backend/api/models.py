@@ -86,6 +86,9 @@ class TableColumn(models.Model):
 
 
 class Task(models.Model):
+    class Meta:
+        unique_together = ['column', 'index']
+
     class TaskLabel(DjangoChoices):
         RED = ChoiceItem('red')
         ORANGE = ChoiceItem('orange')
@@ -98,6 +101,7 @@ class Task(models.Model):
     label = models.CharField(max_length=10, choices=TaskLabel.choices, null=True, blank=True)
     assigned_users = models.ManyToManyField('User')
     deadline = models.DateTimeField(null=True, blank=True)
+    index = models.IntegerField()
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

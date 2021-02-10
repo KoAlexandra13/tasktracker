@@ -6,12 +6,16 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView, TokenVerifyView
 )
 
-from api.views import UserViewSet, TableViewSet, CustomTokenObtainPairView
-from api.serializers import CustomJWTSerializer
+from api.views import (
+    UserViewSet, TableViewSet, CustomTokenObtainPairView,
+    TableColumnViewSet, TaskViewSet
+)
 
 router = routers.SimpleRouter()
 router.register(r'users', UserViewSet)
 router.register(r'tables', TableViewSet)
+router.register(r'tasks', TaskViewSet)
+router.register(r'table-columns', TableColumnViewSet)
 
 urlpatterns = [
     path('token/', CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),

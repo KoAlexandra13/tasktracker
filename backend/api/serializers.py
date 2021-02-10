@@ -1,6 +1,7 @@
 import requests
 from django.core import files
 from io import BytesIO
+import imghdr
 
 from django.db.models import Q
 from django.conf import settings
@@ -57,7 +58,7 @@ class UserMiniSerializer(ModelSerializer):
         fields = ['id', 'image']
 
 
-class TaskMiniSerializer(ModelSerializer):
+class TaskMiniDetailSerializer(ModelSerializer):
     assigned_users = UserMiniSerializer(many=True)
 
     class Meta:
@@ -73,12 +74,28 @@ class TaskDetailSerializer(ModelSerializer):
         fields = '__all__'
 
 
+class TaskUpdateSerializer(ModelSerializer):
+    class Meta:
+        model = Task
+        fields = (
+            'name', 'description',
+            'label', 'assigned_users',
+            'deadline', 'index', 'column'
+        )
+
+
 class TableColumnDetailSerializer(ModelSerializer):
-    tasks = TaskMiniSerializer(many=True)
+    tasks = TaskMiniDetailSerializer(many=True)
 
     class Meta:
         model = TableColumn
         fields = '__all__'
+
+
+class TableColumnUpdateSerializer(ModelSerializer):
+    class Meta:
+        model = TableColumn
+        fields = ('index', 'name', 'table')
 
 
 class TableDetailSerializer(ModelSerializer):
@@ -93,12 +110,24 @@ class TableDetailSerializer(ModelSerializer):
     @staticmethod
     def _download_image_from_url_and_save_to_table(instance, url):
         url = url.replace(settings.FRONTEND_EXTERNAL_URL, settings.FRONTEND_INTERNAL_URL)
+        img_content = requests.get(url).content
+
+        filetype = imghdr.what(None, h=img_content)
+        if filetype is None:
+            # Couldn't determine, so probably not image
+            raise ValidationError("Image of unidentified type")
+        file_extension = "." + filetype
 
         fp = BytesIO()
-        fp.write(
-            requests.get(url).content
-        )
+        fp.write(img_content)
+
         file_name = url.split("/")[-1]
+        # Cut filename to 100 chars
+        if file_name.endswith(file_extension):
+            file_name = file_name[max(len(file_name) - 100, 0):]
+        else:
+            file_name = file_name[max(len(file_name) - 100 - len(file_extension), 0):] + file_extension
+
         instance.background_image.save(file_name, files.File(fp))
 
     def create(self, validated_data):
