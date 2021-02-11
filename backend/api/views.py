@@ -1,3 +1,5 @@
+from django.db.models import Prefetch
+
 from rest_framework import decorators
 from rest_framework.permissions import AllowAny
 from rest_framework.views import status, Response
@@ -66,7 +68,16 @@ class UserViewSet(ModelViewSet):
 
 
 class TableViewSet(ModelViewSet):
-    queryset = Table.objects.all()
+    queryset = Table.objects.prefetch_related(
+        Prefetch(
+            'columns',
+            queryset=TableColumn.objects.order_by('table_id', 'index')
+        ),
+        Prefetch(
+            'columns__tasks',
+            queryset=Task.objects.order_by('column_id', 'index')
+        )
+    ).all()
     serializer_class = TableDetailSerializer
 
     def create(self, request, *args, **kwargs):

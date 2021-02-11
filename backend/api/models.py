@@ -79,10 +79,16 @@ class TableColumn(models.Model):
 
     name = models.CharField(max_length=255)
     index = models.IntegerField()
-    table = models.ForeignKey('Table', on_delete=models.CASCADE, related_name='columns')
+    table = models.ForeignKey('Table', on_delete=models.CASCADE, related_name='columns', null=True)
 
     def __str__(self):
         return f'{str(self.table)} : {self.name}'
+
+    def reindex_tasks(self):
+        tasks = self.tasks.order_by('index')
+        for index, task in tasks:
+            task.index = index
+        Task.objects.bulk_update(tasks, ['index'])
 
 
 class Task(models.Model):
@@ -95,7 +101,7 @@ class Task(models.Model):
         YELLOW = ChoiceItem('yellow')
         GREEN = ChoiceItem('green')
 
-    column = models.ForeignKey('TableColumn', on_delete=models.CASCADE, related_name='tasks')
+    column = models.ForeignKey('TableColumn', on_delete=models.CASCADE, related_name='tasks', null=True)
     name = models.CharField(max_length=255)
     description = models.TextField()
     label = models.CharField(max_length=10, choices=TaskLabel.choices, null=True, blank=True)

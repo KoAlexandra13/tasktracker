@@ -95,7 +95,49 @@ class TableColumnDetailSerializer(ModelSerializer):
 class TableColumnUpdateSerializer(ModelSerializer):
     class Meta:
         model = TableColumn
-        fields = ('index', 'name', 'table')
+        fields = ('index', 'name', 'table', 'tasks')
+
+    def update(self, instance, validated_data):
+        tasks_to_set_ids = validated_data.pop('tasks', None)
+        instance = super().update(instance, validated_data)
+        current_tasks_ids = instance.tasks.order_by('index').values_list('id', flat=True)
+
+        if (
+            tasks_to_set_ids is not None and
+            (
+                new_task_ids_set := set(tasks_to_set_ids).difference(current_tasks_ids)
+            )
+        ):
+            # New tasks added and (maybe) order changed
+            tasks_to_set = tasks_to_set_ids and Task.objects.filter(id__in=tasks_to_set_ids).select_related('column')
+            tasks_to_set__ids_to_objs = {
+                task.id: task
+                for task in tasks_to_set
+            }
+            related_columns = []
+            for i, task_id in enumerate(tasks_to_set_ids):
+                task = tasks_to_set__ids_to_objs[task_id]
+                task.index = i
+                if task_id in new_task_ids_set:
+                    task.column = instance
+                    related_columns.append(task.column)
+            Task.objects.bulk_update(tasks_to_set, ['column', 'index'])
+
+            for column in related_columns:
+                # Normally, related_columns contains one column
+                column.reindex_tasks()
+
+        elif tasks_to_set_ids is not None and (current_tasks_ids != tasks_to_set_ids):
+            # Order changed
+            tasks_to_set = tasks_to_set_ids and instance.tasks.select_related('column')
+            tasks_to_set__ids_to_objs = {
+                task.id: task
+                for task in tasks_to_set
+            }
+            for i, task_id in enumerate(tasks_to_set_ids):
+                tasks_to_set__ids_to_objs[task_id].index = i
+            Task.objects.bulk_update(tasks_to_set, ['column', 'index'])
+        return instance
 
 
 class TableDetailSerializer(ModelSerializer):
@@ -139,7 +181,22 @@ class TableDetailSerializer(ModelSerializer):
 
     def update(self, instance, validated_data):
         image_from_url = validated_data.pop('image_from_url', None)
+        new_columns_ids = validated_data.pop('columns', None)
+
         instance = super().update(instance, validated_data)
+
+        if (
+            new_columns_ids is not None and
+            new_columns_ids != list(instance.columns.order_by('index').values_list('id', flat=True))
+        ):
+            new_columns_qs = instance.columns.all()
+            new_columns_qs_to_objects = {
+                column.id: column for column in new_columns_qs
+            }
+            for index, column_id in enumerate(new_columns_ids):
+                new_columns_qs_to_objects[column_id].index = index
+            TableColumn.objects.bulk_update(new_columns_qs, ['index'])
+
         if image_from_url:
             self._download_image_from_url_and_save_to_table(instance, image_from_url)
         return instance
