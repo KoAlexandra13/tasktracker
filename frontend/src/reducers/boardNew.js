@@ -1,7 +1,7 @@
 import {
     FETCH_BOARD_REQUEST, FETCH_BOARD_SUCCESS, UPLOAD_BOARD_BACKGROUND_IMAGE, 
     FETCH_BOARD_ERROR, CREATE_BOARD_SET_LOADER, CHANGE_BOARD_TITLE,
-    CHANGE_BOARD_COLUMNS
+    CHANGE_BOARD_COLUMNS, ADD_NEW_COLUMN, ADD_NEW_TASK
 } from '../actions/board';
 
 
@@ -27,7 +27,9 @@ const createNewBoardReducer = (state = initialState, action) => {
         case FETCH_BOARD_SUCCESS:
             return {
                 boardTitle: action.data.name,
-                boardColumns: action.data.columns,
+                boardColumns: action.data.columns.sort(function(a, b){
+                    return a.index - b.index
+                }),
                 boardBackgroundColor: action.data.background_color,
                 boardBackgroundImage: action.data.background_image,
                 boardId: action.data.id,
@@ -61,6 +63,30 @@ const createNewBoardReducer = (state = initialState, action) => {
                 ...state, 
                 boardColumns: action.data
             }
+        case ADD_NEW_COLUMN: 
+            return {
+                ...state,
+                boardColumns: state.boardColumns.concat(action.data)
+            }
+        case ADD_NEW_TASK:
+            
+            const columns = Array.from(state.boardColumns);
+            const column = columns.find(column => column.id === action.data.column);
+            const newTasks = column.tasks.concat(action.data).sort(function(a, b) {
+                return a.index - b.index;
+            });
+            
+            const newColumn = {
+                ...column,
+                tasks: newTasks
+            }
+            
+            columns.splice(newColumn.index, 1, newColumn);
+            
+            return {
+                ...state,
+                boardColumns: columns
+            };
         default:
             return state;
     }

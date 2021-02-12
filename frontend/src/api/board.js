@@ -45,14 +45,42 @@ export function editBoardNameRequest(name, id){
     return axios(config);
 }
 
-export function editBoardColumnsRequest(data, id, name){
+export async function editBoardColumnsOrderRequest(columnsId, tableId){
     const config = {
-        url: `http://127.0.0.1:8000/api/tables/${id}/`,
-        method: 'PUT',
+        url: `http://127.0.0.1:8000/api/tables/${tableId}/`,
+        method: 'PATCH',
         data: {
-            columns: data,
-            name: name
+            ordered_columns: columnsId
         }
+    }
+    return axios(config);
+}
+
+export function editTaskPositionRequest(tasksId, columnId){
+    const config = {
+        url: `http://127.0.0.1:8000/api/table-columns/${columnId}/`,
+        method: 'PATCH',
+        data: {
+            ordered_tasks: tasksId
+        }
+    }
+    return axios(config);
+}
+
+export function addNewColumnRequest(data){
+    const config = {
+        url: `http://127.0.0.1:8000/api/table-columns/`,
+        method: 'POST',
+        data
+    }
+    return axios(config);
+}
+
+export function addNewTaskRequest(data){
+    const config = {
+        url: `http://127.0.0.1:8000/api/tasks/`,
+        method: 'POST',
+        data
     }
     return axios(config);
 }

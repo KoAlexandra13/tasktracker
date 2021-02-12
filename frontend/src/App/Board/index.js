@@ -1,6 +1,6 @@
 import React from 'react'
 import { setLoader } from '../../actions/board';
-import { editBoardNameRequest, getBoardRequest, editBoardColumnsRequest } from '../../api/board';
+import { editBoardNameRequest, editTaskPositionRequest, editBoardColumnsOrderRequest } from '../../api/board';
 import Header from '../Header'
 import { connect } from 'react-redux'
 import { ClassicSpinner } from 'react-spinners-kit';
@@ -60,8 +60,10 @@ class Board extends React.Component{
         this.setState({...this.state, openMenuPane: !this.state.openMenuPane})
     }
 
-    onDragEnd = (result) => {
+    onDragEnd = async (result) => {
         const {destination, source, draggableId, type} = result;
+
+        const oldColumnOrder = Array.from(this.props.boardColumns);
 
         if(!destination || _.isUndefined(destination)){
             return;
@@ -83,16 +85,23 @@ class Board extends React.Component{
 
             newColumnOrder.forEach((column, index) => {
                 column['index'] = index;
-            })            
+            });
 
-            /*editBoardColumnsRequest(newState.boardColumns, this.state.boardId, this.state.boardTitle)
-            .then(() => this.setState(newState))
-            .catch(error => console.log(error))*/
-            
             this.props.changeBoardColumns(newColumnOrder);
+            
+            await editBoardColumnsOrderRequest(newColumnOrder.map(column => column.id), this.props.boardId)
+            .then(response => {
+                this.props.changeBoardColumns(response.data.columns.sort(function(a,b) {
+                    return a.index - b.index;
+                }));
+            })
+            .catch(error => {
+                console.log(error)
+                this.props.changeBoardColumns(oldColumnOrder);
+            })
+
             return;
         }
-
 
         const startColumn = this.props.boardColumns.find(column => column.id.toString() === source.droppableId);
         const finishColumn = this.props.boardColumns.find(column => column.id.toString() === destination.droppableId);
@@ -104,6 +113,10 @@ class Board extends React.Component{
 
             newTasks.splice(source.index, 1);
             newTasks.splice(destination.index, 0, draggedTask);
+
+            newTasks.forEach((task, index) => {
+                task['index'] = index;
+            })            
 
             const newColumn = {
                 ...startColumn,
@@ -119,16 +132,25 @@ class Board extends React.Component{
                 ]
             };
 
-            /*editBoardColumnsRequest(newState.boardColumns, this.props.boardId, this.props.boardTitle)
-            .then(() => this.setState(newState))
-            .catch(error => console.log(error))*/
-
             this.props.changeBoardColumns(newProps.boardColumns);
+
+            await editTaskPositionRequest(newTasks.map(task => task.id), startColumn.id)
+            .catch(error => {
+                console.log(error)
+                this.props.changeBoardColumns(oldColumnOrder);
+            })
+
             return;
         }
 
         const startTasks = Array.from(startColumn.tasks);
+
         const draggedTask = startTasks.splice(source.index, 1)[0];
+
+        startTasks.forEach((task, index) => {
+            task['index'] = index;
+        })
+        
 
         const newStartColumn = {
             ...startColumn,
@@ -136,8 +158,13 @@ class Board extends React.Component{
         }
 
         const finishTasks = Array.from(finishColumn.tasks);
+
         draggedTask.column = finishColumn.id;
         finishTasks.splice(destination.index, 0, draggedTask);
+
+        finishTasks.forEach((task, index) => {
+            task['index'] = index;
+        })   
 
         const newFinishColumn = {
             ...finishColumn,
@@ -154,11 +181,15 @@ class Board extends React.Component{
             ]
         };
 
-        /*editBoardColumnsRequest(newState.boardColumns, this.props.boardId, this.props.boardTitle)
-        .then(() => this.setState(newState))
-        .catch(error => console.log(error))*/
 
         this.props.changeBoardColumns(newProps.boardColumns);
+
+        await editTaskPositionRequest(finishTasks.map(task => task.id), finishColumn.id)
+        .catch(error => {
+            console.log(error)
+            this.props.changeBoardColumns(oldColumnOrder);
+        })
+
     }
 
     async componentDidMount(){
@@ -171,7 +202,6 @@ class Board extends React.Component{
         this.props.setLoader(false);
 
         document.addEventListener('mousedown', this.handleClickOutside);
-
     }
 
     componentWillUnmount() {
@@ -276,13 +306,14 @@ class Board extends React.Component{
                                                             {...provided.droppableProps}
                                                             ref={provided.innerRef}
                                                             >
-
                                                             { boardColumns && boardColumns.map((column, index) => 
                                                             <Column
                                                                 key={column.id} 
                                                                 column={column} 
                                                                 index={index}
-                                                                tasks={column.tasks}/>
+                                                                tasks={column.tasks.sort(function(a,b) {
+                                                                    return a.index - b.index
+                                                                })}/>
                                                             )}
                                                             {provided.placeholder}
                                                         </div>

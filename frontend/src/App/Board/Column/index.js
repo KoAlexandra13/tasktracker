@@ -1,10 +1,11 @@
 import React from 'react';
 import Task from './Task';
 import { Droppable, Draggable } from 'react-beautiful-dnd';
-import AddIcon from '@material-ui/icons/Add';
-import CreateOutlinedIcon from '@material-ui/icons/CreateOutlined';
+import CreateRoundedIcon from '@material-ui/icons/CreateRounded';
+import AddNewTask from './AddNewTask'
 
 class Column extends React.Component{
+    
     render(){
         const {column, tasks} = this.props;
         return(
@@ -32,7 +33,7 @@ class Column extends React.Component{
                                     className='edit-title'
                                     onClick={this.handleClickEditButton}>
 
-                                    <CreateOutlinedIcon style={{color: '#212529'}}/>
+                                    <CreateRoundedIcon style={{color: '#202223c7'}}/>
 
                                 </button>
                             </div>
@@ -56,13 +57,9 @@ class Column extends React.Component{
                                 </div>
                                 )}
                             </Droppable>
-                            
-                            <div className='add-new-task'>
-                                <button>
-                                    <AddIcon style={{marginBottom: '4px'}}/>
-                                    &nbsp;Add one more card
-                                </button>
-                            </div>
+
+                           <AddNewTask columnId={column.id} index={column.tasks.length}/>
+
                         </div>
                     </div>
                 )}

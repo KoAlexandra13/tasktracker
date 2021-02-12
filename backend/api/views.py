@@ -13,7 +13,7 @@ from api.models import (
 )
 from api.serializers import (
     UserDetailSerializer,
-    TableDetailSerializer,
+    TableDetailSerializer, TableCreateUpdateSerializer,
     CustomJWTSerializer,
     TableColumnDetailSerializer,
     TableColumnUpdateSerializer,
@@ -78,7 +78,12 @@ class TableViewSet(ModelViewSet):
             queryset=Task.objects.order_by('column_id', 'index')
         )
     ).all()
-    serializer_class = TableDetailSerializer
+
+    def get_serializer_class(self):
+        if self.request.method in ['GET', 'DELETE']:
+            return TableDetailSerializer
+        else:
+            return TableCreateUpdateSerializer
 
     def create(self, request, *args, **kwargs):
         data = request.data.copy()

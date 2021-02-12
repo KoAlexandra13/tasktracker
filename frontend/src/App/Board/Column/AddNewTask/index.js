@@ -1,11 +1,11 @@
 import React from 'react';
 import AddIcon from '@material-ui/icons/Add';
 import CloseIcon from '@material-ui/icons/Close';
-import { connect } from 'react-redux';
-import { addNewColumn } from '../../../actions/board';
-import _ from 'lodash'
+import _ from 'lodash';
+import {connect} from 'react-redux';
+import {addNewTask} from '../../../../actions/board';
 
-class AddNewColumn extends React.Component{
+class AddNewTask extends React.Component{
     constructor(props){
         super(props);
 
@@ -13,13 +13,9 @@ class AddNewColumn extends React.Component{
 
         this.state = {
             isInputPaneOpen: false,
-            columnName: '',
+            taskName: '',
             error: null
         }
-    }
-
-    handleClickAddNewColumn = () => {
-        this.setState({...this.state, isInputPaneOpen: !this.state.isInputPaneOpen, columnName: ''});
     }
 
     componentDidMount(){
@@ -32,44 +28,51 @@ class AddNewColumn extends React.Component{
 
     handleClickOutside = (event) => {
         if (this.wrapperRef && !this.wrapperRef.current.contains(event.target) && this.state.isInputPaneOpen) {
-            this.setState({...this.state, isInputPaneOpen: false, columnName: ''})
+            this.setState({...this.state, isInputPaneOpen: false, taskName: ''})
         }
     };
 
+    handleClickAddNewTask = () => {
+        this.setState({...this.state, isInputPaneOpen: !this.state.isInputPaneOpen, taskName: ''});
+    }
+
     clickAddNewColumnButton = () => {
-        if(this.state.columnName){
+        if(this.state.taskName){
             this.setState(
                 {
                     ...this.state, 
                     error: null,
                     isInputPaneOpen: false 
                 });
-            const columnData = {
-                index: this.props.boardColumns.length,
-                name: this.state.columnName,
-                table: this.props.boardId,
+
+            const taskData = {
+                name: this.state.taskName,
+                column: this.props.columnId,
+                index: this.props.index,
+                description: ''
             }
 
-            this.props.addNewColumn(columnData);
+            this.props.addNewTask(taskData)
         }
         else {
             this.setState(
                 {
                     ...this.state,
-                    error: 'First add the column name!'
+                    error: 'First add the card name!'
                 })
         }
     } 
 
     handleClickCloseButton = () => {
-        this.setState({...this.state, isInputPaneOpen: false, columnName: '', error: null});
+        this.setState({...this.state, isInputPaneOpen: false, taskName: '', error: null});
     }
 
-    getColumnName = (event) => {
-        this.setState({...this.state, columnName: event.target.value})
+    getTaskName = (event) => {
+        this.setState({...this.state, taskName: event.target.value})
     }
 
-    render(){
+    render() {
+
         const styles = {
             buttonStyle: this.state.isInputPaneOpen ? {
                 display: 'none'
@@ -88,27 +91,29 @@ class AddNewColumn extends React.Component{
             }
         }
 
-        return(
-            <div className='add-new-column-container'>
-                <div style={styles.buttonStyle} className='add-new-column-button'>
-                    <button 
-                        onClick={this.handleClickAddNewColumn}
-                    >
-                        <AddIcon/>
-                        <p>&nbsp;Add one more column </p>
+        return (
+            <div className='add-new-task-container'>
+                <div 
+                    style={styles.buttonStyle}
+                    className='add-new-task'>
+                    <button
+                        onClick={this.handleClickAddNewTask}>
+                        <AddIcon style={{marginBottom: '4px'}}/>
+                        &nbsp;Add one more card
                     </button>
                 </div>
 
                 <div 
                     style={styles.inputStyle} 
-                    className='add-new-column-name'
+                    className='add-new-task-name'
                     ref={this.wrapperRef}
                 >
                     <div className='input-container'>
-                        <input 
-                            type="text"
-                            placeholder='Enter a column name...'
-                            onChange={this.getColumnName}/>
+                        <textarea
+                            placeholder='Enter a task name...'
+                            onChange={this.getTaskName}
+                            value={this.state.taskName}
+                        />
 
                             <span
                                 style={styles.errorStyle}
@@ -120,7 +125,7 @@ class AddNewColumn extends React.Component{
                         <button 
                             onClick={this.clickAddNewColumnButton}
                             className='add-button'>
-                            Add new column
+                            Add new card
                         </button>
 
                         <button 
@@ -131,15 +136,9 @@ class AddNewColumn extends React.Component{
                     </div>
                 </div>
             </div>
-        )
+        );
     }
 }
 
-function mapStateToProps(state){
-    return {
-        boardId: state.board.boardId,
-        boardColumns: state.board.boardColumns,
-    };
-}
+export default connect(null, {addNewTask})(AddNewTask);
 
-export default connect(mapStateToProps, {addNewColumn})(AddNewColumn);

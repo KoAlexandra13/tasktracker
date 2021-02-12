@@ -78,6 +78,7 @@ class TaskUpdateSerializer(ModelSerializer):
     class Meta:
         model = Task
         fields = (
+            'id',
             'name', 'description',
             'label', 'assigned_users',
             'deadline', 'index', 'column'
@@ -93,12 +94,15 @@ class TableColumnDetailSerializer(ModelSerializer):
 
 
 class TableColumnUpdateSerializer(ModelSerializer):
+    ordered_tasks = serializers.ListField(required=False, write_only=True)
+    tasks = TaskDetailSerializer(many=True, read_only=True)
+
     class Meta:
         model = TableColumn
-        fields = ('index', 'name', 'table', 'tasks')
+        fields = ('index', 'name', 'table', 'tasks', 'ordered_tasks', 'id')
 
     def update(self, instance, validated_data):
-        tasks_to_set_ids = validated_data.pop('tasks', None)
+        tasks_to_set_ids = validated_data.pop('ordered_tasks', None)
         instance = super().update(instance, validated_data)
         current_tasks_ids = instance.tasks.order_by('index').values_list('id', flat=True)
 
@@ -143,7 +147,16 @@ class TableColumnUpdateSerializer(ModelSerializer):
 class TableDetailSerializer(ModelSerializer):
     columns = TableColumnDetailSerializer(many=True, read_only=True)
     users = UserDetailSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Table
+        fields = '__all__'
+
+
+class TableCreateUpdateSerializer(ModelSerializer):
     image_from_url = serializers.URLField(required=False, write_only=True)
+    columns = TableColumnDetailSerializer(many=True, read_only=True)
+    ordered_columns = serializers.ListField(write_only=True, required=False)
 
     class Meta:
         model = Table
@@ -181,7 +194,7 @@ class TableDetailSerializer(ModelSerializer):
 
     def update(self, instance, validated_data):
         image_from_url = validated_data.pop('image_from_url', None)
-        new_columns_ids = validated_data.pop('columns', None)
+        new_columns_ids = validated_data.pop('ordered_columns', None)
 
         instance = super().update(instance, validated_data)
 
@@ -195,6 +208,7 @@ class TableDetailSerializer(ModelSerializer):
             }
             for index, column_id in enumerate(new_columns_ids):
                 new_columns_qs_to_objects[column_id].index = index
+            print([c.index for c in new_columns_qs])
             TableColumn.objects.bulk_update(new_columns_qs, ['index'])
 
         if image_from_url:

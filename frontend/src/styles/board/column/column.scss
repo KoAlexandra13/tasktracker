@@ -69,12 +69,20 @@
                 border-radius: 3px;
                 font-family: 'system-ui';
                 width: 255px; 
-                border: solid 1px #6cc5ff;
+                border: none;
                 height: 35px;   
                 outline: none;
                 width: 94%;
+                box-shadow: 0 1px 0 rgba(9, 30, 66,0.26);
             }
 
+            span{
+                margin-left: 10px;
+                margin-bottom: -18px;
+                margin-top: -7px;
+                color: #ff4343;
+                font-size: small;
+            }
         }
 
         .options-button{
@@ -83,7 +91,7 @@
             justify-content: space-between;
 
             .add-button{
-                background-color: #6cc5ff;
+                background-color: #67c854;
                 color: whitesmoke;
                 font-family: 'system-ui';
                 margin-bottom: 8px;
@@ -98,17 +106,78 @@
     }
 }
 
-.add-new-task{
-    background-color: #b3b3b378;
-    border-radius: 3px;
-    margin: 0 8px;
-    padding-top: 5px;
-    display: flex;
+.add-new-task-container{
 
-    button{
-        width: 100%;
-        color: black;
-        font-family: 'system-ui';
+    .add-new-task{
+        background-color: #c5c5c578;
+        border-radius: 3px;
+        margin: 0 8px;
+        padding-top: 5px;
+        display: flex;
+    
+        &:hover{
+            background-color: #b3b3b378;
+    
+        }
+    
+        button{
+            width: 100%;
+            color: black;
+            font-family: 'system-ui';
+        }
+    }
+    
+    .add-new-task-name{
+        background-color: #928f8f78;
+        border-radius: 3px;
+        margin: 0 8px;
+
+        .input-container{
+            width: 100%;
+            display: inline;
+            margin-right: 8px;
+            
+            textarea{
+                margin: 8px;
+                border-radius: 3px;
+                font-family: 'system-ui';
+                width: 255px;
+                border: none; 
+                outline: none;
+                width: 94%;
+                height: 70px;
+                overflow: hidden;
+                overflow-wrap: break-word;
+                box-shadow: 0 1px 0 rgba(9, 30, 66,0.26);
+            }
+
+            span{
+                margin-left: 10px;
+                margin-bottom: -18px;
+                margin-top: -7px;
+                color: #ff4343;
+                font-size: small;
+            }
+        }
+
+        .options-button{
+            margin-left: 8px;
+            display: flex;
+            justify-content: space-between;
+
+            .add-button{
+                background-color: #67c854;
+                color: whitesmoke;
+                font-family: 'system-ui';
+                margin-bottom: 8px;
+                border-radius: 3px;
+                height: 32px;
+            }
+
+            .close-button{
+                margin-bottom: 8px;
+            }
+        }
     }
 }
 

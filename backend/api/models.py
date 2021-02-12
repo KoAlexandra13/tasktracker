@@ -74,9 +74,6 @@ class Table(models.Model):
 
 
 class TableColumn(models.Model):
-    class Meta:
-        unique_together = ["table", "index"]
-
     name = models.CharField(max_length=255)
     index = models.IntegerField()
     table = models.ForeignKey('Table', on_delete=models.CASCADE, related_name='columns', null=True)
@@ -86,15 +83,12 @@ class TableColumn(models.Model):
 
     def reindex_tasks(self):
         tasks = self.tasks.order_by('index')
-        for index, task in tasks:
+        for index, task in enumerate(tasks):
             task.index = index
         Task.objects.bulk_update(tasks, ['index'])
 
 
 class Task(models.Model):
-    class Meta:
-        unique_together = ['column', 'index']
-
     class TaskLabel(DjangoChoices):
         RED = ChoiceItem('red')
         ORANGE = ChoiceItem('orange')
@@ -103,9 +97,9 @@ class Task(models.Model):
 
     column = models.ForeignKey('TableColumn', on_delete=models.CASCADE, related_name='tasks', null=True)
     name = models.CharField(max_length=255)
-    description = models.TextField()
+    description = models.TextField(blank=True)
     label = models.CharField(max_length=10, choices=TaskLabel.choices, null=True, blank=True)
-    assigned_users = models.ManyToManyField('User')
+    assigned_users = models.ManyToManyField('User', blank=True)
     deadline = models.DateTimeField(null=True, blank=True)
     index = models.IntegerField()
 
