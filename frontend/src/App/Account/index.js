@@ -151,8 +151,9 @@ class Account extends React.Component{
         const styles = {
             linkStyle: {
                 color: 'rgb(71, 71, 71)',
-                fontFamily: 'system-ui',
-                fontSize: 'large'
+                fontFamily: 'Impact, Haettenschweiler, Arial Narrow Bold, sans-serif',
+                fontSize: 'large',
+                fontFamily: 'Impact, Haettenschweiler, Arial Narrow Bold, sans-serif'
             },
 
             textField: {
@@ -196,7 +197,8 @@ class Account extends React.Component{
                                         width: '45px',
                                         backgroundColor: 'rgb(201, 97, 221)',
                                         marginTop: '-0.2rem',
-                                        fontSize: 'x-large'
+                                        fontSize: 'x-large',
+                                        fontFamily: 'Impact, Haettenschweiler, Arial Narrow Bold, sans-serif'
                                     }} 
                                     >   
                                         {this.getUserInitials()}
@@ -338,6 +340,7 @@ class Account extends React.Component{
                                             backgroundColor: 'rgb(201, 97, 221)',
                                             fontSize: 'xxx-large',
                                             marginTop: '0.25rem',
+                                            fontFamily: 'Impact, Haettenschweiler, Arial Narrow Bold, sans-serif'
                                         }} 
                                     >   
                                         {this.getUserInitials()}

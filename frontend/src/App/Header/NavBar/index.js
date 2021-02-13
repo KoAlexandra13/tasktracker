@@ -105,6 +105,7 @@ class NavBar extends React.Component {
                                     height: '40px',
                                     width: '40px',
                                     backgroundColor: 'rgb(201, 97, 221)',
+                                    fontFamily: 'Impact, Haettenschweiler, Arial Narrow Bold, sans-serif'
                                 }} 
                                 >   
                                     { this.getUserInitials() }
