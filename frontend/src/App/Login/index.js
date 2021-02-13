@@ -53,7 +53,7 @@ class Login extends React.Component {
                 marginLeft: 'auto',
                 marginRight: 'auto',
                 marginTop: '2rem',
-                display: 'flex'
+                display: 'flex',
             },
 
             textField: {
