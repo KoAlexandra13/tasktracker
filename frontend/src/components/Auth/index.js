@@ -1,24 +1,50 @@
 import React from 'react';
 import Login from '../../App/Login';
 import { connect } from 'react-redux';
-import { fetchUser, setAutorizationToken, refreshAuthorizationToken } from '../../actions/user';
+import { fetchUser, userWillLogin, refreshAuthorizationToken } from '../../actions/user';
 import {ClassicSpinner} from 'react-spinners-kit';
 
 class Auth extends React.Component{
-    
-    componentWillMount = async () => {
-        const refreshToken = localStorage.getItem('refreshToken');
-        setAutorizationToken(localStorage.getItem('accessToken'))
+    constructor(props){
+        super(props);
 
-        await refreshAuthorizationToken(refreshToken); 
-        
-        this.props.fetchUser();
-        
+        this.state = {
+            tokenRefreshInterval: null
+        }
     }
     
+    componentDidMount = async () => {
+        const refreshToken = localStorage.getItem('refreshToken');
+
+        let userWillLogin = true;
+        if (refreshToken){
+            const newToken = await refreshAuthorizationToken(refreshToken); 
+            if (newToken){
+                userWillLogin = false;
+                this.props.fetchUser();
+            }
+        }
+
+        if (userWillLogin){
+            this.props.userWillLogin();
+        }
+    }    
+
+    componentDidUpdate(){
+        const {user} = this.props;
+        const {tokenRefreshInterval} = this.state;
+        const isAuthenticated = new Boolean(user.username) && localStorage.getItem('accessToken');
+
+        if (isAuthenticated && !tokenRefreshInterval){
+            const interval = setInterval(
+                refreshAuthorizationToken, 60 * 1000
+            );
+            this.setState({tokenRefreshInterval: interval});
+        }
+    }
 
     render(){
-        const {isFetching} = this.props;
+        const {isFetching, user, children} = this.props;
         if (isFetching){
             return ( 
                 <div style={{
@@ -32,14 +58,15 @@ class Auth extends React.Component{
                     />
                 </div>
             );
-        }
-        
+        };
+
+        const isAuthenticated = new Boolean(user.username) && localStorage.getItem('accessToken');
         return( 
             <div>
                 { 
-                    this.props.user.username ? (
+                    isAuthenticated ? (
                         <div>
-                            {this.props.children}
+                            {children}
                         </div>
                     ) : <Login/> 
                 } 
@@ -55,4 +82,4 @@ function mapStateToProps(state){
     };
 }
 
-export default connect(mapStateToProps, { fetchUser })(Auth);
+export default connect(mapStateToProps, { fetchUser, userWillLogin })(Auth);

@@ -25,7 +25,8 @@ class CreateNewBoard extends React.Component {
             boardTitle: '',
             boardColumns: [],
             boardBackgroundColor: 'transparent',
-            boardBackgroundURL: null,            
+            boardBackgroundURL: null,
+            boardBackgroundImageData: null  
         }
 
         this.popover = {
@@ -76,23 +77,26 @@ class CreateNewBoard extends React.Component {
         this.setState({
             ...this.state, 
             boardBackgroundColor: value, 
-            boardBackgroundURL: null
+            boardBackgroundURL: null,
+            boardBackgroundImageData: null
         })
     }
 
     handleChangeBoardBackgroundURL = (value) => {
         this.setState({
             ...this.state, 
+            boardBackgroundColor: null,
             boardBackgroundURL: value, 
-            boardBackgroundColor: null
+            boardBackgroundImageData: null
         })
     }
 
     handleChangeBoardBackgroundUploadImage = (value) => {
         this.setState({
             ...this.state, 
-            boardBackgroundURL: value.dataURL,
-            boardBackgroundColor: null
+            boardBackgroundColor: null,
+            boardBackgroundURL: null,
+            boardBackgroundImageData: value
         })
     }
 
@@ -123,19 +127,21 @@ class CreateNewBoard extends React.Component {
             data.users= [this.props.userId];
             data.columns = columns;
 
-            if(this.state.boardBackgroundColor){
+            if (this.state.boardBackgroundColor){
                 data.background_color = this.state.boardBackgroundColor
+            }
+
+            if (this.state.boardBackgroundURL){
+                data.image_from_url = `${window.location.origin}${this.state.boardBackgroundURL}`;
             }
 
             this.props.setLoader(true); 
 
             const id = await this.props.fetchBoard(data);
 
-            if(!_.isNull(this.state.boardBackgroundURL)){
-                const imageURL = {
-                    image_from_url: `${window.location.origin}${this.state.boardBackgroundURL}` 
-                }
-                await this.props.uploadImage(id, imageURL);
+            const imgData = this.state.boardBackgroundImageData.file;
+            if(imgData){
+                await this.props.uploadImage(id, imgData);
             }
 
             this.props.setLoader(false);
@@ -147,10 +153,12 @@ class CreateNewBoard extends React.Component {
     render(){
 
         const { images, width, isBoardTitleEntered, 
-            boardColumns, boardBackgroundColor, boardBackgroundURL } = this.state;
+            boardColumns, boardBackgroundColor,
+            boardBackgroundURL, boardBackgroundImageData 
+        } = this.state;
 
         const demoVersionBoardBackgraundStyle = boardBackgroundColor === null ? {
-            background: 'url(' + boardBackgroundURL + ') no-repeat transparent center',
+            background: 'url(' + (boardBackgroundURL || (boardBackgroundImageData && boardBackgroundImageData.dataURL)) + ') no-repeat transparent center',
             height: `${ width * 3 / 6.2 }px`
         } : {
             backgroundColor: boardBackgroundColor,

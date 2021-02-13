@@ -4,6 +4,7 @@ import {
     FETCH_USER_ERROR,
     UPLOAD_AVATAR_IMAGE,
     CHANGE_USER_INFO, 
+    USER_WILL_LOGIN
 } from '../actions/user';
 
 const initialState = {
@@ -58,6 +59,11 @@ const userReducer = (state = initialState, action) => {
                 email: action.data.email,
                 organization: action.data.organization,
                 userInfoAboutYourself: action.data.about
+            }
+        case USER_WILL_LOGIN:
+            return {
+                ...state,
+                isFetching: false
             }
         default:
             return state;

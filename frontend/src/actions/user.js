@@ -1,5 +1,6 @@
 import axios from 'axios';
-import { userSignUpRequest, userLoginRequest, userSelfRequest, verifyEmailRequest } from '../api/user';
+import { userSignUpRequest, userSelfRequest, verifyEmailRequest } from '../api/user';
+import {userLoginRequest} from '../api/auth';
 import { refreshTokenRequest } from '../api/auth';
 
 export const FETCH_USER_SUCCESS = 'FETCH_USER_SUCCESS';
@@ -7,6 +8,7 @@ export const FETCH_USER_REQUEST = 'FETCH_USER_REQUEST';
 export const FETCH_USER_ERROR = 'FETCH_USER_ERROR';
 export const UPLOAD_AVATAR_IMAGE = 'UPLOAD_AVATAR_IMAGE';
 export const CHANGE_USER_INFO = 'CHANGE_USER_INFO';
+export const USER_WILL_LOGIN = 'USER_WILL_LOGIN';
 
 const fetchUserRequestAction = () => ({
     type: FETCH_USER_REQUEST,
@@ -45,7 +47,7 @@ export function changeUserInfo(data){
 export function fetchUser(){
     return dispatch => {
         dispatch(fetchUserRequestAction());
-        userSelfRequest()
+        return userSelfRequest()
         .then(response => {
             dispatch(fetchUserSuccessAction(response.data));
         })
@@ -54,15 +56,12 @@ export function fetchUser(){
             dispatch(fetchUserErrorAction(errorMessage));
         })
     }
-} 
-
-export function setAutorizationToken(token){
-    if (token) {
-        axios.defaults.headers.common['Authorization'] = `JWT ${token}`;
-    } else {
-        delete axios.defaults.headers.common['Authorization'];
-    }
 }
+
+export function userWillLogin(){
+    return dispatch => dispatch({type: USER_WILL_LOGIN})
+}
+
 
 export function signUpUser(fullname, email, username, password1, password2, organization){
 
@@ -86,7 +85,7 @@ export function signUpUser(fullname, email, username, password1, password2, orga
 export function userLogIn(usernameOrEmail, password){
     return userLoginRequest(usernameOrEmail, password)
     .then(
-        async response => 
+        response => 
         {
             localStorage.setItem('accessToken', response.data.access);
             localStorage.setItem('refreshToken', response.data.refresh);
@@ -94,20 +93,23 @@ export function userLogIn(usernameOrEmail, password){
         }
     )
     .catch(
-        () => {
+        error => {
+            console.log(error);
             return false;
         }
     )
 }
 
-export function refreshAuthorizationToken(refreshToken){
-    return refreshTokenRequest(refreshToken)
+export function refreshAuthorizationToken(refreshToken=null){
+    const refreshTokenToSend = (refreshToken === null) ? localStorage.getItem('refreshToken') : refreshToken;
+    
+    return refreshTokenRequest(refreshTokenToSend)
         .then(
-            async response => {
+            response => {
                 localStorage.setItem('accessToken', response.data.access);
                 localStorage.setItem('refreshToken', response.data.refresh);
 
-                setAutorizationToken(localStorage.getItem('accessToken'));
+                return response.data.access;
             }
         )
         .catch(

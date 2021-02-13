@@ -1,8 +1,10 @@
 import axios from 'axios'
+import {BACKEND_API_URL} from './index';
+
 
 export function userSignUpRequest(fullName, email, username, password1, password2, organization){
     const config = {
-        url: 'http://127.0.0.1:8000/api/users/sign_up/', 
+        url: `${BACKEND_API_URL}/users/sign_up/`, 
         method: 'POST',
         data: {
                 fullname: fullName,
@@ -16,21 +18,9 @@ export function userSignUpRequest(fullName, email, username, password1, password
     return axios(config);
 }
 
-export function userLoginRequest(usernameOrEmail, password){
-    const config = {
-        url: 'http://127.0.0.1:8000/api/token/', 
-        method: 'POST',
-        data: {
-                username: usernameOrEmail,
-                password: password
-            }
-    };
-    return axios(config);
-}
-
 export function userSelfRequest(){
     const config = {
-        url: 'http://127.0.0.1:8000/api/users/self/', 
+        url: `${BACKEND_API_URL}/users/self/`, 
         crossDomain: true,
         method: 'GET',
     };
@@ -39,7 +29,7 @@ export function userSelfRequest(){
 
 export function uploadUserAvatarRequest(userId, data){
     const config = {
-        url: `http://127.0.0.1:8000/api/users/${userId}/`, 
+        url: `${BACKEND_API_URL}/users/${userId}/`, 
         method: 'PATCH',
         data,
     }
@@ -48,7 +38,7 @@ export function uploadUserAvatarRequest(userId, data){
 
 export function changeUserInfoRequest(userId, data){
     const config = {
-        url: `http://127.0.0.1:8000/api/users/${userId}/`, 
+        url: `${BACKEND_API_URL}/users/${userId}/`, 
         method: 'PATCH',
         data,
     }
@@ -57,7 +47,7 @@ export function changeUserInfoRequest(userId, data){
 
 export function verifyEmailRequest(data){
     const config = {
-        url: 'http://127.0.0.1:8000/api/users/email-activate/', 
+        url: `${BACKEND_API_URL}/users/email-activate/`, 
         method: 'POST',
         data
     };
@@ -66,7 +56,7 @@ export function verifyEmailRequest(data){
 
 export function resendVerifyEmailRequest(){
     const config = {
-        url: 'http://127.0.0.1:8000/api/users/resend-activation-mail/', 
+        url: `${BACKEND_API_URL}/users/resend-activation-mail/`, 
         method: 'POST'
     };
     return axios(config);

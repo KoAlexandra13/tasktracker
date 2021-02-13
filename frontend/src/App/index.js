@@ -4,6 +4,7 @@ import {
   Switch,
   Route
 } from "react-router-dom";
+import {initAxios} from '../api/index';
 import Home from './Home';
 import CreateNewBoard from './CreateNewBoard';
 import SignUp from './SignUp'
@@ -22,6 +23,8 @@ const store = createStore(
   rootReducer,
   composeEnhancers(applyMiddleware(thunk))
 );
+
+initAxios();
 
 class App extends React.Component{
     render(){

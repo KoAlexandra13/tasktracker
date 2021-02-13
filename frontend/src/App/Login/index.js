@@ -33,7 +33,6 @@ class Login extends React.Component {
     };
 
     handleClickLoginButton = async () => {
-        
         const success = await userLogIn(this.state.emailOrUsername, this.state.password);
 
         if (success){

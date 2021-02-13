@@ -1,26 +1,30 @@
 import axios from 'axios'
+import {BACKEND_API_URL} from './index';
 
 export function createNewBoardRequest(data){
     const config = {
-        url: 'http://127.0.0.1:8000/api/tables/', 
+        url: `${BACKEND_API_URL}/tables/`, 
         method: 'POST',
         data
     };
     return axios(config);
 }
 
-export function uploadBoardImageRequest(tableId, imageURL){
+export function uploadBoardImageRequest(tableId, imgData){
+    const data = new FormData();
+    data.append('background_image', imgData);
+    
     const config = {
-        url: `http://127.0.0.1:8000/api/tables/${tableId}/`,
+        url: `${BACKEND_API_URL}/tables/${tableId}/`,
         method: 'PATCH',
-        imageURL
+        data
     };
     return axios(config);
 }
 
 export function getBoardListRequest(){
     const config = {
-        url: 'http://127.0.0.1:8000/api/tables/',
+        url: `${BACKEND_API_URL}/tables/`,
         method: 'GET'
     };
     return axios(config);
@@ -28,7 +32,7 @@ export function getBoardListRequest(){
 
 export function getBoardRequest(id){
     const config = {
-        url: `http://127.0.0.1:8000/api/tables/${id}/`,
+        url: `${BACKEND_API_URL}/tables/${id}/`,
         method: 'GET'
     };
     return axios(config);
@@ -36,7 +40,7 @@ export function getBoardRequest(id){
 
 export function editBoardNameRequest(name, id){
     const config = {
-        url: `http://127.0.0.1:8000/api/tables/${id}/`,
+        url: `${BACKEND_API_URL}/tables/${id}/`,
         method: 'PATCH',
         data: {
             name: name 
@@ -47,7 +51,7 @@ export function editBoardNameRequest(name, id){
 
 export async function editBoardColumnsOrderRequest(columnsId, tableId){
     const config = {
-        url: `http://127.0.0.1:8000/api/tables/${tableId}/`,
+        url: `${BACKEND_API_URL}/tables/${tableId}/`,
         method: 'PATCH',
         data: {
             ordered_columns: columnsId
@@ -58,7 +62,7 @@ export async function editBoardColumnsOrderRequest(columnsId, tableId){
 
 export function editTaskPositionRequest(tasksId, columnId){
     const config = {
-        url: `http://127.0.0.1:8000/api/table-columns/${columnId}/`,
+        url: `${BACKEND_API_URL}/table-columns/${columnId}/`,
         method: 'PATCH',
         data: {
             ordered_tasks: tasksId
@@ -69,7 +73,7 @@ export function editTaskPositionRequest(tasksId, columnId){
 
 export function addNewColumnRequest(data){
     const config = {
-        url: `http://127.0.0.1:8000/api/table-columns/`,
+        url: `${BACKEND_API_URL}/table-columns/`,
         method: 'POST',
         data
     }
@@ -78,7 +82,7 @@ export function addNewColumnRequest(data){
 
 export function addNewTaskRequest(data){
     const config = {
-        url: `http://127.0.0.1:8000/api/tasks/`,
+        url: `${BACKEND_API_URL}/tasks/`,
         method: 'POST',
         data
     }

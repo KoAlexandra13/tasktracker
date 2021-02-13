@@ -44,7 +44,7 @@ class Board extends React.Component{
 
     handleChangeFavouriteIcon = () => {
         this.setState({...this.state, favouriteBoard: !this.state.favouriteBoard})
-        //send put/patch request(change favourite board) 
+        //send put/patch request(change favorite board) 
 
     }
 
@@ -210,13 +210,15 @@ class Board extends React.Component{
 
     render(){
         
-        const { boardBackgroundColor, boardTitle, boardColumns } = this.props;
+        const { boardBackgroundColor, boardBackgroundImage, boardTitle, boardColumns } = this.props;
 
         const { openEditTitlePane, favouriteBoard, openMenuPane } = this.state;
 
         const styles = {
-            boardBackgraundStyle : boardBackgroundColor === null ? {
-                //background: 'url(' + boardBackgroundImage + ') no-repeat transparent center',
+            boardBackgroundStyle : boardBackgroundColor === null ? {
+                backgroundImage: 'url(' + boardBackgroundImage + ')',
+                backgroundSize: '100% auto',
+                backgroundRepeat: 'repeat-y'
             } : {
                 backgroundColor: boardBackgroundColor,
             },
@@ -252,7 +254,7 @@ class Board extends React.Component{
                     <Header/>
                     <div 
                         className='board-main-container'
-                        style={styles.boardBackgraundStyle}>
+                        style={styles.boardBackgroundStyle}>
                             <div className='board-header'>
                                 <div className='favourite-board-button-container'>
                                     <button

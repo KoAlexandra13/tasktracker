@@ -82,11 +82,11 @@ export function setLoader(data){
     }
 }
 
-export function uploadImage(boardId, data){
+export function uploadImage(boardId, imgData){
     return dispatch => {
-        uploadBoardImageRequest(boardId, data)
+        uploadBoardImageRequest(boardId, imgData)
         .then(response => {
-            dispatch(addBoardBackgroundImageAction(response.data)); //?????
+            //dispatch(addBoardBackgroundImageAction(response.data)); //?????
         })
         .catch(()=> {
             console.log("An error occured while image uploading");

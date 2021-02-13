@@ -67,8 +67,9 @@ class Account extends React.Component{
             data = new FormData();
             data.append("image", image);
         } else {
-            data = {};
-            data['image'] = image;
+            data = {
+                image: image
+            };
         }
 
         uploadUserAvatarRequest(this.props.userId, data)
