@@ -32,7 +32,8 @@ class Login extends React.Component {
         event.preventDefault();
     };
 
-    handleClickLoginButton = async () => {
+    handleSubmitLoginForm = async (e) => {
+        e.preventDefault();
         const success = await userLogIn(this.state.emailOrUsername, this.state.password);
 
         if (success){
@@ -94,7 +95,7 @@ class Login extends React.Component {
                             <img src={ image } alt={'login'}/>
                         </div>
 
-                        <div className='login-form'>
+                        <form className='login-form' onSubmit={this.handleSubmitLoginForm}>
                             <h4 className='login-title'>Login to continue </h4>
 
                             <TextField
@@ -151,9 +152,7 @@ class Login extends React.Component {
                                 </button>
                             </div>
 
-                            <button 
-                            className='login-btn'
-                            onClick={this.handleClickLoginButton}>
+                            <button className='login-btn'>
                                 <p>LOGIN</p>
                             </button>
 
@@ -164,7 +163,7 @@ class Login extends React.Component {
                                 </Link>
                             </div>   
 
-                        </div>
+                        </form>
 
                     </Paper>
                 </div>
