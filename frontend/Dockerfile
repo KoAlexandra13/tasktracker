@@ -1,13 +1,12 @@
 FROM node:12
 WORKDIR /frontend
-ENV PATH /frontend/node_modules/.bin:$PATH
+#ENV PATH /frontend/node_modules/.bin:$PATH
+RUN npm install serve react-scripts -g
 
 # install app dependencies
-COPY package.json ./
-COPY package-lock.json ./
-RUN npm install --silent
-RUN npm install serve react-scripts@3.4.1 -g --silent
+COPY package*.json ./
+RUN npm install
 
 # add app
 COPY . ./
-CMD ["npm", "start"]
+EXPOSE 5000

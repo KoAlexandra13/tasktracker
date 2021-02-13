@@ -16,17 +16,13 @@ services:
       - db.env
     volumes:
       - './backend:/backend'
-    ports:
-      - "8000:8000"
     depends_on:
       - db
   frontend:
-    command: npm start
+    entrypoint: ./frontend-entrypoint.prod.sh
+    environment:
+      - NODE_ENV=production
     build: frontend/
-    volumes:
-      - './frontend:/frontend'
-    ports:
-      - "3000:3000"
   celery:
     build: backend/
     entrypoint: ./celery-entrypoint.sh
@@ -41,8 +37,10 @@ services:
     image: redis:alpine
   nginx:
     build: ./nginx
+    volumes:
+      - './backend/staticfiles:/backend/static'
     ports:
-      - 1337:80
+      - 80:80
     depends_on:
       - backend
 

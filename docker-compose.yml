@@ -23,8 +23,11 @@ services:
   frontend:
     command: npm start
     build: frontend/
+    environment:
+      - NODE_ENV=development
     volumes:
-      - './frontend:/frontend'
+      - './frontend/src/:/frontend/src'
+      - './frontend/public:/frontend/public'
     ports:
       - "3000:3000"
   celery:
