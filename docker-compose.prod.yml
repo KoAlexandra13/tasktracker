@@ -19,10 +19,12 @@ services:
     depends_on:
       - db
   frontend:
-    entrypoint: ./frontend-entrypoint.prod.sh
+    command: serve -s build
     environment:
       - NODE_ENV=production
-    build: frontend/
+    build:
+      context: frontend/
+      dockerfile: Dockerfile.prod
   celery:
     build: backend/
     entrypoint: ./celery-entrypoint.sh
