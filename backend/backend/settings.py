@@ -24,7 +24,7 @@ SECRET_KEY = env('DJANGO_SECRET_KEY')
 
 DEBUG = env('DJANGO_DEBUG', default=False)
 
-ALLOWED_HOSTS = ['localhost:3000', 'localhost:8000', 'ec2-3-138-200-123.us-east-2.compute.amazonaws.com']
+ALLOWED_HOSTS = ['localhost', 'ec2-3-138-200-123.us-east-2.compute.amazonaws.com']
 
 
 # Application definition
