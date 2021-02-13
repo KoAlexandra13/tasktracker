@@ -26,7 +26,7 @@ from api.urls import urlpatterns as api_urls
 from backend import settings
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('api/admin/', admin.site.urls),
     path('api/', include(api_urls)),
 ]
 
