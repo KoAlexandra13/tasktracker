@@ -128,25 +128,28 @@ class CreateNewBoard extends React.Component {
             data.columns = columns;
 
             if (this.state.boardBackgroundColor){
-                data.background_color = this.state.boardBackgroundColor
+                data.background_color = this.state.boardBackgroundColor;
             }
 
             if (this.state.boardBackgroundURL){
                 data.image_from_url = `${window.location.origin}${this.state.boardBackgroundURL}`;
             }
 
+            console.log(data)
+
             this.props.setLoader(true); 
 
             const id = await this.props.fetchBoard(data);
 
-            const imgData = this.state.boardBackgroundImageData.file;
-            if(imgData){
-                await this.props.uploadImage(id, imgData);
+            if(this.state.boardBackgroundImageData){
+                await this.props.uploadImage(id, this.state.boardBackgroundImageData.file);
             }
 
-            this.props.setLoader(false);
+            //this.props.setLoader(false);
 
-            window.location.href = `/board/${id}/`;
+            if(id){
+                window.location.href = `/board/${id}/`;
+            }
         }
     }
 
@@ -249,12 +252,12 @@ class CreateNewBoard extends React.Component {
                                                 <p>Custom color</p>
                                             </button>
                                             { this.state.displayColorPicker ? 
-                                            <div style={ this.popover }>
+                                            <div style={this.popover}>
                                                 <div 
-                                                style={ this.cover } 
-                                                onClick={ this.handleColorPickerClose }/>
+                                                style={this.cover} 
+                                                onClick={this.handleColorPickerClose}/>
                                                 <SwatchesPicker 
-                                                onChange={ this.handleChooseCustomBackgroundColor}/>
+                                                onChange={this.handleChooseCustomBackgroundColor}/>
                                             </div> : null }
                                         </li>
     

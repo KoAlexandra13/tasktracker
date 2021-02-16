@@ -1,7 +1,7 @@
 import {
     FETCH_BOARD_REQUEST, FETCH_BOARD_SUCCESS, UPLOAD_BOARD_BACKGROUND_IMAGE, 
     FETCH_BOARD_ERROR, CREATE_BOARD_SET_LOADER, CHANGE_BOARD_TITLE,
-    CHANGE_BOARD_COLUMNS, ADD_NEW_COLUMN, ADD_NEW_TASK
+    CHANGE_BOARD_COLUMNS, ADD_NEW_COLUMN, ADD_NEW_TASK, CHANGE_TASK_TITLE
 } from '../actions/board';
 
 
@@ -69,7 +69,6 @@ const createNewBoardReducer = (state = initialState, action) => {
                 boardColumns: state.boardColumns.concat(action.data)
             }
         case ADD_NEW_TASK:
-            
             const columns = Array.from(state.boardColumns);
             const column = columns.find(column => column.id === action.data.column);
             const newTasks = column.tasks.concat(action.data).sort(function(a, b) {

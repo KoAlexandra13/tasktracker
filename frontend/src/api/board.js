@@ -88,3 +88,12 @@ export function addNewTaskRequest(data){
     }
     return axios(config);
 }
+
+export function changeTaskRequest(data, id){
+    const config = {
+        url: `${BACKEND_API_URL}/tasks/${id}`,
+        method: 'PATCH',
+        data
+    }
+    return axios(config);
+}

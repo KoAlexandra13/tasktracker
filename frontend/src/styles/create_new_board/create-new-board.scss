@@ -231,7 +231,7 @@
 
 }
 
-@media screen and (max-device-width:1070px), screen and (max-width: 1070px)  {
+@media screen and (max-device-width:1062px), screen and (max-width: 1062px)  {
     .create-new-board-btn {
         p{
             visibility: hidden;
@@ -239,7 +239,7 @@
             &:before{
                 content: 'Create';
                 visibility: visible;
-                padding-left: 1.5rem;
+                padding-left: 0.15rem;
                 font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
             }
         }

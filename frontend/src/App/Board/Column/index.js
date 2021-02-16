@@ -52,7 +52,11 @@ class Column extends React.Component{
                                         ref={provided.innerRef}
                                         {...provided.droppableProps}
                                     >
-                                    {tasks && tasks.map((task, index) => <Task key={task.id} task={task} index={index}/>)}
+                                    {tasks && tasks.map((task, index) => <Task 
+                                        key={task.id} 
+                                        task={task} 
+                                        index={index}
+                                        columnId={column.id}/>)}
                                     {provided.placeholder}
                                 </div>
                                 )}

@@ -53,8 +53,7 @@ export function changeBoardTitle(data){
     return dispatch => {
         dispatch(changeBoardTitleAction(data))
     }
-}
-
+};
 export function changeBoardColumns(data){
     return dispatch => {
         dispatch(changeBoardColumnsAction(data))
@@ -83,15 +82,11 @@ export function setLoader(data){
 }
 
 export function uploadImage(boardId, imgData){
-    return dispatch => {
-        uploadBoardImageRequest(boardId, imgData)
-        .then(response => {
-            //dispatch(addBoardBackgroundImageAction(response.data)); //?????
-        })
+    return uploadBoardImageRequest(boardId, imgData)
         .catch(()=> {
             console.log("An error occured while image uploading");
         })
-    }
+    
 }
 
 export function getBoard(id){

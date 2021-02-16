@@ -68,7 +68,7 @@ class Login extends React.Component {
                 marginTop: '1rem'
             },
 
-            feildsFont: {
+            fieldsFont: {
                 fontSize: 'medium', 
                 color:'rgb(43, 40, 40)',
             }
@@ -103,7 +103,7 @@ class Login extends React.Component {
                                 variant='outlined'
                                 size='small'
                                 style={styles.textField}
-                                inputProps={{style: styles.feildsFont}}
+                                inputProps={{style: styles.fieldsFont}}
                                 onChange={this.handleChange('emailOrUsername')}
                             />
                         
@@ -122,7 +122,7 @@ class Login extends React.Component {
                                         value={password}
                                         onChange={this.handleChange('password')}
                                         style={{padding : 0}}
-                                        inputProps={{style: styles.feildsFont}} 
+                                        inputProps={{style: styles.fieldsFont}} 
                                         endAdornment={
                                         <InputAdornment position='end'>
                                             <IconButton

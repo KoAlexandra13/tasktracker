@@ -153,7 +153,6 @@ class Account extends React.Component{
                 color: 'rgb(71, 71, 71)',
                 fontFamily: 'Impact, Haettenschweiler, Arial Narrow Bold, sans-serif',
                 fontSize: 'large',
-                fontFamily: 'Impact, Haettenschweiler, Arial Narrow Bold, sans-serif'
             },
 
             textField: {
@@ -239,9 +238,9 @@ class Account extends React.Component{
                                     </button>
 
                                     <Dialog 
-                                    open={openLogOutDialogWindow}
-                                    onClose={this.handleCloseDialogWindow('openLogOutDialogWindow')} 
-                                    aria-labelledby='form-dialog-title'>
+                                        open={openLogOutDialogWindow}
+                                        onClose={this.handleCloseDialogWindow('openLogOutDialogWindow')} 
+                                        aria-labelledby='form-dialog-title'>
                                     <DialogTitle>Log out</DialogTitle>
 
                                     <DialogContent>
