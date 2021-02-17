@@ -9,6 +9,9 @@ import IconButton from '@material-ui/core/IconButton';
 import SubjectIcon from '@material-ui/icons/Subject';
 import WebIcon from '@material-ui/icons/Web';
 import AddPhotoAlternateRoundedIcon from '@material-ui/icons/AddPhotoAlternateRounded';
+import LabelImportantRoundedIcon from '@material-ui/icons/LabelImportantRounded';
+import CheckRoundedIcon from '@material-ui/icons/CheckRounded';
+import ScheduleRoundedIcon from '@material-ui/icons/ScheduleRounded';
 
 class TaskEditPane extends React.Component{
     constructor(props){
@@ -17,8 +20,13 @@ class TaskEditPane extends React.Component{
         this.state = {
             isOpenTitleInput: false,
             taskName: this.props.task.name,
-            taskDescription: this.props.task.description
+            taskDescription: this.props.task.description,
+            active: Array(4).fill(false),
         }
+
+        this.labelColors = [
+            '#67c854', '#fbe729', '#f1793a', '#ff4545'
+        ];
     }
 
     handleChangeTaskTitle = (event) => {
@@ -42,6 +50,19 @@ class TaskEditPane extends React.Component{
     closeDialogWindow = () => {
         this.setState({...this.state, isOpenTitleInput: false});
         this.props.handleCloseDialogWindow('isOpenDialogWindow');
+    }
+
+    handleClickOnLabel = (index) => {
+        const newArray = Array.from(this.state.active);
+        newArray.fill(false);
+
+        if(this.state.active[index] === true){
+            this.setState({...this.state, active: newArray});
+        }
+        else{
+            newArray[index] = true;
+            this.setState({...this.state, active: newArray});
+        }
     }
 
     render(){
@@ -151,6 +172,43 @@ class TaskEditPane extends React.Component{
                                 <AddPhotoAlternateRoundedIcon/>
                             </IconButton>
                         </div>                        
+                    </div>
+
+                    <div className='task-label-container'>
+                        <div className='task-label-title'>
+                            <LabelImportantRoundedIcon style={{color: '#4c5b64'}}/>
+                            <h5>Labels</h5>
+                        </div>
+
+                        <div className='labels'>
+                            {this.labelColors.map((color, index) => {
+                                return (
+                                    <button
+                                        onClick={() => this.handleClickOnLabel(index)} 
+                                        key={index} 
+                                        className={`label`} 
+                                        style={{backgroundColor: color}}>
+                                            <CheckRoundedIcon
+                                                style={{visibility: 'hidden'}} 
+                                                className={`${this.state.active[index] ? 'active' : ''}`}/>
+                                        </button>)
+                            })}
+                        </div>
+                    </div>
+
+                    <div className='task-deadline-container'>
+                        <div className='task-deadline-title'>
+                            <ScheduleRoundedIcon style={{color: '#4c5b64'}}/>
+                            <h5>Deadline</h5>
+                        </div>
+
+                        <div className='deadline-input-container'>
+                            <input type="datetime-local" name="" id=""/>
+                        </div>
+
+                        <button className='save-deadline'>
+                                Save deadline
+                        </button>
                     </div>
                 </DialogContent>
                

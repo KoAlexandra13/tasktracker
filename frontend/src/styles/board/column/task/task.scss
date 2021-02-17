@@ -40,10 +40,14 @@
     margin-left: 30px;
 }
 
-.task-description-container{
+.task-deadline-container{
+    padding-bottom: 15px;
+}
+
+.task-description-container, .task-label-container, .task-deadline-container{
     padding-top: 10px;
 
-    .task-description-title{
+    .task-description-title, .task-label-title, .task-deadline-title{
         width: 100%;
         display: inline-flex;
     
@@ -54,6 +58,41 @@
             display: inline-flex;
             margin-left: 10px;
             font-size: larger;
+        }
+    }
+
+    .deadline-input-container{
+        padding-bottom: 15px;
+
+        input{
+            border: solid 1px #007bff;
+            outline: #007bff;
+            border-radius: 3px;
+        }
+    }
+
+    .save-deadline{
+        color: white;
+        background-color: #67c854;
+        border-radius: 3px;
+        height: 32px;
+        padding: 0 15px;
+    }
+
+    .labels{
+        width: 100%;
+        padding-bottom: 10px;
+        padding-right: 15px;
+
+        .label{
+            width: 25%;
+            height: 30px;
+            border-radius: 3px;
+        }
+
+        .active{
+            visibility: visible !important;
+            float: left;
         }
     }
 
@@ -75,13 +114,5 @@
         }
     }
 }
-
-.sidebar{
-    float: right;
-    padding: 0 16px 8px 8px;
-    width: 168px;
-    overflow: hidden;
-}
-
 
 
