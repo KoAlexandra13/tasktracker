@@ -91,9 +91,17 @@ export function addNewTaskRequest(data){
 
 export function changeTaskRequest(data, id){
     const config = {
-        url: `${BACKEND_API_URL}/tasks/${id}`,
+        url: `${BACKEND_API_URL}/tasks/${id}/`,
         method: 'PATCH',
         data
     }
     return axios(config);
 }
+
+ export function deleteTaskRequest(id){
+    const config = {
+        url: `${BACKEND_API_URL}/tasks/${id}/`,
+        method: 'DELETE',
+    }
+    return axios(config);
+ }

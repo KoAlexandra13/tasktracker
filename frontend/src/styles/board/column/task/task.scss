@@ -9,6 +9,12 @@
     &:hover{
         cursor: pointer;
     }
+
+    .task-label{
+        height: 7px;
+        width: 15%;
+        border-radius: 3px;
+    }
 }
 
 .edit-task-name-container{
@@ -38,6 +44,16 @@
     font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
     font-size: small;
     margin-left: 30px;
+}
+
+.delete-button-container{
+    display: flex;
+    float: right;
+    margin-top: -15px;
+
+    p{
+        color: #f61212;
+    }
 }
 
 .task-deadline-container{

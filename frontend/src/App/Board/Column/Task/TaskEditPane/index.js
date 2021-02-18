@@ -12,49 +12,115 @@ import AddPhotoAlternateRoundedIcon from '@material-ui/icons/AddPhotoAlternateRo
 import LabelImportantRoundedIcon from '@material-ui/icons/LabelImportantRounded';
 import CheckRoundedIcon from '@material-ui/icons/CheckRounded';
 import ScheduleRoundedIcon from '@material-ui/icons/ScheduleRounded';
+import DeleteForeverRoundedIcon from '@material-ui/icons/DeleteForeverRounded';
+import {changeBoardTask} from '../../../../../actions/board';
+import _ from 'lodash';
+import {deleteTask} from '../../../../../actions/board';
 
 class TaskEditPane extends React.Component{
     constructor(props){
         super(props)
 
+        this.labelColors = [
+            { green: '#67c854' }, 
+            { yellow: '#fbe729' }, 
+            { orange: '#f1793a' }, 
+            { red: '#ff4545' }
+        ];
+
         this.state = {
             isOpenTitleInput: false,
             taskName: this.props.task.name,
             taskDescription: this.props.task.description,
-            active: Array(4).fill(false),
+            deadline: this.props.task.deadline ? this.props.task.deadline.slice(0, -4) : null,
+            active: this.handleSelectLabel(this.props.task.label),
         }
-
-        this.labelColors = [
-            '#67c854', '#fbe729', '#f1793a', '#ff4545'
-        ];
     }
 
+    handleSelectLabel = (label) => {
+        if(_.isNull(label)){
+            return Array(4).fill(false);
+        }
+        else {
+            const labelsArray = Array(4).fill(false);
+            this.labelColors.forEach((value, index) => {
+                if(Object.keys(value)[0] === label){
+                    labelsArray[index] = true;
+                }
+            })
+            return labelsArray;
+        }
+    }
+    
     handleChangeTaskTitle = (event) => {
-        this.setState({...this.state, taskName: event.target.value})
+        this.setState({
+            ...this.state, 
+            taskName: event.target.value})
     }
 
     handleChangeTaskDescription = (event) => {
-        this.setState({...this.state, taskDescription: event.target.value})
+        this.setState({
+            ...this.state, 
+            taskDescription: event.target.value})
     }
 
     openTaskTitleEditPane = () => {
-        this.setState({...this.state, isOpenTitleInput: !this.state.isOpenTitleInput})
+        this.setState({
+            ...this.state, 
+            isOpenTitleInput: !this.state.isOpenTitleInput})
     }
 
     handleKeyDown = (event) => {
         if (event.key === 'Enter') {
-            this.setState({...this.state, isOpenTitleInput: false})
+            this.setState({
+                ...this.state, 
+                isOpenTitleInput: false})
+
+            const name = { 
+                name: this.state.taskName
+            }
+    
+            this.props.changeBoardTask(name, this.props.task.id);
         }
     }
 
+    saveDescription = () => {
+        const description = { 
+            description: this.state.description 
+        }
+
+        this.props.changeBoardTask(description, this.props.task.id);
+    }
+
+    saveDeadline = () => {
+        const deadline = { 
+            deadline: this.state.deadline 
+        }
+
+        this.props.changeBoardTask(deadline, this.props.task.id);
+    }
+
+    handleChangeTaskDeadline = (event) => {
+        this.setState({
+            ...this.state, 
+            deadline: event.target.value})
+    }
+
     closeDialogWindow = () => {
-        this.setState({...this.state, isOpenTitleInput: false});
         this.props.handleCloseDialogWindow('isOpenDialogWindow');
+        this.setState({
+            ...this.state, 
+            isOpenTitleInput: false, 
+            taskName: this.props.task.name,
+            taskDescription: this.props.task.description,
+            deadline: this.props.task.deadline ? this.props.task.deadline.slice(0, -4) : null,
+        });
     }
 
     handleClickOnLabel = (index) => {
         const newArray = Array.from(this.state.active);
         newArray.fill(false);
+        let labelColor = null;
 
         if(this.state.active[index] === true){
             this.setState({...this.state, active: newArray});
@@ -62,11 +128,22 @@ class TaskEditPane extends React.Component{
         else{
             newArray[index] = true;
             this.setState({...this.state, active: newArray});
+            labelColor = Object.keys(this.labelColors[index])[0];
         }
+        const label = {
+            label: labelColor
+        }
+
+        this.props.changeBoardTask(label, this.props.task.id);
+    }
+
+    deleteTask = () => {
+        this.props.deleteTask(this.props.task.id);
+        this.props.handleCloseDialogWindow('isOpenDialogWindow');
     }
 
     render(){
-        const {openDialogWindow, task} = this.props;
+        const {openDialogWindow} = this.props;
 
         const {isOpenTitleInput, taskDescription} = this.state;
 
@@ -110,7 +187,7 @@ class TaskEditPane extends React.Component{
                             width: '100%',   
                         }}
                     >
-                        <div className='edit-task-name-container'>
+                       <div className='edit-task-name-container'>
                             <WebIcon style={{marginTop: '8px', color: '#4c5b64'}}/>
                             <h5 
                                 className='task-name'
@@ -165,7 +242,9 @@ class TaskEditPane extends React.Component{
                         </div>
 
                         <div className='button-container'>
-                            <button className='save-description'>
+                            <button 
+                                className='save-description'
+                                onClick={this.saveDescription}>
                                 Save changes
                             </button>
                             <IconButton style={{marginTop: '-8px', marginRight: '12px'}}>
@@ -181,13 +260,13 @@ class TaskEditPane extends React.Component{
                         </div>
 
                         <div className='labels'>
-                            {this.labelColors.map((color, index) => {
+                            {this.labelColors.map((value, index) => {
                                 return (
                                     <button
                                         onClick={() => this.handleClickOnLabel(index)} 
                                         key={index} 
                                         className={`label`} 
-                                        style={{backgroundColor: color}}>
+                                        style={{backgroundColor: Object.values(value)[0]}}>
                                             <CheckRoundedIcon
                                                 style={{visibility: 'hidden'}} 
                                                 className={`${this.state.active[index] ? 'active' : ''}`}/>
@@ -203,18 +282,41 @@ class TaskEditPane extends React.Component{
                         </div>
 
                         <div className='deadline-input-container'>
-                            <input type="datetime-local" name="" id=""/>
+                            <input 
+                                type="datetime-local"
+                                value={this.state.deadline}
+                                onChange={this.handleChangeTaskDeadline}
+                            />
                         </div>
 
-                        <button className='save-deadline'>
+                        <button 
+                            className='save-deadline'
+                            onClick={this.saveDeadline}>
                                 Save deadline
                         </button>
                     </div>
+
+                    <div className='delete-button-container'>
+                        <p> Delete task </p>
+                        <IconButton style={{
+                            marginTop: '-15px', 
+                            marginRight: '12px', 
+                            color: 'rgb(255, 69, 69)',
+                            marginLeft: '12px',
+                            marginBottom: '5px' 
+                            }}
+                            onClick={this.deleteTask}
+                        >
+                            <DeleteForeverRoundedIcon style={{color: 'rgb(255, 69, 69)'}}/>
+                        </IconButton>
+                    </div>
                 </DialogContent>
-               
             </Dialog>
         )
     }
 }
 
-export default connect(null,{})(TaskEditPane);
+export default connect(null,{
+    changeBoardTask,
+    deleteTask}
+)(TaskEditPane);

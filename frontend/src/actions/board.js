@@ -1,7 +1,7 @@
 import { 
     createNewBoardRequest, uploadBoardImageRequest, getBoardRequest, 
-    addNewColumnRequest, addNewTaskRequest 
-} from '../api/board'
+    addNewColumnRequest, addNewTaskRequest, changeTaskRequest, deleteTaskRequest 
+} from '../api/board';
 
 export const UPLOAD_BOARD_BACKGROUND_IMAGE = 'UPLOAD_BOARD_BACKGROUND_IMAGE';
 export const FETCH_BOARD_SUCCESS = 'FETCH_BOARD_SUCCESS';
@@ -9,14 +9,12 @@ export const FETCH_BOARD_REQUEST = 'FETCH_BOARD_REQUEST';
 export const FETCH_BOARD_ERROR = 'FETCH_BOARD_ERROR';
 export const CREATE_BOARD_SET_LOADER = 'SET_LOADER';
 export const CHANGE_BOARD_TITLE = 'CHANGE_BOARD_TITLE';
+export const CHANGE_BOARD_TASK = 'CHANGE_BOARD_TASK';
 export const CHANGE_BOARD_COLUMNS = 'CHANGE_BOARD_COLUMNS';
 export const ADD_NEW_COLUMN = 'ADD_NEW_COLUMN';
 export const ADD_NEW_TASK = 'ADD_NEW_TASK';
+export const DELETE_BOARD_TASK = 'DELETE_BOARD_TASK';
 
-const addBoardBackgroundImageAction = (image) => ({
-    type: UPLOAD_BOARD_BACKGROUND_IMAGE,
-    image
-});
 const fetchBoardRequestAction = () => ({
     type: FETCH_BOARD_REQUEST,
 });
@@ -36,6 +34,10 @@ const changeBoardTitleAction = (data) => ({
     type: CHANGE_BOARD_TITLE,
     data 
 });
+const changeBoardTaskAction = (data) => ({
+    type: CHANGE_BOARD_TASK,
+    data 
+});
 const changeBoardColumnsAction = (data) => ({
     type: CHANGE_BOARD_COLUMNS,
     data
@@ -48,12 +50,42 @@ const addNewTaskAction = (data) => ({
     type: ADD_NEW_TASK,
     data
 })
-
+const deleteTaskAction = (data) => ({
+    type: DELETE_BOARD_TASK,
+    data
+})
 export function changeBoardTitle(data){
     return dispatch => {
         dispatch(changeBoardTitleAction(data))
     }
 };
+
+export function changeBoardTask(data, id){
+    return async dispatch => {
+        return await changeTaskRequest(data, id)
+        .then(
+            response => 
+            dispatch(changeBoardTaskAction(response.data))
+        )
+        .catch(
+            () => 
+            console.log('An error occured while task changing')
+        )
+    }
+};
+
+export function deleteTask(id){
+    return dispatch => {
+        return deleteTaskRequest(id)
+        .then(
+            () => dispatch(deleteTaskAction(id))
+        )
+        .catch(
+            () => console.log('An error occured while task deleting')
+        )
+    }
+}
+
 export function changeBoardColumns(data){
     return dispatch => {
         dispatch(changeBoardColumnsAction(data))

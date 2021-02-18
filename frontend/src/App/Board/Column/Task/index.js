@@ -1,13 +1,22 @@
 import React from 'react'
 import { Draggable } from 'react-beautiful-dnd';
-import TaskEditPane from './TaskEditPane'
+import TaskEditPane from './TaskEditPane';
+import _ from 'lodash'
 
 class Task extends React.Component{
     constructor(props){
         super(props);
 
+        this.labelColors = [
+            { green: '#67c854' }, 
+            { yellow: '#fbe729' }, 
+            { orange: '#f1793a' }, 
+            { red: '#ff4545' }
+        ];
+
         this.state = {
-            isOpenDialogWindow: false
+            isOpenDialogWindow: false,
+            labelColor: this.selectLabelColor()
         }
     }
 
@@ -16,7 +25,12 @@ class Task extends React.Component{
     }
 
     handleCloseDialogWindow = (prop) => {
-        this.setState({...this.state, [prop]: false})
+        this.setState({...this.state, [prop]: false, labelColor: this.selectLabelColor()})
+    }
+
+    selectLabelColor = () => {
+        const color = this.labelColors.find(color => Object.keys(color)[0] === this.props.task.label);
+        return _.isUndefined(color) ? null : Object.values(color)[0];
     }
 
 
@@ -24,7 +38,13 @@ class Task extends React.Component{
 
         const {task, index, columnId} = this.props;
 
-        const {isOpenDialogWindow} = this.state;
+        const {isOpenDialogWindow, labelColor} = this.state;
+
+        const labelStyle = _.isNull(task.label) ? {
+            display: 'none',
+        } : {
+            backgroundColor: `${labelColor}`
+        }
 
         return (
             <div>
@@ -41,6 +61,9 @@ class Task extends React.Component{
                             ref={provided.innerRef}
                             onClick={this.handleClickOnTask}
                         >
+                            <div 
+                                className='task-label'
+                                style={labelStyle}/>
                             {task.name}
                         </div>
                     )}
