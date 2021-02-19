@@ -3,7 +3,9 @@ import {
     FETCH_BOARD_REQUEST, FETCH_BOARD_SUCCESS, UPLOAD_BOARD_BACKGROUND_IMAGE, 
     FETCH_BOARD_ERROR, CREATE_BOARD_SET_LOADER, CHANGE_BOARD_TITLE,
     CHANGE_BOARD_COLUMNS, ADD_NEW_COLUMN, ADD_NEW_TASK, CHANGE_BOARD_TASK,
-    DELETE_BOARD_TASK
+    DELETE_BOARD_TASK,
+    CHANGE_COLUMN_TITLE,
+    DELETE_BOARD_COLUMN
 } from '../actions/board';
 
 
@@ -20,6 +22,7 @@ const initialState = {
 }
 
 const createNewBoardReducer = (state = initialState, action) => {
+    let columns = Array.from(state.boardColumns);
     switch(action.type){
         case FETCH_BOARD_REQUEST:
             return {
@@ -71,7 +74,6 @@ const createNewBoardReducer = (state = initialState, action) => {
                 boardColumns: state.boardColumns.concat(action.data)
             }
         case ADD_NEW_TASK:
-            const columns = Array.from(state.boardColumns);
             const column = columns.find(column => column.id === action.data.column);
             const newTasks = column.tasks.concat(action.data).sort(function(a, b) {
                 return a.index - b.index;
@@ -88,9 +90,8 @@ const createNewBoardReducer = (state = initialState, action) => {
                 ...state,
                 boardColumns: columns
             };
-        case CHANGE_BOARD_TASK: 
-            const columnsTmp = Array.from(state.boardColumns);
-            const changedTask = columnsTmp.find(column => {
+        case CHANGE_BOARD_TASK:
+            const changedTask = columns.find(column => {
                 return column.tasks.find(task => task.id === action.data.id)
             }).tasks;
 
@@ -102,11 +103,10 @@ const createNewBoardReducer = (state = initialState, action) => {
 
             return {
                 ...state,
-                boardColumns: columnsTmp
+                boardColumns: columns
             };
         case DELETE_BOARD_TASK: 
-            const columns_ = Array.from(state.boardColumns);
-            let tasks_ = columns_.find(column => {
+            let tasks_ = columns.find(column => {
                 return column.tasks.find(task => task.id === action.data)
             }).tasks;
 
@@ -116,7 +116,25 @@ const createNewBoardReducer = (state = initialState, action) => {
 
             return {
                 ...state,
-                boardColumns: columns_
+                boardColumns: columns
+            };
+        case CHANGE_COLUMN_TITLE:
+            columns.forEach(column => {
+                if(column.id === action.data.data.id){
+                    column.name = action.data.data.name
+                }
+            })
+            return {
+                ...state,
+                boardColumns: columns
+            };
+        case DELETE_BOARD_COLUMN:
+            columns = _.remove(columns, function(column) { 
+                return column.id !== action.data;
+            })
+            return {
+                ...state,
+                boardColumns: columns
             };
         default:
             return state;

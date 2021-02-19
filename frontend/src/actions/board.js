@@ -1,6 +1,7 @@
 import { 
     createNewBoardRequest, uploadBoardImageRequest, getBoardRequest, 
-    addNewColumnRequest, addNewTaskRequest, changeTaskRequest, deleteTaskRequest 
+    addNewColumnRequest, addNewTaskRequest, changeTaskRequest, 
+    deleteTaskRequest, changeColumnTitleRequest, deleteColumnRequest 
 } from '../api/board';
 
 export const UPLOAD_BOARD_BACKGROUND_IMAGE = 'UPLOAD_BOARD_BACKGROUND_IMAGE';
@@ -14,6 +15,8 @@ export const CHANGE_BOARD_COLUMNS = 'CHANGE_BOARD_COLUMNS';
 export const ADD_NEW_COLUMN = 'ADD_NEW_COLUMN';
 export const ADD_NEW_TASK = 'ADD_NEW_TASK';
 export const DELETE_BOARD_TASK = 'DELETE_BOARD_TASK';
+export const DELETE_BOARD_COLUMN = 'DELETE_BOARD_COLUMN';
+export const CHANGE_COLUMN_TITLE = 'CHANGE_COLUMN_TITLE';
 
 const fetchBoardRequestAction = () => ({
     type: FETCH_BOARD_REQUEST,
@@ -54,22 +57,39 @@ const deleteTaskAction = (data) => ({
     type: DELETE_BOARD_TASK,
     data
 })
+const deleteColumnAction = (data) => ({
+    type: DELETE_BOARD_COLUMN,
+    data
+});
+const changeColumnTitleAction = (data) => ({
+    type: CHANGE_COLUMN_TITLE,
+    data
+});
 export function changeBoardTitle(data){
     return dispatch => {
         dispatch(changeBoardTitleAction(data))
     }
 };
+export function changeColumnTitle(data, id){
+    return dispatch => {
+        return changeColumnTitleRequest(data, id)
+        .then(
+            response => dispatch(changeColumnTitleAction(response))
+        )
+        .catch(
+            () => console.log('An error occured while column title changing')
+        )
+    }
+};
 
 export function changeBoardTask(data, id){
     return async dispatch => {
-        return await changeTaskRequest(data, id)
+        return changeTaskRequest(data, id)
         .then(
-            response => 
-            dispatch(changeBoardTaskAction(response.data))
+            response => dispatch(changeBoardTaskAction(response.data))
         )
         .catch(
-            () => 
-            console.log('An error occured while task changing')
+            () => console.log('An error occured while task changing')
         )
     }
 };
@@ -85,7 +105,17 @@ export function deleteTask(id){
         )
     }
 }
-
+export function deleteColumn(id){
+    return dispatch => {
+        return deleteColumnRequest(id)
+        .then(
+            () => dispatch(deleteColumnAction(id))
+        )
+        .catch(
+            () => console.log('An error occured while column deleting')
+        )
+    }
+}
 export function changeBoardColumns(data){
     return dispatch => {
         dispatch(changeBoardColumnsAction(data))

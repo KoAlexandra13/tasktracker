@@ -10,7 +10,8 @@ class BoardItem extends React.Component {
         const style = _.isNull(board.background_image) ? {
             backgroundColor: board.background_color
         } : {
-            background: 'url(' + board.background_image + ') no-repeat transparent center'
+            background: 'url(' + board.background_image + ')',
+            backgroundSize: '100%',
         }
 
         return(

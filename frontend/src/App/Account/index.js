@@ -241,27 +241,27 @@ class Account extends React.Component{
                                         open={openLogOutDialogWindow}
                                         onClose={this.handleCloseDialogWindow('openLogOutDialogWindow')} 
                                         aria-labelledby='form-dialog-title'>
-                                    <DialogTitle>Log out</DialogTitle>
+                                        <DialogTitle>Log out</DialogTitle>
 
-                                    <DialogContent>
-                                        <DialogContentText style={{color: 'rgb(71, 71, 71)'}}>
-                                            Are you sure you want to log out?
-                                        </DialogContentText>
-                                
-                                    </DialogContent>
-                                    <DialogActions>
-                                        <Button 
-                                            onClick={this.logOut} 
-                                            color='#374549'>
-                                            Yes
-                                        </Button>
-                                        <Button 
-                                            onClick={this.handleCloseDialogWindow('openLogOutDialogWindow')} 
-                                            color='#374549'>
-                                            No
-                                        </Button>
-                                    </DialogActions>
-                                </Dialog>
+                                        <DialogContent>
+                                            <DialogContentText style={{color: 'rgb(71, 71, 71)'}}>
+                                                Are you sure you want to log out?
+                                            </DialogContentText>
+                                    
+                                        </DialogContent>
+                                        <DialogActions>
+                                            <Button 
+                                                onClick={this.logOut} 
+                                                color='#374549'>
+                                                Yes
+                                            </Button>
+                                            <Button 
+                                                onClick={this.handleCloseDialogWindow('openLogOutDialogWindow')} 
+                                                color='#374549'>
+                                                No
+                                            </Button>
+                                        </DialogActions>
+                                    </Dialog>
                                 </div>
                             </div>
                         </div>

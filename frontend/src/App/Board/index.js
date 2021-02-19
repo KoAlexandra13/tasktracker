@@ -10,7 +10,8 @@ import Column from './Column';
 import _ from 'lodash'
 import AddNewColumn from './AddNewColumn';
 import MenuIcon from '@material-ui/icons/Menu';
-import { getBoard, changeBoardTitle, changeBoardColumns } from '../../actions/board';
+import { getBoard, changeBoardTitle, changeBoardColumns, 
+    changeColumnTitle, deleteColumn } from '../../actions/board';
 import Menu from './Menu'
 
 class Board extends React.Component{
@@ -315,7 +316,10 @@ class Board extends React.Component{
                                                                 index={index}
                                                                 tasks={column.tasks.sort(function(a,b) {
                                                                     return a.index - b.index
-                                                                })}/>
+                                                                })}
+                                                                changeColumnTitle={this.props.changeColumnTitle}
+                                                                deleteColumn={this.props.deleteColumn}
+                                                            />
                                                             )}
                                                             {provided.placeholder}
                                                         </div>
@@ -347,6 +351,8 @@ export default connect(mapStateToProps, {
         setLoader,
         getBoard,
         changeBoardTitle,
-        changeBoardColumns
+        changeBoardColumns,
+        changeColumnTitle, 
+        deleteColumn
     }
 )(Board);

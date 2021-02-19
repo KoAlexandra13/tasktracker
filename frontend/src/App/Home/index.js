@@ -18,7 +18,7 @@ class Home extends React.Component {
         const { personalBoardList } = this.props;
 
         return(
-            <div>
+            <div className='home-page-container'>
                 <Header/>
                 <div className='boards'>
                     <div className='boards-container'>
@@ -47,16 +47,16 @@ class Home extends React.Component {
 
                         </div>
 
-                        <div className='team-boards'>
+                        {/*<div className='team-boards'>
                             <div className='team-boards-title'>
                                 <p>TEAM BOARDS: </p>
                             </div>
 
                             <ul className='team-boards-list'>  
-                                { /*teamBoardList.map((boardName, index) => <BoardItem 
+                                { teamBoardList.map((boardName, index) => <BoardItem 
                                     boardName={ boardName }
                                     key={boardName + index}
-                                    />)*/
+                                    />)
                                 } 
                                 <li className='team-boards-create-new-board-item'> 
                                     <Link to='/createnewteam'>
@@ -69,10 +69,10 @@ class Home extends React.Component {
                                 </li>
                             </ul> 
                             
-                        </div>
+                        </div>*/}
                     </div> 
                 </div>
-                <Footer style={{position: 'fixed'}}/>
+                <Footer/>
             </div>
         );
     }

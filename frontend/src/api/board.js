@@ -105,3 +105,20 @@ export function changeTaskRequest(data, id){
     }
     return axios(config);
  }
+
+ export function changeColumnTitleRequest(data, id){
+    const config = {
+        url: `${BACKEND_API_URL}/table-columns/${id}/`,
+        method: 'PATCH',
+        data
+    }
+    return axios(config);
+ }
+
+ export function deleteColumnRequest(id){
+    const config = {
+        url: `${BACKEND_API_URL}/table-columns/${id}/`,
+        method: 'DELETE',
+    }
+    return axios(config);
+ }

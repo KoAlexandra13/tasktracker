@@ -38,17 +38,18 @@ class AddNewColumn extends React.Component{
 
     clickAddNewColumnButton = () => {
         if(this.state.columnName){
-            this.setState(
-                {
-                    ...this.state, 
-                    error: null,
-                    isInputPaneOpen: false 
-                });
             const columnData = {
                 index: this.props.boardColumns.length,
                 name: this.state.columnName,
                 table: this.props.boardId,
             }
+
+            this.setState({
+                ...this.state, 
+                error: null,
+                isInputPaneOpen: false,
+                columnName: ''
+            });
 
             this.props.addNewColumn(columnData);
         }
@@ -108,6 +109,7 @@ class AddNewColumn extends React.Component{
                         <input 
                             type="text"
                             placeholder='Enter a column name...'
+                            value={this.state.columnName}
                             onChange={this.getColumnName}/>
 
                             <span

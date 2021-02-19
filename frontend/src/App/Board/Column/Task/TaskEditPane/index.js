@@ -13,9 +13,8 @@ import LabelImportantRoundedIcon from '@material-ui/icons/LabelImportantRounded'
 import CheckRoundedIcon from '@material-ui/icons/CheckRounded';
 import ScheduleRoundedIcon from '@material-ui/icons/ScheduleRounded';
 import DeleteForeverRoundedIcon from '@material-ui/icons/DeleteForeverRounded';
-import {changeBoardTask} from '../../../../../actions/board';
+import {changeBoardTask, deleteTask} from '../../../../../actions/board';
 import _ from 'lodash';
-import {deleteTask} from '../../../../../actions/board';
 
 class TaskEditPane extends React.Component{
     constructor(props){
