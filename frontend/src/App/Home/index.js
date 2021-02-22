@@ -18,7 +18,7 @@ class Home extends React.Component {
         const { personalBoardList } = this.props;
 
         return(
-            <div className='home-page-container' style={{width: '100%'}}>
+            <div className='home-page-container'>
                 <Header/>
                 <div className='boards'>
                     <div className='boards-container'>
