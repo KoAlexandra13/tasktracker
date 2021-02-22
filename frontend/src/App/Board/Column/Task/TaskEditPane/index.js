@@ -29,10 +29,10 @@ class TaskEditPane extends React.Component{
 
         this.state = {
             isOpenTitleInput: false,
-            taskName: this.props.task.name,
-            taskDescription: this.props.task.description,
-            deadline: this.props.task.deadline ? this.props.task.deadline.slice(0, -4) : null,
-            active: this.handleSelectLabel(this.props.task.label),
+            taskName: props.task.name,
+            taskDescription: props.task.description,
+            deadline: props.task.deadline ? props.task.deadline.slice(0, -4) : null,
+            active: this.handleSelectLabel(props.task.label),
         }
     }
 
@@ -85,7 +85,7 @@ class TaskEditPane extends React.Component{
 
     saveDescription = () => {
         const description = { 
-            description: this.state.description 
+            description: this.state.taskDescription 
         }
 
         this.props.changeBoardTask(description, this.props.task.id);

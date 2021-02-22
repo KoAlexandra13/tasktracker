@@ -89,7 +89,7 @@ export function changeBoardTask(data, id){
             response => dispatch(changeBoardTaskAction(response.data))
         )
         .catch(
-            () => console.log('An error occured while task changing')
+            () => console.log('An error occured while changing task')
         )
     }
 };

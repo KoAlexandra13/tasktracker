@@ -90,6 +90,7 @@ export function addNewTaskRequest(data){
 }
 
 export function changeTaskRequest(data, id){
+    console.log(data);
     const config = {
         url: `${BACKEND_API_URL}/tasks/${id}/`,
         method: 'PATCH',
