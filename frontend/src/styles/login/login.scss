@@ -50,6 +50,7 @@
                 justify-content: flex-end;
                 margin-top: 0.25rem;
                 margin-right: 18%;
+                text-decoration: none;
 
                 .forgot-password-link{
                     font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
@@ -57,18 +58,26 @@
                     font-size: small;
                     color: rgba(128, 123, 123, 1);
                     margin-top: 0.75rem;
+                    outline: none;
+                }
+
+                a{
+                    &:hover{
+                        text-decoration: none;
+                    }
                 }
             }
             
             .login-btn{
                 width: 60%;
                 margin-top: 0.25rem;
-                border-radius: 15px;
-                background: rgb(70, 150, 255);
+                border-radius: 5px;
+                background: #1bb1f3;
                 height: 2.2rem;
 
                 &:hover{
                     color: white;
+                    background: #00a6ef;
                 }
                 
                 p{
@@ -107,7 +116,7 @@
     }
 }
 
-@media screen and (max-device-width:800px), screen and (max-width: 800px)  {
+@media screen and (max-device-width:900px), screen and (max-width: 900px)  {
     .login-image-container{
         display: none;
     }

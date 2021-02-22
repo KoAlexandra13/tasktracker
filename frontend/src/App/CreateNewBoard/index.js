@@ -24,9 +24,10 @@ class CreateNewBoard extends React.Component {
             isBoardTitleEntered: true,
             boardTitle: '',
             boardColumns: [],
-            boardBackgroundColor: 'transparent',
+            boardBackgroundColor: null,
             boardBackgroundURL: null,
-            boardBackgroundImageData: null  
+            boardBackgroundImageData: null, 
+            isActive: Array(13).fill(false)
         }
 
         this.popover = {
@@ -74,6 +75,7 @@ class CreateNewBoard extends React.Component {
     handleSelectOptionsChange = (selectOptions) => this.setState({...this.state, boardColumns: selectOptions})
 
     handleChangeBoardBackgroundColor = (value) => {
+        console.log('work')
         this.setState({
             ...this.state, 
             boardBackgroundColor: value, 
@@ -83,6 +85,7 @@ class CreateNewBoard extends React.Component {
     }
 
     handleChangeBoardBackgroundURL = (value) => {
+        console.log('work')
         this.setState({
             ...this.state, 
             boardBackgroundColor: null,
@@ -92,6 +95,7 @@ class CreateNewBoard extends React.Component {
     }
 
     handleChangeBoardBackgroundUploadImage = (value) => {
+        console.log('work')
         this.setState({
             ...this.state, 
             boardBackgroundColor: null,
@@ -135,22 +139,27 @@ class CreateNewBoard extends React.Component {
                 data.image_from_url = `${window.location.origin}${this.state.boardBackgroundURL}`;
             }
 
-            console.log(data)
-
             this.props.setLoader(true); 
 
             const id = await this.props.fetchBoard(data);
 
             if(this.state.boardBackgroundImageData){
-                await this.props.uploadImage(id, this.state.boardBackgroundImageData.file);
+                const imageAsFile = this.state.boardBackgroundImageData.file;
+                await uploadImage(id, imageAsFile);
             }
 
-            //this.props.setLoader(false);
+            this.props.setLoader(true); 
 
             if(id){
                 window.location.href = `/board/${id}/`;
             }
         }
+    }
+
+    addActiveClass = (index, callback) => {
+        let newState = Array(13).fill(false);
+        newState[index] = true;
+        this.setState({...this.state, isActive: newState}, callback);
     }
 
     render(){
@@ -241,6 +250,9 @@ class CreateNewBoard extends React.Component {
                                                 color={color}
                                                 image={null}
                                                 key={`color-${index}`}
+                                                index={index}
+                                                addActiveClass={this.addActiveClass}
+                                                isActive={this.state.isActive[index]}
                                                 handleChangeBoardBackground={this.handleChangeBoardBackgroundColor}
                                             />
                                         )}  
@@ -265,6 +277,9 @@ class CreateNewBoard extends React.Component {
                                             (image, index) => <BackgroundItem 
                                                 image={image}
                                                 key={`image-${index}`}
+                                                index={index + 7}
+                                                isActive={this.state.isActive[index + 7]}
+                                                addActiveClass={this.addActiveClass}
                                                 handleChangeBoardBackground={this.handleChangeBoardBackgroundURL}
                                             /> 
                                         )}
@@ -273,6 +288,9 @@ class CreateNewBoard extends React.Component {
                                             (image, index) => <UploadImage 
                                                 image={image} 
                                                 key={`user-image-${index}`}
+                                                index={index + 12}
+                                                isActive={this.state.isActive[index + 12]}
+                                                addActiveClass={this.addActiveClass}
                                                 handleChangeBoardBackground={this.handleChangeBoardBackgroundUploadImage}
                                                 />)
                                         }
@@ -301,7 +319,7 @@ class CreateNewBoard extends React.Component {
                                 </fieldset>  
                             </div>
     
-                            <div className='d-flex'>
+                            <div className='select-container d-flex'>
                                 <Creatable
                                     isMulti
                                     options={this.options}
@@ -367,6 +385,5 @@ export default connect(mapStateToProps,
     {
         fetchBoard, 
         setLoader,
-        uploadImage,
     }
 )(CreateNewBoard);

@@ -12,9 +12,14 @@ class BackgroundItem extends React.Component {
     }
     render(){
 
-        const { image, handleChangeBoardBackground, color } = this.props;
+        const { image, handleChangeBoardBackground, color, 
+            index,addActiveClass, isActive } = this.props;
 
-        const name = image ? 'board-background-color-btn image' : 'board-background-color-btn';
+        let name = image ? 'board-background-color-btn image' : 'board-background-color-btn';
+
+        if(isActive){
+            name = `${name} active` 
+        }
 
         const value = image ? image : color;
 
@@ -24,9 +29,11 @@ class BackgroundItem extends React.Component {
             <li
             className='item-container'>
                 <button 
-                className={name}
+                className={`${name}`}
                 style={itemStyle}
-                onClick={() => handleChangeBoardBackground(value)}
+                onClick={() => {
+                    addActiveClass(index, () => handleChangeBoardBackground(value))
+                }}
                 >
                     {image && <img className='image' src={image} alt='Background'/>}
                 </button>

@@ -4,14 +4,22 @@ class UploadImage extends React.Component {
 
     render(){
 
-        const {image, handleChangeBoardBackground} = this.props;
+        const {image, handleChangeBoardBackground, isActive,
+            index, addActiveClass} = this.props;
+
+        let name = `board-background-color-btn image`;
+
+        if(isActive){
+            name = `${name} active`; 
+        }
 
         return (
             <li 
             className='item-container'>
                 <button 
-                className='board-background-color-btn image' 
-                onClick={ () => handleChangeBoardBackground(image)}
+                    className={name}
+                    onClick={ () => addActiveClass(index, () => handleChangeBoardBackground(image))
+                }
                 >
                     <img className='image' src={image.dataURL} alt='Background'/>
                 </button>

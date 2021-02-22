@@ -30,6 +30,7 @@
         .sign-up-form{
             width: 60%;
             text-align: center;
+            margin-top: 1.2rem;
 
             .sign-up-title{
                 font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
@@ -62,13 +63,13 @@
             
             .sign-up-btn{
                 width: 65%;
-                margin-top: 1.5rem;
-                border-radius: 50px;
-                background: rgb(70, 150, 255);
+                margin-top: 1.2rem;
+                border-radius: 5px;
+                background: #1bb1f3;
 
                 &:hover{
                     color: white;
-                    background: rgb(35, 126, 245);
+                    background: #00a6ef;
 
                 }
 
@@ -102,12 +103,20 @@
             }
 
             .checkboxes-container{
-                margin-top: 1.5rem;
+                margin-top: 1.25rem;
                 text-align: left;
                 margin-left: 20%;
 
-                .subscribe-chekbox, .terms-and-conditions-checkbox{
-                    display: flex;
+                .terms-and-conditions-checkbox{
+                    display: inline;
+
+                    input{
+                        vertical-align: middle;
+                    }
+                }
+
+                .subscribe-chekbox {
+                    display: none;
                 }
 
                 .terms-and-conditions-checkbox{

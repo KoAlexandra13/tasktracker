@@ -4,14 +4,16 @@
     height: 100vh;
 
     .board-header{
-        margin: 0 1.5rem 0 1.5rem;
+        padding: 0 1.25rem 0 1.25rem;
+        margin: 0 0.5rem 0 0.5rem;
         text-align: center;
         justify-content: space-between;
-        display:flex;
+        display: flex;
+        //background: #0000004f;
+        border-radius: 5px;
 
         .board-title-container{
             border-radius: 5px;
-            //background-color: #63675d4f;
             height: 2.5rem;
             display: flex;
             margin-bottom: 0.25rem;
@@ -21,8 +23,6 @@
             h3{
                 color: white;
                 font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
-                margin: 0;
-                display: flex;
                 align-content: center;
                 margin: 0 0.3rem 0.1rem 0.3rem;
                 font-weight: bold;
@@ -47,7 +47,6 @@
 
         .menu{
             display: inline-flex;
-            //background-color: #63675d4f;
             border-radius: 5px;
             vertical-align: text-bottom;
 
@@ -63,6 +62,8 @@
         width: 100%;
         overflow-x: scroll;
         background-color: initial;
+        height: 92vh;
+        scrollbar-width: none;
 
         .columns-container{
             display: flex;

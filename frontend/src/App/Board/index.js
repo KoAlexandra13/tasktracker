@@ -218,7 +218,9 @@ class Board extends React.Component{
         const styles = {
             boardBackgroundStyle : boardBackgroundColor === null ? {
                 backgroundImage: 'url(' + boardBackgroundImage + ')',
-                backgroundSize: '100% auto',
+                backgroundSize: 'cover',
+                // backgroundSize: '100% auto',
+                backgroundPosition: '50%',
                 backgroundRepeat: 'repeat-y'
             } : {
                 backgroundColor: boardBackgroundColor,
@@ -257,7 +259,7 @@ class Board extends React.Component{
                         className='board-main-container'
                         style={styles.boardBackgroundStyle}>
                             <div className='board-header'>
-                                <div className='favourite-board-button-container'>
+                                <div style={{visibility: 'hidden'}} className='favourite-board-button-container'>
                                     <button
                                         onClick={this.handleChangeFavouriteIcon}>
                                         <StarBorderRoundedIcon
@@ -279,7 +281,7 @@ class Board extends React.Component{
                                         value={boardTitle} 
                                         style={
                                             {
-                                                width : `${((boardTitle.length + 1) * 14)}px`,
+                                                width : `${((boardTitle.length + 1) * 16)}px`,
                                                 display: openEditTitlePane ? 'inline' : 'none'
                                             }
                                         }
