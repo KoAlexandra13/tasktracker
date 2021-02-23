@@ -98,4 +98,31 @@ button {
     height: 40px;
 }
 
+@media screen and (max-device-width:550px), screen and (max-width: 550px)  {
 
+    .home-icon, .add-board-icon{
+        display: flex !important;
+    }
+
+    .navbar-titles, .delimiter{
+        display: none !important;  
+    }
+
+    .navbar--center-section{
+        display: inline-flex;
+        margin-top: 5px;
+        padding-left: 20px;
+    }
+
+    .navbar--left-section{
+        margin-left: 0 !important;
+    }
+
+    .navbar--right-section{
+        margin-right: 0 !important;
+    }
+
+    .open-search, .close-search{
+        display: none !important;
+    }
+}

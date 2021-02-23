@@ -177,7 +177,7 @@ class Account extends React.Component{
         };
 
         return( 
-            <div style={{minWidth: '600px', width: '100%'}}>
+            <div style={{width: '100%'}}>
                 <Header/>
                 <div className='account-body-container'>
                     <div className='user-info-pane-container'>

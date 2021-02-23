@@ -4,7 +4,8 @@ import Avatar from '@material-ui/core/Avatar';
 import { connect } from 'react-redux';
 import { faSearch } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
+import HomeIcon from '@material-ui/icons/Home';
+import AddToPhotosRoundedIcon from '@material-ui/icons/AddToPhotosRounded';
 
 class NavBar extends React.Component {
     constructor(props){
@@ -67,18 +68,20 @@ class NavBar extends React.Component {
                     <button>
                         <Link to='/'>
                             <p className='navbar-titles'>HOME</p>
+                            <div style={{display: 'none'}} className='home-icon'>
+                                <HomeIcon/>
+                            </div>
                         </Link>
                     </button>
-
-                    {/*<p className='delimiter'>|</p>
-
-                    <BoardsPopup/>*/}
 
                     <p className='delimiter'>|</p>
 
                     <button>
                         <Link to='/createnewboard' >
                             <p className='navbar-titles'>CREATE NEW BOARD</p>
+                            <div style={{display: 'none'}} className='add-board-icon'>
+                                <AddToPhotosRoundedIcon/>
+                            </div>
                         </Link>
                     </button>
 
