@@ -70,6 +70,12 @@ class AddNewColumn extends React.Component{
         this.setState({...this.state, columnName: event.target.value})
     }
 
+    pressEnter = (event) => {
+        if (event.key === 'Enter'){
+            this.clickAddNewColumnButton();
+        }
+    }
+
     render(){
         const styles = {
             buttonStyle: this.state.isInputPaneOpen ? {
@@ -110,7 +116,8 @@ class AddNewColumn extends React.Component{
                             type="text"
                             placeholder='Enter a column name...'
                             value={this.state.columnName}
-                            onChange={this.getColumnName}/>
+                            onChange={this.getColumnName}
+                            onKeyDown={this.pressEnter}/>
 
                             <span
                                 style={styles.errorStyle}

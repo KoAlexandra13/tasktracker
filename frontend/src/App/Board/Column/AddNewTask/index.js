@@ -36,7 +36,7 @@ class AddNewTask extends React.Component{
         this.setState({...this.state, isInputPaneOpen: !this.state.isInputPaneOpen, taskName: ''});
     }
 
-    clickAddNewColumnButton = () => {
+    clickAddNewTaskButton = () => {
         if(this.state.taskName){
             this.setState(
                 {
@@ -69,6 +69,12 @@ class AddNewTask extends React.Component{
 
     getTaskName = (event) => {
         this.setState({...this.state, taskName: event.target.value})
+    }
+
+    pressEnter = (event) => {
+        if (event.key === 'Enter'){
+            this.clickAddNewTaskButton();
+        }
     }
 
     render() {
@@ -113,6 +119,7 @@ class AddNewTask extends React.Component{
                             placeholder='Enter a task name...'
                             onChange={this.getTaskName}
                             value={this.state.taskName}
+                            onKeyDown={this.pressEnter}
                         />
 
                             <span
@@ -123,7 +130,7 @@ class AddNewTask extends React.Component{
                     </div>
                     <div className='options-button'>
                         <button 
-                            onClick={this.clickAddNewColumnButton}
+                            onClick={this.clickAddNewTaskButton}
                             className='add-button'>
                             Add new card
                         </button>

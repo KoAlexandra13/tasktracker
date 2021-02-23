@@ -171,10 +171,10 @@ class CreateNewBoard extends React.Component {
 
         const demoVersionBoardBackgraundStyle = boardBackgroundColor === null ? {
             background: 'url(' + (boardBackgroundURL || (boardBackgroundImageData && boardBackgroundImageData.dataURL)) + ') no-repeat transparent center',
-            height: `${ width * 3 / 6.2 }px`
+            height: `${ width * 3 / 6 }px`
         } : {
             backgroundColor: boardBackgroundColor,
-            height: `${ width * 3 / 6.2 }px`
+            height: `${ width * 3 / 6 }px`
         };
 
         const titleErrorStyle = isBoardTitleEntered ? {
