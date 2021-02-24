@@ -1,0 +1,16 @@
+.menu-title-container{
+    width: 100%;
+    display: inline-flex;
+
+    .title{
+        margin: 0;
+        display: flex;
+        font-size: x-large;
+        margin-left: 13px;
+        padding-top: 6px;
+        width: 100%;
+        font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+        color: #39444a;
+        font-weight: bolder;
+    }
+}

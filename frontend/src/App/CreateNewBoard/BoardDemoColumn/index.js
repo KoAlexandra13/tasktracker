@@ -7,7 +7,7 @@ class BoardDemoColumn extends React.Component {
 
     const style = {
         width: `${boardWidth / 5.5 }px`,
-        height: `${boardWidth * 3 / 6.6 }px`,
+        height: `${boardWidth * 3 / 6.5 }px`,
         opasity: '90%'
     };
 

@@ -16,7 +16,8 @@ import thunk from 'redux-thunk';
 import Account from './Account';
 import VerifyEmail from './VerifyEmail'
 import Board from './Board';
-import ForgotPassword from './ForgotPassword'
+import ForgotPassword from './ForgotPassword';
+import PageUnderConstruction from './PageUnderConstruction';
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
@@ -43,6 +44,8 @@ class App extends React.Component{
                       <Route path='/createnewboard' component={CreateNewBoard}/>
                       <Route path='/account' component={Account}/>
                       <Route path='/board' component={Board}/>
+                      <Route path='/termsAndConditions' component={PageUnderConstruction}/>
+                      <Route path='/about' component={PageUnderConstruction}/>
                     </Switch>
                   </Auth>
                 </Route>

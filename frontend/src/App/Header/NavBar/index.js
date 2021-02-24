@@ -88,7 +88,9 @@ class NavBar extends React.Component {
                     <p className='delimiter'>|</p>
 
                     <button>
-                        <p className='navbar-titles'>ABOUT</p>
+                        <Link to='/about' >
+                            <p className='navbar-titles'>ABOUT</p>
+                        </Link>
                     </button>
 
 

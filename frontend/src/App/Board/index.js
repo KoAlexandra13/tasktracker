@@ -23,7 +23,7 @@ class Board extends React.Component{
         this.state = {
             openEditTitlePane: false,
             favouriteBoard: false,
-            openMenuPane: false,
+            isOpenMenuDialogWindow: false,
         }
     }
 
@@ -58,7 +58,7 @@ class Board extends React.Component{
     }
 
     handleOpenMenu = () => {
-        this.setState({...this.state, openMenuPane: !this.state.openMenuPane})
+        this.setState({...this.state, isOpenMenuDialogWindow: !this.state.isOpenMenuDialogWindow})
     }
 
     onDragEnd = async (result) => {
@@ -209,11 +209,15 @@ class Board extends React.Component{
         document.removeEventListener('mousedown', this.handleClickOutside);
     }
 
+    handleCloseMenuDialogWindow = (prop) => {
+        this.setState({...this.state, [prop]: false})
+    }
+
     render(){
         
         const { boardBackgroundColor, boardBackgroundImage, boardTitle, boardColumns } = this.props;
 
-        const { openEditTitlePane, favouriteBoard, openMenuPane } = this.state;
+        const { openEditTitlePane, favouriteBoard, isOpenMenuDialogWindow } = this.state;
 
         const styles = {
             boardBackgroundStyle : boardBackgroundColor === null ? {
@@ -290,7 +294,7 @@ class Board extends React.Component{
                                 </div>
                                 <div className='menu'>
                                     <button
-                                    onClick={this.handleOpenMenu}>
+                                        onClick={this.handleOpenMenu}>
                                         <MenuIcon 
                                             style={{marginBottom: '2px', fontSize: 'large'}}/>
                                         &nbsp;Menu
@@ -331,7 +335,10 @@ class Board extends React.Component{
                                 <AddNewColumn/>
                             </div>
                     </div>
-                    {openMenuPane && <Menu closeMenu={this.handleOpenMenu}/>}
+                    {<Menu 
+                        openMenuDialogWindow={isOpenMenuDialogWindow} 
+                        handleCloseMenuDialogWindow={this.handleCloseMenuDialogWindow}
+                    />}
                 </div>
             )
         }
