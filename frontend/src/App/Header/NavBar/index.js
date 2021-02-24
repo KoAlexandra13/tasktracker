@@ -6,6 +6,7 @@ import { faSearch } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import HomeIcon from '@material-ui/icons/Home';
 import AddToPhotosRoundedIcon from '@material-ui/icons/AddToPhotosRounded';
+import _ from 'lodash'
 
 class NavBar extends React.Component {
     constructor(props){
@@ -14,13 +15,18 @@ class NavBar extends React.Component {
         this.state = {
             boardsPopUpEnabled: true,
             clickOnSearchButton: false,
-            openSearchTextField: false
+            openSearchTextField: false,
         }
     }
 
     getUserInitials = () => {
-        const firstAndSecondNames = this.props.fullName ? this.props.fullName.split(' ') : [];
-        return (firstAndSecondNames && firstAndSecondNames.length) ? firstAndSecondNames[0].charAt(0) + firstAndSecondNames[1].charAt(0) : null;
+        const firstAndSecondNames = this.props.fullname ? this.props.fullname.split(' ') : [];
+        if(firstAndSecondNames.length === 1){
+            return firstAndSecondNames[0].slice(0, 2);
+        }
+        return (firstAndSecondNames && firstAndSecondNames.length) ?
+         firstAndSecondNames[0].charAt(0) + firstAndSecondNames[1].charAt(0) : 
+         null;
     }
 
     handleOpenSearchInput = () => {
@@ -44,17 +50,20 @@ class NavBar extends React.Component {
     }
 
     render(){
-        const closeSearchStyle = this.state.openSearchTextField ? {
-            display: 'none',
-        } : {
-            display: 'block',
-        };
 
-        const openSearchStyle = !this.state.openSearchTextField ? {
-            display: 'none',
-        } : {
-            display: 'flex',
-        };
+        const styles = {
+            closeSearchStyle: this.state.openSearchTextField ? {
+                display: 'none',
+            } : {
+                display: 'block',
+            },
+    
+            openSearchStyle: !this.state.openSearchTextField ? {
+                display: 'none',
+            } : {
+                display: 'flex',
+            },
+        }
 
         return(
             <div className='navbar-container py-2'>
@@ -113,12 +122,12 @@ class NavBar extends React.Component {
                                     fontFamily: 'Impact, Haettenschweiler, Arial Narrow Bold, sans-serif'
                                 }} 
                                 >   
-                                    { this.getUserInitials() }
+                                    {this.getUserInitials()}
                             </Avatar>
                         </Link>
                     </button>
 
-                    <div className='open-search' style = {openSearchStyle}>
+                    <div className='open-search' style = {styles.openSearchStyle}>
                         <input 
                             type='text'
                             placeholder='Search...'/>
@@ -127,7 +136,7 @@ class NavBar extends React.Component {
                             onClick={this.handleCloseSearchInput}>x</button>
                     </div>
 
-                    <div className='close-search' style = {closeSearchStyle}>
+                    <div className='close-search' style = {styles.closeSearchStyle}>
                         <FontAwesomeIcon 
                             icon={ faSearch } 
                             className='text-light'
@@ -143,7 +152,7 @@ class NavBar extends React.Component {
 
 function mapStateToProps(state){
     return {
-        fullName: state.user.fullName,
+        fullname: state.user.fullName,
         image: state.user.userIcon,
     };
 }

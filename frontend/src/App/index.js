@@ -36,7 +36,7 @@ class App extends React.Component{
               <Switch>
                 <Route path='/signup' component={SignUp}/>
                 <Route path='/email-activate' component={VerifyEmail}/>
-                <Route path='/forgotpassword' component={ForgotPassword}/>
+                <Route path='/forgotpassword' component={PageUnderConstruction}/>
                 <Route path='/'>
                   <Auth>
                     <Switch>

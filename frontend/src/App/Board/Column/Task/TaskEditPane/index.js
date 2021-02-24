@@ -296,7 +296,6 @@ class TaskEditPane extends React.Component{
                     </div>
 
                     <div className='delete-button-container'>
-                        <p> Delete task </p>
                         <IconButton style={{
                             marginTop: '-15px', 
                             marginRight: '12px', 

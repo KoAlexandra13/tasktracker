@@ -5,7 +5,8 @@
 
     .text-container{
         display: flex;
-        margin-left: 40%;
+        width: 100%;
+        padding-left: 40%;
 
         p, button{
             color: #474747d6;
@@ -22,4 +23,11 @@
             }
         }
     }
+}
+
+@media screen and (max-device-width:750px), screen and (max-width: 750px)  {
+    .text-container{
+        padding-left: 20% !important;
+    }
+
 }

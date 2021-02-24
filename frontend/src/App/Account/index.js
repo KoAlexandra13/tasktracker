@@ -14,6 +14,7 @@ import ImageUploading from 'react-images-uploading';
 import Footer from '../Footer'
 import { uploadUserAvatarRequest, changeUserInfoRequest } from '../../api/user'
 import { uploadAvatarImage, changeUserInfo } from '../../actions/user';
+import _ from 'lodash'
 
 
 class Account extends React.Component{
@@ -39,7 +40,12 @@ class Account extends React.Component{
 
     getUserInitials = () => {
         const firstAndSecondNames = this.props.fullname ? this.props.fullname.split(' ') : [];
-        return (firstAndSecondNames && firstAndSecondNames.length) ? firstAndSecondNames[0].charAt(0) + firstAndSecondNames[1].charAt(0) : null;
+        if(firstAndSecondNames.length === 1){
+            return firstAndSecondNames[0].slice(0, 2);
+        }
+        return (firstAndSecondNames && _.isUndefined(firstAndSecondNames) && firstAndSecondNames.length) ?
+         firstAndSecondNames[0].charAt(0) + firstAndSecondNames[1].charAt(0) : 
+         null;
     }
 
     openChangeAvatarDialogWindow = () => {this.setState({...this.state, openAvatarDialogWindow: true})}
