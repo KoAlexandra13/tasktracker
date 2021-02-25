@@ -24,6 +24,8 @@ class Board extends React.Component{
             openEditTitlePane: false,
             favouriteBoard: false,
             isOpenMenuDialogWindow: false,
+            newBoardBackgroundColor: null,
+            newBoardBackgroundImage: null
         }
     }
 
@@ -193,6 +195,49 @@ class Board extends React.Component{
 
     }
 
+    selectNewBoardColor = (value) => {
+        if (value !== this.state.newBoardBackgroundColor){
+            this.setState(
+                {
+                    ...this.state, 
+                    newBoardBackgroundColor: value, 
+                    newBoardBackgroundImage: null
+                }
+            )
+        }
+        else {
+            this.setState(
+                {
+                    ...this.state, 
+                    newBoardBackgroundColor: null, 
+                    newBoardBackgroundImage: null
+                }
+            )
+        }
+        
+    }
+
+    selectNewBoardImage = (value) => {
+        if(value !== this.state.newBoardBackgroundImage){
+            this.setState(
+                {
+                    ...this.state, 
+                    newBoardBackgroundColor: null, 
+                    newBoardBackgroundImage: value
+                }
+            )
+        }
+        else {
+            this.setState(
+                {
+                    ...this.state, 
+                    newBoardBackgroundColor: null, 
+                    newBoardBackgroundImage: null
+                }
+            )
+        }
+    }
+
     async componentDidMount(){
         const id = window.location.pathname.split('/')[2];
 
@@ -217,7 +262,8 @@ class Board extends React.Component{
         
         const { boardBackgroundColor, boardBackgroundImage, boardTitle, boardColumns } = this.props;
 
-        const { openEditTitlePane, favouriteBoard, isOpenMenuDialogWindow } = this.state;
+        const { openEditTitlePane, favouriteBoard, isOpenMenuDialogWindow, 
+            newBoardBackgroundColor, newBoardBackgroundImage } = this.state;
 
         const styles = {
             boardBackgroundStyle : boardBackgroundColor === null ? {
@@ -229,6 +275,16 @@ class Board extends React.Component{
             } : {
                 backgroundColor: boardBackgroundColor,
             },
+
+            newBoardBackgroundStyle: newBoardBackgroundColor === null ? {
+                backgroundImage: 'url(' + newBoardBackgroundImage + ')',
+                backgroundSize: 'cover',
+                backgroundPosition: '50%',
+                backgroundRepeat: 'repeat-y'
+            } : {
+                backgroundColor: newBoardBackgroundColor,
+            },
+
             titleStyle: openEditTitlePane ? {
                 display: 'none'
             } : {
@@ -261,7 +317,8 @@ class Board extends React.Component{
                     <Header/>
                     <div 
                         className='board-main-container'
-                        style={styles.boardBackgroundStyle}>
+                        style={(_.isNull(newBoardBackgroundColor) && _.isNull(newBoardBackgroundImage)) ? 
+                                styles.boardBackgroundStyle : styles.newBoardBackgroundStyle}>
                             <div className='board-header'>
                                 <div className='favourite-board-button-container'>
                                     <button
@@ -338,6 +395,9 @@ class Board extends React.Component{
                     {<Menu 
                         openMenuDialogWindow={isOpenMenuDialogWindow} 
                         handleCloseMenuDialogWindow={this.handleCloseMenuDialogWindow}
+                        selectNewBoardColor={this.selectNewBoardColor}
+                        selectNewBoardImage={this.selectNewBoardImage}
+                        id={this.props.boardId}
                     />}
                 </div>
             )

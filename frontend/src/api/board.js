@@ -116,10 +116,27 @@ export function changeTaskRequest(data, id){
     return axios(config);
  }
 
- export function deleteColumnRequest(id){
+export function deleteColumnRequest(id){
     const config = {
         url: `${BACKEND_API_URL}/table-columns/${id}/`,
         method: 'DELETE',
     }
     return axios(config);
- }
+}
+
+export function deleteBoardRequest(id){
+    const config = {
+        url: `${BACKEND_API_URL}/tables/${id}/`,
+        method: 'DELETE',
+    }
+    return axios(config);
+}
+
+export function changeBoardBackgroundRequest(tableId, data){
+    const config = {
+        url: `${BACKEND_API_URL}/tables/${tableId}/`,
+        method: 'PATCH',
+        data
+    }
+    return axios(config);
+}

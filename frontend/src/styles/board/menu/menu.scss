@@ -53,6 +53,10 @@
                 height: 5rem;
                 width: 8rem;
                 border-radius: 3px;
+
+                &:hover{
+                    cursor: pointer;
+                }
             }
         }
     }

@@ -8,7 +8,7 @@ import _ from 'lodash';
 import ColorLensRoundedIcon from '@material-ui/icons/ColorLensRounded';
 import PhotoLibraryRoundedIcon from '@material-ui/icons/PhotoLibraryRounded';
 import DeleteRoundedIcon from '@material-ui/icons/DeleteRounded';
-
+import {deleteBoardRequest} from '../../../api/board';
 
 class Menu extends React.Component{
     constructor(props){
@@ -25,12 +25,25 @@ class Menu extends React.Component{
     }
 
     getImages = () => {
-        let imageNumber = 1;
         let images = [];
-        for(imageNumber; imageNumber <= 43; imageNumber++){
+        for(let imageNumber = 1; imageNumber <= 43; imageNumber++){
             images = images.concat(require(`./images/${imageNumber}.jpg`).default,);
         }
         return images;
+    }
+
+    selectColor = (color) => {
+        this.props.selectNewBoardColor(color);
+    }
+    
+    selectImage = (image) => {
+        this.props.selectNewBoardImage(image);
+    }
+
+    deleteBoard = () => {
+        deleteBoardRequest(this.props.id)
+        .then(() => window.location.href = '/')
+        .catch(error => console.log(error))
     }
 
     render() {
@@ -82,7 +95,11 @@ class Menu extends React.Component{
                             {this.colors.map(color => {
                                 return (
                                     <div className='color'>
-                                        <button style={{backgroundColor: color}}></button>
+                                        <button 
+                                            style={{backgroundColor: color}}
+                                            onClick={() => this.selectColor(color)}
+                                        >
+                                        </button>
                                     </div>
                                 )
                             })}
@@ -98,7 +115,9 @@ class Menu extends React.Component{
                             {this.images.map(image => {
                                 return (
                                     <div className='image'>
-                                           <img src={image}/>
+                                        <img src={image}
+                                            onClick={() => this.selectImage(image)}
+                                        />
                                     </div>
                                 )
                             })}
@@ -117,7 +136,8 @@ class Menu extends React.Component{
                         </div>
 
                         <div className='delete-board-button-container'>
-                            <button>
+                            <button
+                                onClick={this.deleteBoard}>
                                 <p>Delete board anyway</p>
                             </button>
                         </div>
