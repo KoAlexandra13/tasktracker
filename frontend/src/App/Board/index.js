@@ -1,6 +1,6 @@
 import React from 'react'
 import { setLoader } from '../../actions/board';
-import { editBoardNameRequest, editTaskPositionRequest, editBoardColumnsOrderRequest } from '../../api/board';
+import { editBoardNameRequest, editTaskPositionRequest, editBoardColumnsOrderRequest, changeBoardBackgroundRequest } from '../../api/board';
 import Header from '../Header'
 import { connect } from 'react-redux'
 import { ClassicSpinner } from 'react-spinners-kit';
@@ -255,7 +255,24 @@ class Board extends React.Component{
     }
 
     handleCloseMenuDialogWindow = (prop) => {
-        this.setState({...this.state, [prop]: false})
+        this.setState({...this.state, [prop]: false});
+
+        if(!_.isNull(this.state.newBoardBackgroundColor)){
+            const data = {
+                background_color: this.state.newBoardBackgroundColor,
+            }
+
+            changeBoardBackgroundRequest(this.props.boardId, data)
+            .catch(error => console.log(error))
+        }
+        else if(!_.isNull(this.state.newBoardBackgroundImage)){
+            const data = {
+                image_from_url: `${window.location.origin}${this.state.newBoardBackgroundImage}`,
+                background_color: null
+            }
+            changeBoardBackgroundRequest(this.props.boardId, data)
+            .catch(error => console.log(error))
+        }
     }
 
     render(){
