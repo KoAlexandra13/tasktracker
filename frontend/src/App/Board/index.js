@@ -263,7 +263,7 @@ class Board extends React.Component{
                         className='board-main-container'
                         style={styles.boardBackgroundStyle}>
                             <div className='board-header'>
-                                <div style={{visibility: 'hidden'}} className='favourite-board-button-container'>
+                                <div className='favourite-board-button-container'>
                                     <button
                                         onClick={this.handleChangeFavouriteIcon}>
                                         <StarBorderRoundedIcon
@@ -296,8 +296,8 @@ class Board extends React.Component{
                                     <button
                                         onClick={this.handleOpenMenu}>
                                         <MenuIcon 
-                                            style={{marginBottom: '2px', fontSize: 'large'}}/>
-                                        &nbsp;Menu
+                                            style={{marginTop: '3px', fontSize: 'large'}}/>
+                                        <p>&nbsp;Menu</p>
                                     </button>
                                 </div>
                             </div>

@@ -160,45 +160,6 @@ class Column extends React.Component{
                                         <DeleteForeverRoundedIcon style={{fontSize: 'large'}}/>
                                     </IconButton>
                                 </div>
-
-                                <Dialog 
-                                    open={deleteColumnDialogWindow}
-                                    onClose={this.handleDeleteColumnDialogWindowState} 
-                                    aria-labelledby='form-dialog-title'>
-                                    <DialogTitle>
-                                        <h3 style={{
-                                                textAlign: 'center'
-                                            }}
-                                        >
-                                            Deleting a column
-                                        </h3>
-                                    </DialogTitle>
-
-                                    <DialogContent>
-                                        <DialogContentText 
-                                            style={{
-                                                fontFamily: 'Impact, Haettenschweiler, Arial Narrow Bold, sans-serif',
-                                                color: 'rgba(0, 0, 0, 0.87)',
-                                            }}>
-                                            Are you sure you want to delete the column "{column.name}"?
-                                        </DialogContentText>
-                                
-                                    </DialogContent>
-                                    <DialogActions>
-                                        <Button 
-                                            onClick={this.deleteColumn}
-                                            color='primary'
-                                        >
-                                            Yes
-                                        </Button>
-                                        <Button 
-                                            onClick={this.handleDeleteColumnDialogWindowState}
-                                            color='primary' 
-                                        >
-                                            No
-                                        </Button>
-                                    </DialogActions>
-                                </Dialog>
                             </div>
 
                             <Droppable 
@@ -227,6 +188,45 @@ class Column extends React.Component{
 
                            <AddNewTask columnId={column.id} index={column.tasks.length}/>
                         </div>
+
+                        <Dialog 
+                            open={deleteColumnDialogWindow}
+                            onClose={this.handleDeleteColumnDialogWindowState} 
+                            aria-labelledby='form-dialog-title'>
+                            <DialogTitle>
+                                <h3 style={{
+                                        textAlign: 'center'
+                                    }}
+                                >
+                                    Deleting a column
+                                </h3>
+                            </DialogTitle>
+
+                            <DialogContent>
+                                <DialogContentText 
+                                    style={{
+                                        fontFamily: 'Impact, Haettenschweiler, Arial Narrow Bold, sans-serif',
+                                        color: 'rgba(0, 0, 0, 0.87)',
+                                    }}>
+                                    Are you sure you want to delete the column "{column.name}"?
+                                </DialogContentText>
+                        
+                            </DialogContent>
+                            <DialogActions>
+                                <Button 
+                                    onClick={this.deleteColumn}
+                                    color='primary'
+                                >
+                                    Yes
+                                </Button>
+                                <Button 
+                                    onClick={this.handleDeleteColumnDialogWindowState}
+                                    color='primary' 
+                                >
+                                    No
+                                </Button>
+                            </DialogActions>
+                        </Dialog>
                     </div>
                 )}
             </Draggable>
