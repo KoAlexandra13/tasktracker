@@ -43,7 +43,7 @@ class Account extends React.Component{
         if(firstAndSecondNames.length === 1){
             return firstAndSecondNames[0].slice(0, 2);
         }
-        return (firstAndSecondNames && _.isUndefined(firstAndSecondNames) && firstAndSecondNames.length) ?
+        return (firstAndSecondNames && firstAndSecondNames.length) ?
          firstAndSecondNames[0].charAt(0) + firstAndSecondNames[1].charAt(0) : 
          null;
     }
