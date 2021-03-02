@@ -37,7 +37,7 @@ class AddNewTask extends React.Component{
     }
 
     clickAddNewTaskButton = () => {
-        if(this.state.taskName && this.state.taskName === ''){
+        if(this.state.taskName){
             this.setState(
                 {
                     ...this.state, 
