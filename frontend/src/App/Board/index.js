@@ -260,6 +260,7 @@ class Board extends React.Component{
         if(!_.isNull(this.state.newBoardBackgroundColor)){
             const data = {
                 background_color: this.state.newBoardBackgroundColor,
+                background_image: null
             }
 
             changeBoardBackgroundRequest(this.props.boardId, data)
